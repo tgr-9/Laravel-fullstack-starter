@@ -1,0 +1,13 @@
+{
+    "recommendations": [
+        "adrianwilczynski.alpine-js-intellisense",
+        "bmewburn.vscode-intelephense-client",
+        "bradlc.vscode-tailwindcss",
+        "cpylua.language-postcss",
+        "dbaeumer.vscode-eslint",
+        "editorconfig.editorconfig",
+        "github.vscode-pull-request-github",
+        "mikestead.dotenv",
+        "xdebug.php-debug",
+    ]
+}

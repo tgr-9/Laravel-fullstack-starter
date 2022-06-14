@@ -1,0 +1,36 @@
+# Generic
+# --------------------------
+Thumbs.db
+Desktop.ini
+.DS_Store
+._
+*.cache
+*.log
+*.old
+*.zip
+*.pem
+*~
+
+
+# Developments
+# --------------------------
+/storage/*.key
+/tests/clover.xml
+docker-compose.override.yml
+Homestead.json
+Homestead.yaml
+node_modules
+dist
+runtime-config.json
+service-account.json
+vendor
+.env
+.env.*
+.firebaserc
+.phpunit.result.cache
+
+# But Keep these
+# --------------------------
+!.env.example
+!.htaccess
+!.gitkeep
