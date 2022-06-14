@@ -1,0 +1,150 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [develop]
+  release:
+    types: [created]
+
+env:
+  APP_URL: https://demo-wanho.creasi.co
+  APP_NAME: Wanho Demo
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+
+    env:
+      MIX_SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_LARAVEL_DSN }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          cache: 'yarn'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: yarn
+
+      - name: Build assets
+        run: yarn build
+
+      - name: Store assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: public
+          path: |
+            public/css
+            public/js
+            public/mix-manifest.json
+
+  tests:
+    runs-on: ubuntu-latest
+    name: Test on PHP ${{ matrix.php-version }}
+    needs: build
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.0', '8.1']
+
+    env:
+      APP_KEY: ${{ secrets.APP_KEY }}
+      APP_ENV: testing
+      DB_CONNECTION: sqlite
+      DB_DATABASE: database/database.sqlite
+      SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_LARAVEL_DSN }}
+      SENTRY_TRACE_QUEUE_ENABLED: true
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Setup PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug
+
+      - name: Download assets
+        id: download
+        uses: actions/download-artifact@v3
+        with:
+          name: public
+          path: public
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer files
+        uses: actions/cache@v2.1.7
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
+            ${{ runner.os }}-composer-${{ matrix.php-version }}
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: |
+          composer validate
+          composer install --no-progress --no-interaction --prefer-dist --optimize-autoloader $ext
+
+      - name: Run migrations
+        run: |
+          touch ${{ env.DB_DATABASE }}
+          php artisan migrate --seed
+
+      - name: Run tests suite
+        run: php artisan test
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    needs: tests
+    if: ${{ github.ref_name == 'develop' && github.event_name == 'push' }}
+
+    environment:
+      name: staging
+      url: ${{ env.APP_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Prepare
+        run: |
+          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
+          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
+          echo "${{ secrets.STAGING_SERVER_SSH_HOSTS }}" >> $HOME/.ssh/known_hosts
+          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
+          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
+          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
+
+      - name: Download assets
+        id: download
+        uses: actions/download-artifact@v3
+        with:
+          name: public
+          path: public
+
+      - name: Deploy repo
+        run: |
+          git fetch creasico@creasi.co:~/git/wanho.git
+          git push -fu creasico@creasi.co:~/git/wanho.git HEAD:master
+
+      - name: Deploy assets
+        run: rsync -zrtv public/ creasi.co:demo-wanho.creasi.co/public/
