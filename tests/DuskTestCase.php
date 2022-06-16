@@ -55,9 +55,17 @@ abstract class DuskTestCase extends BaseTestCase
             ]);
         })->all());
 
+        $hasBrowserStack = static::hasBrowserStackKey();
         $capabilities = DesiredCapabilities::chrome()
-            ->setCapability(ChromeOptions::CAPABILITY, $options)
-            ->setCapability('browserstack.local', true);
+            ->setCapability(ChromeOptions::CAPABILITY, $options);
+
+        if ($hasBrowserStack) {
+            $capabilities
+                ->setCapability('browserstack.local', true)
+                ->setCapability('browserstack.localIdentifier', env('BROWSERSTACK_LOCAL_IDENTIFIER'))
+                ->setCapability('build', env('BROWSERSTACK_BUILD_NAME'))
+                ->setCapability('project', env('BROWSERSTACK_PROJECT_NAME'));
+        }
 
         return RemoteWebDriver::create(static::getDriverURL(), $capabilities);
     }
@@ -89,14 +97,14 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected static function hasBrowserStackKey()
     {
-        return false;
-        // return isset($_SERVER['BROWSERSTACK_ACCESS_KEY']) || isset($_ENV['BROWSERSTACK_ACCESS_KEY']);
+        // return false;
+        return isset($_SERVER['BROWSERSTACK_ACCESS_KEY']) || isset($_ENV['BROWSERSTACK_ACCESS_KEY']);
     }
 
     protected static function getDriverURL()
     {
         if (static::hasBrowserStackKey()) {
-            return 'https://'.env('BROWSERSTACK_USER').':'.env('BROWSERSTACK_ACCESS_KEY').'@hub-cloud.browserstack.com/wd/hub';
+            return 'https://'.env('BROWSERSTACK_USERNAME').':'.env('BROWSERSTACK_ACCESS_KEY').'@hub-cloud.browserstack.com/wd/hub';
         }
 
         return $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515';
