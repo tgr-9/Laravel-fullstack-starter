@@ -1,6 +1,6 @@
 import Alpine from 'alpinejs'
 import { format } from 'date-fns'
-import { id, enUS as en } from 'date-fns/locale'
+import { enUS as en, id } from 'date-fns/locale'
 import * as Sentry from '@sentry/browser'
 import { BrowserTracing } from '@sentry/tracing'
 
@@ -40,8 +40,8 @@ Alpine.plugin(TimeAgo.configure({ locale: locales[document.documentElement.lang]
 
 Alpine.start()
 
-const dataLayer = window.dataLayer || [];
-const gtag = window.gtag = () => dataLayer.push(arguments)
+const dataLayer = window.dataLayer || []
+const gtag = window.gtag = (...args) => dataLayer.push(args)
 
 window.addEventListener('DOMContentLoaded', () => {
   gtag('js', new Date())

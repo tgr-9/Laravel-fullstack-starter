@@ -54,6 +54,10 @@ $ yarn watch
 
 So, please make sure you've already install the dependencies as stated in the [Setup](#setup) section above.
 
+**NOTES**:
+- **Commit Convention**: This project follows [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) using [@commitlint/config-conventional](https://github.com/conventional-changelog/commitlint/tree/master/@commitlint/config-conventional) as standart, so make sure you follow the rules.
+- **Code Style**: This project `PSR2` code standard and [`@antfu/eslint-config`](https://github.com/antfu/eslint-config), so make sure you follow the rules. But don't worry, your VSCode should handle it for you. Please consult to [this config](.vscode/settings.json) for more info.
+
 ## License
 
 The Application will be open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
