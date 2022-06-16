@@ -127,10 +127,7 @@ jobs:
           SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
 
       - name: Run end-to-end tests
-        run: |
-          vendor/laravel/dusk/bin/chromedriver-linux &
-          php artisan serve --no-reload &
-          php artisan dusk
+        run: php artisan dusk
         env:
           APP_URL: http://127.0.0.1:8000
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
