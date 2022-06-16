@@ -197,8 +197,6 @@ jobs:
         run: php artisan dusk
         env:
           APP_URL: http://127.0.0.1:8000
-          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
 
       - name: Upload screenshots
         if: failure()
