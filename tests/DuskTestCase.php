@@ -6,10 +6,16 @@ use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Laravel\Dusk\TestCase as BaseTestCase;
+use Symfony\Component\Process\Process;
 
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    /**
+     * @var \Symfony\Component\Process\Process
+     */
+    protected static $webServerProc;
 
     /**
      * Prepare for Dusk test execution.
@@ -19,9 +25,18 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        if (! static::runningInSail()) {
+        if (! static::runningInSail() && ! static::hasBrowserStackKey()) {
             static::startChromeDriver();
         }
+
+        static::$webServerProc = static::createServerProcess();
+        static::$webServerProc->start();
+
+        static::afterClass(function () {
+            if (static::$webServerProc) {
+                static::$webServerProc->stop();
+            }
+        });
     }
 
     /**
@@ -36,16 +51,15 @@ abstract class DuskTestCase extends BaseTestCase
         ])->unless($this->hasHeadlessDisabled(), function ($items) {
             return $items->merge([
                 '--disable-gpu',
-                // '--headless',
+                '--headless',
             ]);
         })->all());
 
-        return RemoteWebDriver::create(
-            $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515',
-            DesiredCapabilities::chrome()->setCapability(
-                ChromeOptions::CAPABILITY, $options
-            )
-        );
+        $capabilities = DesiredCapabilities::chrome()
+            ->setCapability(ChromeOptions::CAPABILITY, $options)
+            ->setCapability('browserstack.local', true);
+
+        return RemoteWebDriver::create(static::getDriverURL(), $capabilities);
     }
 
     /**
@@ -55,8 +69,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function hasHeadlessDisabled()
     {
-        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) ||
-               isset($_ENV['DUSK_HEADLESS_DISABLED']);
+        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) || isset($_ENV['DUSK_HEADLESS_DISABLED']);
     }
 
     /**
@@ -66,7 +79,33 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function shouldStartMaximized()
     {
-        return isset($_SERVER['DUSK_START_MAXIMIZED']) ||
-               isset($_ENV['DUSK_START_MAXIMIZED']);
+        return isset($_SERVER['DUSK_START_MAXIMIZED']) || isset($_ENV['DUSK_START_MAXIMIZED']);
+    }
+
+    /**
+     * Determine if the BrowserStack Key and User is set.
+     *
+     * @return bool
+     */
+    protected static function hasBrowserStackKey()
+    {
+        return false;
+        // return isset($_SERVER['BROWSERSTACK_ACCESS_KEY']) || isset($_ENV['BROWSERSTACK_ACCESS_KEY']);
+    }
+
+    protected static function getDriverURL()
+    {
+        if (static::hasBrowserStackKey()) {
+            return 'https://'.env('BROWSERSTACK_USER').':'.env('BROWSERSTACK_ACCESS_KEY').'@hub-cloud.browserstack.com/wd/hub';
+        }
+
+        return $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515';
+    }
+
+    protected static function createServerProcess()
+    {
+        return (new Process([PHP_BINARY, 'artisan', 'serve', '--env=testing']))
+            ->setWorkingDirectory(realpath(__DIR__.'/../'))
+            ->setTimeout(null);
     }
 }
