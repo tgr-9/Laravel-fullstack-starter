@@ -3,22 +3,20 @@ import axios from 'axios'
 window.axios = axios
 
 const scrollTop = (response) => {
-  document.body.scrollTop = 0             // For Safari
-  document.documentElement.scrollTop = 0  // For Chrome, Firefox, IE and Opera
+  document.body.scrollTop = 0 // For Safari
+  document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
 
   return response
 }
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.withCredentials = true
-axios.interceptors.response.use((response) => scrollTop(response), (error) => {
-  if (error.response.status === 401) {
+axios.interceptors.response.use(response => scrollTop(response), (error) => {
+  if (error.response.status === 401)
     window.location.replace('/login')
-  }
 
-  if (error.response.status === 422) {
+  if (error.response.status === 422)
     return error.response
-  }
 
   // whatever you want to do with the error
   console.error('error bro', error.response)

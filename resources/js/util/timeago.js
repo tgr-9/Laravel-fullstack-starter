@@ -1,4 +1,4 @@
-import { formatDistanceToNow, format, parseISO } from 'date-fns'
+import { format, formatDistanceToNow, parseISO } from 'date-fns'
 
 let locale
 
@@ -11,15 +11,16 @@ export function TimeAgo(Alpine) {
 
     const render = (date) => {
       try {
-        if (typeof date === 'string') {
+        if (typeof date === 'string')
           date = parseISO(date)
-        }
+
         el.setAttribute('title', date)
         el.textContent = format(date, 'yyyy-MM-dd HH:mm:ss', {
           addSuffix: !modifiers.includes('pure'),
           locale,
         })
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
       }
     }
@@ -34,15 +35,16 @@ export function TimeAgo(Alpine) {
 
     const render = (date) => {
       try {
-        if (typeof date === 'string') {
+        if (typeof date === 'string')
           date = parseISO(date)
-        }
+
         el.setAttribute('title', date)
         el.textContent = format(date, 'yyyy-MM-dd', {
           addSuffix: !modifiers.includes('pure'),
           locale,
         })
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
       }
     }
@@ -57,15 +59,16 @@ export function TimeAgo(Alpine) {
 
     const render = (date) => {
       try {
-        if (typeof date === 'string') {
+        if (typeof date === 'string')
           date = parseISO(date)
-        }
+
         el.setAttribute('title', date)
         el.textContent = format(date, 'HH:mm:ss', {
           addSuffix: !modifiers.includes('pure'),
           locale,
         })
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
       }
     }
@@ -80,15 +83,16 @@ export function TimeAgo(Alpine) {
 
     const render = (date) => {
       try {
-        if (typeof date === 'string') {
+        if (typeof date === 'string')
           date = parseISO(date)
-        }
+
         el.setAttribute('title', date)
         el.textContent = formatDistanceToNow(date, {
           addSuffix: !modifiers.includes('pure'),
           locale,
         })
-      } catch (e) {
+      }
+      catch (e) {
         console.error(e)
       }
     }
@@ -97,9 +101,8 @@ export function TimeAgo(Alpine) {
 
     effect(() => {
       evaluateDate((date) => {
-        if (interval) {
+        if (interval)
           clearInterval(interval)
-        }
 
         render(date)
 
@@ -114,11 +117,8 @@ export function TimeAgo(Alpine) {
 }
 
 TimeAgo.configure = (config) => {
-  if (config.hasOwnProperty('locale') && typeof config.locale === 'object') {
-    if (config.locale.hasOwnProperty('formatDistance')) {
-      locale = config.locale
-    }
-  }
+  if (!!config.locale && !!config.locale.formatDistance)
+    locale = config.locale
 
   return TimeAgo
 }
