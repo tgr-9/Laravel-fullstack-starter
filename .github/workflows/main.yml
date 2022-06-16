@@ -10,8 +10,9 @@ on:
     types: [created]
 
 env:
-  APP_URL: https://demo-wanho.creasi.co
-  APP_NAME: Wanho Demo
+  APP_NAME: Creasi App
+  APP_ENV: testing
+  MAIL_FROM_ADDRESS: devtest@creasi.co
 
 jobs:
   build:
@@ -19,7 +20,7 @@ jobs:
     name: Build
 
     env:
-      MIX_SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_LARAVEL_DSN }}
+      MIX_SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
 
     steps:
       - name: Checkout
@@ -55,14 +56,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.0', '8.1']
+        php-version: ['8.1', '8.2']
 
     env:
       APP_KEY: ${{ secrets.APP_KEY }}
-      APP_ENV: testing
       DB_CONNECTION: sqlite
       DB_DATABASE: database/database.sqlite
-      SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_LARAVEL_DSN }}
+      SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
       SENTRY_TRACE_QUEUE_ENABLED: true
 
     steps:
@@ -109,42 +109,42 @@ jobs:
       - name: Run tests suite
         run: php artisan test
 
-  deploy:
-    runs-on: ubuntu-latest
-    name: Deploy
-    needs: tests
-    if: ${{ github.ref_name == 'develop' && github.event_name == 'push' }}
+  # deploy:
+  #   runs-on: ubuntu-latest
+  #   name: Deploy
+  #   needs: tests
+  #   if: ${{ github.ref_name == 'develop' && github.event_name == 'push' }}
 
-    environment:
-      name: staging
-      url: ${{ env.APP_URL }}
+  #   environment:
+  #     name: staging
+  #     url: ${{ env.APP_URL }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+  #       with:
+  #         fetch-depth: 0
 
-      - name: Prepare
-        run: |
-          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
-          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
-          echo "${{ secrets.STAGING_SERVER_SSH_HOSTS }}" >> $HOME/.ssh/known_hosts
-          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
-          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
+  #     - name: Prepare
+  #       run: |
+  #         [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
+  #         echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
+  #         echo "${{ secrets.STAGING_SERVER_SSH_HOSTS }}" >> $HOME/.ssh/known_hosts
+  #         echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
+  #         chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
+  #         git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
-      - name: Download assets
-        id: download
-        uses: actions/download-artifact@v3
-        with:
-          name: public
-          path: public
+  #     - name: Download assets
+  #       id: download
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: public
+  #         path: public
 
-      - name: Deploy repo
-        run: |
-          git fetch creasico@creasi.co:~/git/wanho.git
-          git push -fu creasico@creasi.co:~/git/wanho.git HEAD:master
+  #     - name: Deploy repo
+  #       run: |
+  #         git fetch creasico@creasi.co:~/git/wanho.git
+  #         git push -fu creasico@creasi.co:~/git/wanho.git HEAD:master
 
-      - name: Deploy assets
-        run: rsync -zrtv public/ creasi.co:demo-wanho.creasi.co/public/
+  #     - name: Deploy assets
+  #       run: rsync -zrtv public/ creasi.co:demo-wanho.creasi.co/public/
