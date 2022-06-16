@@ -83,8 +83,6 @@ jobs:
 
     env:
       APP_KEY: ${{ secrets.APP_KEY }}
-      BROWSERSTACK_BUILD: ${{ github.ref }}
-      BROWSERSTACK_PROJECT: "${{ github.repository }} - ${{ github.workflow }} on PHP ${{ matrix.php }}"
       DB_PASSWORD: secret
       SENTRY_TRACE_QUEUE_ENABLED: true
 
@@ -126,12 +124,27 @@ jobs:
         env:
           SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
 
+      - name: 'BrowserStack Env Setup'  # Invokes the setup-env action
+        uses: browserstack/github-actions/setup-env@master
+        with:
+          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          build-name: ${{ github.ref }}
+          project-name: "${{ github.repository }} - ${{ github.workflow }} on PHP ${{ matrix.php }}"
+
+      - name: 'Start BrowserStackLocal Tunnel'
+        uses: 'browserstack/github-actions/setup-local@master'
+        with:
+          local-testing: start
+          local-logging-level: all-logs
+          local-identifier: random
+
       - name: Run end-to-end tests
         run: php artisan dusk
         env:
           APP_URL: http://127.0.0.1:8000
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
 
       - name: Upload Screenshots
         if: failure()
@@ -146,6 +159,11 @@ jobs:
         with:
           name: console
           path: tests/Browser/console
+
+      - name: 'Stop BrowserStackLocal'
+        uses: 'browserstack/github-actions/setup-local@master'
+        with:
+          local-testing: 'stop'
 
   # deploy:
   #   runs-on: ubuntu-latest
