@@ -54,7 +54,7 @@
             "phpcs --standard=PSR12 -n -p app database"
         ],
         "lint:fix": [
-            "php-cs-fixer fix --allow-risky=yes"
+            "php-cs-fixer fix --config .php-cs-fixer.php --allow-risky yes"
         ],
         "test": [
             "@php artisan test --env=testing"
