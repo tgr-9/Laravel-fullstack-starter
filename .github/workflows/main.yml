@@ -84,8 +84,9 @@ jobs:
 
     env:
       APP_KEY: ${{ secrets.APP_KEY }}
+      BROWSERSTACK_BUILD: ${{ github.ref }}
+      BROWSERSTACK_PROJECT: "${{ github.repository }} - ${{ github.workflow }}"
       DB_PASSWORD: secret
-      SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
       SENTRY_TRACE_QUEUE_ENABLED: true
 
     steps:
@@ -111,20 +112,6 @@ jobs:
           name: public
           path: public
 
-      # - name: Get Composer Cache Directory
-      #   id: composer-cache
-      #   run: echo "::set-output name=dir::$(composer config cache-files-dir)"
-
-      # - name: Cache composer files
-      #   uses: actions/cache@v2.1.7
-      #   with:
-      #     path: ${{ steps.composer-cache.outputs.dir }}
-      #     key: ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-composer-${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-      #       ${{ runner.os }}-composer-${{ matrix.php }}
-      #       ${{ runner.os }}-composer-
-
       - name: Install dependencies
         uses: nick-invision/retry@v1
         with:
@@ -137,6 +124,10 @@ jobs:
 
       - name: Run tests suite
         run: php artisan test
+        env:
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          BROWSERSTACK_USER: ${{ secrets.BROWSERSTACK_USER }}
+          SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
 
   # deploy:
   #   runs-on: ubuntu-latest
