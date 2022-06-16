@@ -16,6 +16,7 @@
         "sentry/sentry-laravel": "^2.12"
     },
     "require-dev": {
+        "laravel/dusk": "^6.24",
         "laravel/sail": "^1.0.1",
         "laravel/telescope": "^4.8",
         "laravel/tinker": "^2.7",
