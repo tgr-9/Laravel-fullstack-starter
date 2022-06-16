@@ -53,7 +53,7 @@ jobs:
 
   tests:
     runs-on: ubuntu-latest
-    name: PHP ${{ matrix.php }}
+    name: Test with PHP ${{ matrix.php }}
     needs: build
 
     services:
@@ -90,12 +90,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, gd, redis-phpredis/phpredis@5.3.5, igbinary, msgpack, lzf, zstd, lz4
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, gd, redis-phpredis/phpredis@5.3.5, igbinary, lzf, zstd, lz4
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: xdebug
         env:
-          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary --enable-redis-msgpack --enable-redis-lzf --with-liblzf --enable-redis-zstd --with-libzstd --enable-redis-lz4 --with-liblz4
+          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary --enable-redis-lzf --with-liblzf --enable-redis-zstd --with-libzstd --enable-redis-lz4 --with-liblz4
           REDIS_LIBS: liblz4-dev, liblzf-dev, libzstd-dev
 
       - name: Download assets
@@ -115,14 +115,14 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --seed
 
-      - name: Run tests suite
+      - name: Run tests
         run: php artisan test
         env:
           SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
 
   e2e:
     runs-on: ubuntu-latest
-    name: End-to-End Test
+    name: Test on BrowserStack
     needs: tests
 
     services:
@@ -154,11 +154,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, gd, redis-phpredis/phpredis@5.3.5, igbinary, msgpack, lzf, zstd, lz4
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, gd, redis-phpredis/phpredis@5.3.5, igbinary, lzf, zstd, lz4
           tools: composer:v2
           coverage: xdebug
         env:
-          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary --enable-redis-msgpack --enable-redis-lzf --with-liblzf --enable-redis-zstd --with-libzstd --enable-redis-lz4 --with-liblz4
+          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary --enable-redis-lzf --with-liblzf --enable-redis-zstd --with-libzstd --enable-redis-lz4 --with-liblz4
           REDIS_LIBS: liblz4-dev, liblzf-dev, libzstd-dev
 
       - name: Download assets
@@ -175,7 +175,7 @@ jobs:
           max_attempts: 3
           command: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: 'Setup BrowserStack env'  # Invokes the setup-env action
+      - name: 'Setup env'  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master
         with:
           username:  ${{ secrets.BROWSERSTACK_USERNAME }}
@@ -183,7 +183,7 @@ jobs:
           build-name: ${{ github.ref }}
           project-name: "${{ github.repository }} - ${{ github.workflow }} on PHP 8.1"
 
-      - name: 'Start BrowserStackLocal Tunnel'
+      - name: 'Start local tunnel'
         uses: 'browserstack/github-actions/setup-local@master'
         with:
           local-testing: start
@@ -193,7 +193,7 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --seed
 
-      - name: Run end-to-end tests
+      - name: Run tests
         run: php artisan dusk
         env:
           APP_URL: http://127.0.0.1:8000
@@ -212,7 +212,7 @@ jobs:
           name: console
           path: tests/Browser/console
 
-      - name: 'Stop BrowserStackLocal'
+      - name: 'Stop local tunnel'
         uses: 'browserstack/github-actions/setup-local@master'
         with:
           local-testing: 'stop'
