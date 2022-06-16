@@ -47,7 +47,7 @@ abstract class DuskTestCase extends BaseTestCase
     protected function driver()
     {
         $options = (new ChromeOptions)->addArguments(collect([
-            $this->shouldStartMaximized() ? '--start-maximized' : '--window-size=1920,1080',
+            '--start-maximized'
         ])->unless($this->hasHeadlessDisabled(), function ($items) {
             return $items->merge([
                 '--disable-gpu',
@@ -77,7 +77,11 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function hasHeadlessDisabled()
     {
-        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) || isset($_ENV['DUSK_HEADLESS_DISABLED']);
+        if (static::hasBrowserStackKey()) {
+            return false;
+        }
+
+        return ($_SERVER['DUSK_HEADLESS_DISABLED'] ?? $_ENV['DUSK_HEADLESS_DISABLED']) === true;
     }
 
     /**
@@ -87,7 +91,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected function shouldStartMaximized()
     {
-        return isset($_SERVER['DUSK_START_MAXIMIZED']) || isset($_ENV['DUSK_START_MAXIMIZED']);
+        return ($_SERVER['DUSK_START_MAXIMIZED'] ?? $_ENV['DUSK_START_MAXIMIZED']) === true;
     }
 
     /**
