@@ -1,9 +1,18 @@
 {
   "name": "creasi/skeleton",
-  "type": "project",
   "description": "Application Project Skeleton for Creasi.co",
-  "keywords": ["framework", "laravel"],
+  "keywords": ["project", "laravel"],
   "license": "MIT",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Creasi.co",
+      "email": "hello@creasi.co"
+    }
+  ],
+  "support": {
+    "source": "https://github.com/creasico/laravel-project"
+  },
   "require": {
     "php": ">=8.1",
     "ext-redis": "*",
