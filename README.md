@@ -1,3 +1,7 @@
+[![Version](https://img.shields.io/packagist/v/creasi/laravel-project?style=flat-square)](https://packagist.org/packages/creasi/laravel-project)
+[![License](https://img.shields.io/packagist/l/creasi/laravel-project?style=flat-square)](https://github.com/creasico/laravel-project/blob/master/LICENSE)
+[![Actions Status](https://img.shields.io/github/workflow/status/creasico/laravel-project/Tests/master?style=flat-square&logo=github-actions)](https://github.com/creasico/laravel-project/actions)
+
 # Application Skeleton
 
 ## Requirements

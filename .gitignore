@@ -2,32 +2,31 @@
 # --------------------------
 Thumbs.db
 Desktop.ini
-.DS_Store
-._
+.directory
 *.cache
-*.log
 *.old
-*.zip
+*.log
 *.pem
+*.tmp
+*.zip
+._
 *~
-
 
 # Developments
 # --------------------------
 /storage/*.key
 /tests/clover.xml
-docker-compose.override.yml
 Homestead.json
 Homestead.yaml
+coveralls-upload.json
+docker-compose.override.yml
 node_modules
-dist
 runtime-config.json
 service-account.json
 vendor
 .env
 .env.*
 .firebaserc
-.phpunit.result.cache
 
 # But Keep these
 # --------------------------
