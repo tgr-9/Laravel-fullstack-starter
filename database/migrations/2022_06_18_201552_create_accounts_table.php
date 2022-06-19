@@ -34,7 +34,7 @@ return new class extends Migration {
             $table->id();
             $table->enum('type', array_column(Account\MetaType::cases(), 'value'))->nullable();
             $table->string('key');
-            $table->string('cast');
+            $table->string('cast')->nullable();
             $table->json('payload')->nullable();
         });
 
