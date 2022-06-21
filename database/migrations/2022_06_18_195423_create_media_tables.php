@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->string('url')->nullable();
             $table->json('meta')->nullable();
             $table->string('disk')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
 
