@@ -1,6 +1,6 @@
 /// <reference types="vite/client" />
 
-declare interface Window {
+interface Window {
   dateFormat: (date: Date, fmt: string) => string
   numberFormat: (num: number) => string
   // extend the window
