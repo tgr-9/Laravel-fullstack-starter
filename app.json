@@ -16,14 +16,14 @@
       "description": "Only for automated deploys, please don't enter anything!",
       "required": true
     },
-    "APP_ENV": {
-      "description": "Laravel environment you desire for your Heroku instance, e.g: production, staging, etc",
-      "value": "staging",
-      "required": false
-    },
     "APP_DEBUG": {
       "description": "Whether you want to enable debuging or not",
       "value": "false",
+      "required": false
+    },
+    "APP_ENV": {
+      "description": "Laravel environment you desire for your Heroku instance, e.g: production, staging, etc",
+      "value": "staging",
       "required": false
     },
     "APP_KEY": {
@@ -40,8 +40,13 @@
     "review": {
       "env": {
         "APP_DEBUG": "true",
-        "APP_ENV": "testing",
-        "LOG_CHANNEL": "stderr"
+        "APP_ENV": "staging",
+        "BROADCAST_DRIVER": "redis",
+        "CACHE_DRIVER": "redis",
+        "FILESYSTEM_DISK": "s3",
+        "LOG_CHANNEL": "sentry",
+        "QUEUE_CONNECTION": "redis",
+        "SESSION_DRIVER": "redis"
       }
     }
   },
