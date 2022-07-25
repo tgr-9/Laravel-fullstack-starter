@@ -105,8 +105,8 @@ jobs:
         id: download
         uses: actions/download-artifact@v3
         with:
-          name: public
-          path: public
+          name: public/build
+          path: public/build
 
       - name: Install dependencies
         uses: nick-invision/retry@v1
@@ -136,7 +136,7 @@ jobs:
       - name: Run unit tests
         run: php artisan test
 
-      - name: Run tests
+      - name: Run e2e tests
         run: php artisan dusk
 
       - name: Upload screenshots
