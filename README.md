@@ -20,7 +20,7 @@
 2. Install dependencies
    ```shell
    $ composer install
-   $ yarn
+   $ pnpm install
    ```
 3. Copy `.env.example` file to `.env` file & generate new app key
    ```shell
@@ -51,9 +51,9 @@ Now you're good to go. For more information please consult to the [official docu
 
 ## Development
 
-This project is using `tailwind.css` and `alpine.js` as main front-end library, which mean any changes you've made, won't appears immadiately unless you run the following command
+This project is using `windi.css` and `alpine.js` as main front-end library, which mean any changes you've made, won't appears immadiately unless you run the following command
 ```shell
-$ yarn watch
+$ pnpm watch
 ```
 
 So, please make sure you've already install the dependencies as stated in the [Setup](#setup) section above.
