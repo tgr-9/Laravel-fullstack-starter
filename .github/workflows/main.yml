@@ -50,9 +50,7 @@ jobs:
         with:
           name: public
           path: |
-            public/css
-            public/js
-            public/mix-manifest.json
+            public/build
 
   tests:
     runs-on: ubuntu-latest
