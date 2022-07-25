@@ -17,6 +17,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Account> $companies
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Account> $family
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Account> $profiles
+ *
+ * @method static \Database\Factories\UserFactory<static> factory()
  */
 class User extends Authenticatable
 {

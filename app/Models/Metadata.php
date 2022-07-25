@@ -21,16 +21,13 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read Account\Setting $defined_settings
  * @property-read Account $accounts
  * @property-read self $onlyRelations
- *
- * @method static Builder|self onlyRelations()
- *
  * @property-read self $onlySettings
- *
- * @method static Builder|self onlySettings()
- *
  * @property-read self $onlyContacts
  *
+ * @method static Builder|self onlyRelations()
+ * @method static Builder|self onlySettings()
  * @method static Builder|self onlyContacts()
+ * @method static \Database\Factories\AccountFactory<static> factory()
  */
 class Metadata extends Model
 {
