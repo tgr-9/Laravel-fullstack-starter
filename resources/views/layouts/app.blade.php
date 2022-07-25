@@ -11,7 +11,7 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-1KQP24LR0L"></script>
 
         <!-- Scripts -->
-        @vite('resources/ts/app.ts')
+        @vite('resources/client/app.ts')
     </head>
 
     <body class="font-sans antialiased">

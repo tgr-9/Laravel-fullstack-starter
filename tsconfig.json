@@ -1,6 +1,6 @@
 {
-  "include": ["resources/ts/**/*"],
-  "exclude": ["dist", "node_modules"],
+  "include": ["resources/client/**/*"],
+  "exclude": ["build", "node_modules"],
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "public",
@@ -20,7 +20,7 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ESNext", "DOM"],
-    "typeRoots": ["./resources/ts"],
+    "typeRoots": ["resources/client"],
     "types": [
       // "vitest",
       "vite/client"
@@ -30,7 +30,7 @@
       // "vite-plugin-vue-layouts/client"
     ],
     "paths": {
-      "@/*": ["resources/ts/*"]
+      "~/*": ["resources/client/*"]
     }
   }
 }
