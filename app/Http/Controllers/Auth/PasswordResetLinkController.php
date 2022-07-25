@@ -44,7 +44,7 @@ class PasswordResetLinkController extends Controller
                 'message' => __($status),
                 'errors' => $status != Password::RESET_LINK_SENT ?: [
                     'email' => [__($status)],
-                ]
+                ],
             ]);
         }
 

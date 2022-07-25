@@ -29,16 +29,16 @@ class MetadataSeeder extends Seeder
 
     private const SETTINGS = [
         'locale' => [
-            'value'   => 'id',
-            'options' => ['en', 'id']
+            'value' => 'id',
+            'options' => ['en', 'id'],
         ],
         'timezone' => [
-            'value'   => 'Asia/Jakarta',
-            'options' => ['Asia/Jakarta', 'Asia/Makassar', 'Asia/Jayapura']
+            'value' => 'Asia/Jakarta',
+            'options' => ['Asia/Jakarta', 'Asia/Makassar', 'Asia/Jayapura'],
         ],
         'appearance' => [
-            'value'   => 'light',
-            'options' => ['light', 'dark', 'system']
+            'value' => 'light',
+            'options' => ['light', 'dark', 'system'],
         ],
     ];
 
@@ -63,8 +63,8 @@ class MetadataSeeder extends Seeder
 
             foreach (self::SETTINGS as $key => $payload) {
                 $factory->setting()->create([
-                    'key'     => $key,
-                    'payload' => $payload
+                    'key' => $key,
+                    'payload' => $payload,
                 ]);
             }
         });

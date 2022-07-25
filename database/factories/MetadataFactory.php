@@ -18,9 +18,9 @@ class MetadataFactory extends Factory
     public function definition()
     {
         return [
-            'type'    => null,
-            'key'     => '',
-            'cast'    => '',
+            'type' => null,
+            'key' => '',
+            'cast' => '',
             'payload' => null,
         ];
     }
@@ -28,21 +28,21 @@ class MetadataFactory extends Factory
     public function relation()
     {
         return $this->state([
-            'type' => MetaType::Relations
+            'type' => MetaType::Relations,
         ]);
     }
 
     public function contact()
     {
         return $this->state([
-            'type' => MetaType::Contacts
+            'type' => MetaType::Contacts,
         ]);
     }
 
     public function setting()
     {
         return $this->state([
-            'type' => MetaType::Settings
+            'type' => MetaType::Settings,
         ]);
     }
 }

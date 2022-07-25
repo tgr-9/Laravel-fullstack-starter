@@ -4,7 +4,7 @@ namespace App\Models\Account;
 
 enum MetaType: string
 {
-    case Contacts  = 'contact';
+    case Contacts = 'contact';
     case Relations = 'relation';
-    case Settings  = 'setting';
+    case Settings = 'setting';
 }

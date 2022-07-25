@@ -6,7 +6,6 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
 /**
- * @package App\Http\Requests\User
  * @method \App\Models\User user()
  */
 class RegistrationRequest extends FormRequest

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @package App\Models
  * @property-read int $id
  * @property Account\MetaType $type
  * @property string $key
@@ -22,10 +21,15 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read Account\Setting $defined_settings
  * @property-read Account $accounts
  * @property-read self $onlyRelations
+ *
  * @method static Builder|self onlyRelations()
+ *
  * @property-read self $onlySettings
+ *
  * @method static Builder|self onlySettings()
+ *
  * @property-read self $onlyContacts
+ *
  * @method static Builder|self onlyContacts()
  */
 class Metadata extends Model
@@ -37,18 +41,18 @@ class Metadata extends Model
     protected $fillable = ['type', 'key', 'cast', 'payload'];
 
     protected $casts = [
-        'type'    => Account\MetaType::class,
+        'type' => Account\MetaType::class,
         'payload' => AsArrayObject::class,
     ];
 
     public function getLabelAttribute(): string
     {
-        return trans($this->type->value . '.' . $this->key . '.label');
+        return trans($this->type->value.'.'.$this->key.'.label');
     }
 
     public function getDescriptionAttribute(): string
     {
-        return trans($this->type->value . '.' . $this->key . '.description');
+        return trans($this->type->value.'.'.$this->key.'.description');
     }
 
     /**
@@ -60,7 +64,7 @@ class Metadata extends Model
     }
 
     /**
-     * @param Builder $query
+     * @param  Builder  $query
      * @return Builder|static
      */
     public function scopeOnlyRelations(Builder $query)
@@ -69,7 +73,7 @@ class Metadata extends Model
     }
 
     /**
-     * @param Builder $query
+     * @param  Builder  $query
      * @return Builder|static
      */
     public function scopeOnlySettings(Builder $query)
@@ -78,7 +82,7 @@ class Metadata extends Model
     }
 
     /**
-     * @param Builder $query
+     * @param  Builder  $query
      * @return Builder|static
      */
     public function scopeOnlyContacts(Builder $query)
