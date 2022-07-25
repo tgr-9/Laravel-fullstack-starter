@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { enUS as en, id } from 'date-fns/locale'
 
 // import TimeAgo from './util/timeago'
-import './bootstrap'
+import '~/bootstrap'
 
 const locales: { [key in string]: Locale } = { id, en }
 const locale = locales[document.documentElement.lang]
