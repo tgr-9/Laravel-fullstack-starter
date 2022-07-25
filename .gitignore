@@ -3,30 +3,33 @@
 Thumbs.db
 Desktop.ini
 .directory
+.DS_Store
+._
 *.cache
-*.old
 *.log
+*.old
 *.pem
 *.tmp
 *.zip
-._
 *~
 
-# Developments
+# Development files
 # --------------------------
-/storage/*.key
-/tests/clover.xml
+.env.*
+.env
+.php-version
+coveralls-upload.json
+node_modules
+storage/*.key
+tests/clover.xml
+vendor
+
+.firebaserc
 Homestead.json
 Homestead.yaml
-coveralls-upload.json
 docker-compose.override.yml
-node_modules
 runtime-config.json
 service-account.json
-vendor
-.env
-.env.*
-.firebaserc
 
 # But Keep these
 # --------------------------

@@ -17,6 +17,6 @@ return [
     'sent' => 'Kami telah mengirimkan email untuk mengatur ulang password Anda!',
     'throttled' => 'Silakan tunggu beberapa saat lagi.',
     'token' => 'Token tersebut tidak valid.',
-    'user' => "Kami tidak dapat menemukan pengguna dengan email tersebut.",
+    'user' => 'Kami tidak dapat menemukan pengguna dengan email tersebut.',
 
 ];
