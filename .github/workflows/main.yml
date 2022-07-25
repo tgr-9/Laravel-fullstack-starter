@@ -29,18 +29,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2.2.1
+
+      - name: Setup Node.JS
         uses: actions/setup-node@v3
         with:
+          cache: 'pnpm'
           node-version: '16.x'
-          cache: 'yarn'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: yarn
+        run: pnpm install
 
       - name: Build assets
-        run: yarn build
+        run: pnpm build
 
       - name: Store assets
         uses: actions/upload-artifact@v3
@@ -78,8 +81,10 @@ jobs:
         php: ['8.1']
 
     env:
+      APP_URL: http://127.0.0.1:8000
       APP_KEY: ${{ secrets.APP_KEY }}
       DB_PASSWORD: secret
+      SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
       SENTRY_TRACE_QUEUE_ENABLED: true
 
     steps:
@@ -112,76 +117,13 @@ jobs:
           max_attempts: 3
           command: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Run migrations
-        run: php artisan migrate --seed
-
-      - name: Run tests
-        run: php artisan test
-        env:
-          SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
-
-  e2e:
-    runs-on: ubuntu-latest
-    name: Test on BrowserStack
-    needs: tests
-
-    services:
-      postgresql:
-        image: postgres:14
-        env:
-          POSTGRES_DB: creasico
-          POSTGRES_USER: creasico
-          POSTGRES_PASSWORD: secret
-        ports:
-          - 5432:5432
-        options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
-      redis:
-        image: redis:5.0
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
-
-    env:
-      APP_KEY: ${{ secrets.APP_KEY }}
-      DB_PASSWORD: secret
-      SENTRY_TRACE_QUEUE_ENABLED: true
-
-    steps:
-      - name: Checkout sources
-        uses: actions/checkout@v3
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, gd, redis-phpredis/phpredis@5.3.5, igbinary, lzf, zstd, lz4
-          tools: composer:v2
-          coverage: xdebug
-        env:
-          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary --enable-redis-lzf --with-liblzf --enable-redis-zstd --with-libzstd --enable-redis-lz4 --with-liblz4
-          REDIS_LIBS: liblz4-dev, liblzf-dev, libzstd-dev
-
-      - name: Download assets
-        id: download
-        uses: actions/download-artifact@v3
-        with:
-          name: public
-          path: public
-
-      - name: Install dependencies
-        uses: nick-invision/retry@v1
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          command: composer install --prefer-dist --no-interaction --no-progress
-
       - name: 'Setup env'  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master
         with:
           username:  ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
           build-name: ${{ github.ref }}
-          project-name: "${{ github.repository }} - ${{ github.workflow }} on PHP 8.1"
+          project-name: "${{ github.repository }} - ${{ github.workflow }} on PHP ${{ matrix.php }}"
 
       - name: 'Start local tunnel'
         uses: 'browserstack/github-actions/setup-local@master'
@@ -193,10 +135,11 @@ jobs:
       - name: Run migrations
         run: php artisan migrate --seed
 
+      - name: Run unit tests
+        run: php artisan test
+
       - name: Run tests
         run: php artisan dusk
-        env:
-          APP_URL: http://127.0.0.1:8000
 
       - name: Upload screenshots
         if: failure()
