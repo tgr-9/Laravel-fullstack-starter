@@ -7,12 +7,11 @@
 
         <title>{{ config('app.name', 'Laravel') }} - @yield('title', 'Dashboard')</title>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ asset(mix('/css/app.css')) }}">
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-1KQP24LR0L"></script>
+
+        <!-- Scripts -->
+        @vite('resources/ts/app.ts')
     </head>
 
     <body class="font-sans antialiased">
@@ -31,14 +30,5 @@
                 {{ $slot }}
             </main>
         </div>
-
-        <!-- Scripts -->
-        @push('scripts')
-            <script src="{{ asset(mix('/js/manifest.js')) }}"></script>
-            <script src="{{ asset(mix('/js/vendor.js')) }}"></script>
-            <script src="{{ asset(mix('/js/app.js')) }}"></script>
-        @endpush
-
-        @stack('scripts')
     </body>
 </html>
