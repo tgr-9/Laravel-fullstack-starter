@@ -105,7 +105,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v3
         with:
-          name: public/build
+          name: public
           path: public/build
 
       - name: Install dependencies
