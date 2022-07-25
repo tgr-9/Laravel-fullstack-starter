@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     {
         /**
          * While not in production, send all email tho the following address instead.
+         *
          * @see https://laravel.com/docs/9.x/mail#using-a-global-to-address
          */
         if (! $this->app->environment('production') && $devMail = env('MAIL_DEVELOPMENT')) {

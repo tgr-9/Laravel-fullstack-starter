@@ -4,7 +4,8 @@ namespace App\Models\Account;
 
 enum Type: string
 {
-    case Billings  = 'billings';
+    case Billings = 'billings';
     case Companies = 'companies';
-    case People    = 'people';
+    case Family = 'family';
+    case People = 'people';
 }
