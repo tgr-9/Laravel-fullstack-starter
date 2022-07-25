@@ -39,7 +39,6 @@
   "environments": {
     "review": {
       "env": {
-        "SCRIPT_DEBUG": "true",
         "APP_DEBUG": "true",
         "APP_ENV": "testing",
         "LOG_CHANNEL": "stderr"
