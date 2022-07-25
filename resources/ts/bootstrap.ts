@@ -1,8 +1,13 @@
 import axios from 'axios'
+import type { AxiosResponse } from 'axios'
+import * as Sentry from '@sentry/browser'
+import { BrowserTracing } from '@sentry/tracing'
 
-window.axios = axios
+import 'virtual:windi-devtools'
+import 'virtual:windi.css'
+import '../css/app.css'
 
-const scrollTop = (response) => {
+const scrollTop = (response: AxiosResponse) => {
   document.body.scrollTop = 0 // For Safari
   document.documentElement.scrollTop = 0 // For Chrome, Firefox, IE and Opera
 
@@ -24,6 +29,16 @@ axios.interceptors.response.use(response => scrollTop(response), (error) => {
   throw error
 })
 
+Sentry.init({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  integrations: [new BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: import.meta.env.VITE_SENTRY_TRACES_SAMPLE_RATE,
+})
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting
@@ -37,7 +52,7 @@ axios.interceptors.response.use(response => scrollTop(response), (error) => {
 
 // window.Echo = new Echo({
 //     broadcaster: 'pusher',
-//     key: process.env.MIX_PUSHER_APP_KEY,
-//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     key: import.meta.env.VITE_PUSHER_APP_KEY,
+//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
