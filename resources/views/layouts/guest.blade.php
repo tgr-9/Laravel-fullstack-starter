@@ -7,25 +7,16 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Fonts -->
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1KQP24LR0L"></script>
 
-        <!-- Styles -->
-        <link rel="stylesheet" href="{{ mix('/css/app.css') }}">
+        <!-- Scripts -->
+        @vite('resources/ts/app.ts')
     </head>
 
     <body class="font-sans antialiased">
         <div class="text-gray-900">
             {{ $slot }}
         </div>
-
-        <!-- Scripts -->
-        @push('scripts')
-            <script src="{{ asset(mix('/js/manifest.js')) }}"></script>
-            <script src="{{ asset(mix('/js/vendor.js')) }}"></script>
-            <script src="{{ asset(mix('/js/app.js')) }}"></script>
-        @endpush
-
-        @stack('scripts')
     </body>
 </html>

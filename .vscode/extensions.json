@@ -2,16 +2,13 @@
   "recommendations": [
     "adrianwilczynski.alpine-js-intellisense",
     "bmewburn.vscode-intelephense-client",
+    "cpylua.language-postcss",
     "dbaeumer.vscode-eslint",
     "editorconfig.editorconfig",
     "github.vscode-pull-request-github",
-    "mikestead.dotenv",
-    "xdebug.php-debug",
     "lokalise.i18n-ally",
-    "bradlc.vscode-tailwindcss",
-    "mtxr.sqltools",
     "mtxr.sqltools-driver-pg",
-    "cpylua.language-postcss",
-    "EditorConfig.EditorConfig"
+    "rangav.vscode-thunder-client",
+    "mtxr.sqltools"
   ]
 }

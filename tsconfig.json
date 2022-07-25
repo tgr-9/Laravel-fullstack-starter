@@ -1,0 +1,36 @@
+{
+  "include": ["resources/ts/**/*"],
+  "exclude": ["dist", "node_modules"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "public",
+    "module": "esnext",
+    "target": "esnext",
+    "jsx": "preserve",
+    "strict": true,
+    "allowJs": true,
+    "noEmit": true,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "useDefineForClassFields": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["ESNext", "DOM"],
+    "typeRoots": ["./resources/ts"],
+    "types": [
+      // "vitest",
+      "vite/client"
+      // "vue/ref-macros",
+      // "vite-plugin-pages/client",
+      // "vite-plugin-pwa/client",
+      // "vite-plugin-vue-layouts/client"
+    ],
+    "paths": {
+      "@/*": ["resources/ts/*"]
+    }
+  }
+}
