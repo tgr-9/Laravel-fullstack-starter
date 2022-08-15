@@ -30,7 +30,7 @@ class AccountFactory extends Factory
             'name' => $this->faker->name($gender->value !== 'other' ? $gender->value : null),
             'slug' => null,
             'display' => null,
-            'sumary' => $this->faker->sentence(2),
+            'summary' => $this->faker->sentence(2),
             'type' => $type,
             'gender' => $gender,
         ];
@@ -46,7 +46,7 @@ class AccountFactory extends Factory
     public function withPhoto(File $photo)
     {
         return $this->state([
-            'photo_ud' => $photo->id,
+            'photo_id' => $photo->id,
         ]);
     }
 
