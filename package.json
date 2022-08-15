@@ -12,26 +12,25 @@
     "prepare": "husky install scripts/husky"
   },
   "dependencies": {
-    "@sentry/browser": "^7.7.0",
-    "@sentry/tracing": "^7.7.0",
+    "@sentry/browser": "^7.10.0",
+    "@sentry/tracing": "^7.10.0",
+    "alpinejs": "^3.10.3",
+    "axios": "^0.27.2",
     "date-fns": "^2.29.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config-vue": "^0.25.2",
+    "@antfu/eslint-config-vue": "^0.26.1",
     "@commitlint/cli": "^17.0.3",
     "@commitlint/config-conventional": "^17.0.3",
-    "@fontsource/nunito": "^4.5.9",
+    "@fontsource/nunito": "^4.5.10",
     "@types/alpinejs": "^3.7.0",
-    "alpinejs": "^3.10.3",
-    "axios": "^0.27.2",
     "cross-env": "^7.0.3",
-    "eslint": "^8.20.0",
+    "eslint": "^8.22.0",
     "husky": "^8.0.1",
-    "laravel-vite-plugin": "^0.5.2",
+    "laravel-vite-plugin": "^0.5.3",
     "lint-staged": "^13.0.3",
-    "lodash": "^4.17.21",
     "typescript": "^4.7.4",
-    "vite": "^3.0.2",
+    "vite": "^3.0.7",
     "vite-plugin-windicss": "^1.8.7",
     "windicss": "^3.5.6"
   },
@@ -46,13 +45,7 @@
     ]
   },
   "lint-staged": {
-    "{resources,scripts}/**/*.{ts,js,vue}": [
-      "eslint --fix"
-    ],
-    "{package,tsconfig}.json": [
-      "eslint --fix"
-    ],
-    "*.config.{js,ts}": [
+    "*.{json,js,ts,vue}": [
       "eslint --fix"
     ],
     "{app,config,database,resources,tests}/**/*.php": [
