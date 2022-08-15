@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
  * @property string $name
  * @property null|string $slug
  * @property null|string $display
- * @property null|string $sumary
+ * @property null|string $summary
  * @property null|Account\Type $type
  * @property null|Account\Gender $gender
  * @property null|\Carbon\CarbonImmutable $deleted_at
@@ -43,7 +43,7 @@ class Account extends Model
     use HasFactory;
     use SoftDeletes;
 
-    protected $fillable = ['name', 'display', 'sumary'];
+    protected $fillable = ['name', 'slug', 'display', 'summary'];
 
     protected $with = ['user', 'photo'];
 

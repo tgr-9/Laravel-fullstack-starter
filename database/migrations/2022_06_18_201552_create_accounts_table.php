@@ -21,7 +21,7 @@ return new class() extends Migration
             $table->string('name');
             $table->string('display')->nullable();
             $table->string('slug')->nullable();
-            $table->text('sumary')->nullable();
+            $table->text('summary')->nullable();
             $table->enum('type', array_column(Account\Type::cases(), 'value'))->nullable();
             $table->enum('gender', array_column(Account\Gender::cases(), 'value'))->nullable();
             $table->softDeletes();
