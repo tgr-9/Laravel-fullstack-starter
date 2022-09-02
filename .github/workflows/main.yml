@@ -204,4 +204,4 @@ jobs:
       #     git push -fu creasico@creasi.co:~/git/wanho.git HEAD:master
 
       - name: Deploy assets
-        run: rsync -zrtv public/build creasi.co:skeleton.creasi.dev/public/build
+        run: rsync -zrtv public/build creasi.co:skeleton.creasi.dev/public
