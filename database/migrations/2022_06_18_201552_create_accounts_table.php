@@ -22,8 +22,8 @@ return new class() extends Migration
             $table->string('display')->nullable();
             $table->string('slug')->nullable();
             $table->text('summary')->nullable();
-            $table->enum('type', array_column(Account\Type::cases(), 'value'))->nullable();
-            $table->enum('gender', array_column(Account\Gender::cases(), 'value'))->nullable();
+            // $table->enum('type', array_column(Account\Type::cases(), 'value'))->nullable();
+            // $table->enum('gender', array_column(Account\Gender::cases(), 'value'))->nullable();
             $table->softDeletes();
             $table->timestamps();
 
@@ -33,7 +33,7 @@ return new class() extends Migration
 
         Schema::create('metadata', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', array_column(Account\MetaType::cases(), 'value'))->nullable();
+            // $table->enum('type', array_column(Account\MetaType::cases(), 'value'))->nullable();
             $table->string('key');
             $table->string('cast')->nullable();
             $table->json('payload')->nullable();
