@@ -23,6 +23,8 @@ class UserTest extends TestCase
 
     public function test_add_user_profile()
     {
+        $this->markTestSkipped();
+
         /** @var User $user */
         $user = User::factory()->create();
         /** @var Account $profile */
