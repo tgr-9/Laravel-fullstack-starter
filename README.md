@@ -6,7 +6,7 @@
 
 ## Requirements
 
-- PHP `>= v8.1` and Composer `>= v2.0`
+- PHP `>= v8.0` and Composer `>= v2.0`
 - Node.js `>= v16.0` and Yarn `v1.x`
 - Database Server (MySQL or PostgreSQL)
 
