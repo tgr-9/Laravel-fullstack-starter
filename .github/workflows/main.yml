@@ -196,7 +196,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: public
-          path: public
+          path: public/build
 
       # - name: Deploy repo
       #   run: |
@@ -204,4 +204,4 @@ jobs:
       #     git push -fu creasico@creasi.co:~/git/wanho.git HEAD:master
 
       - name: Deploy assets
-        run: rsync -zrtv public/ creasi.co:skeleton.creasi.dev/public/
+        run: rsync -zrtv public/build creasi.co:skeleton.creasi.dev/public/build
