@@ -64,7 +64,7 @@ return new class() extends Migration
             $table->id();
             $table->string('name');
             $table->string('code')->nullable();
-            $table->enum('type', array_column(Employment\StatusType::cases(), 'value'))->nullable();
+            // $table->enum('type', array_column(Employment\StatusType::cases(), 'value'))->nullable();
             $table->text('description')->default(0);
         });
 
