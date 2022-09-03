@@ -23,6 +23,8 @@ node_modules
 storage/*.key
 tests/clover.xml
 vendor
+yarn.lock
+package-lock.json
 
 .firebaserc
 Homestead.json
