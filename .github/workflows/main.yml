@@ -116,6 +116,19 @@ jobs:
           name: public
           path: public/build
 
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: |
+          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
+
       - name: Install dependencies
         uses: nick-invision/retry@v1
         with:
@@ -123,7 +136,7 @@ jobs:
           max_attempts: 3
           command: composer update --prefer-dist --no-interaction --no-progress
 
-      - name: 'Setup env'  # Invokes the setup-env action
+      - name: 'Setup BrowserStack env'  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master
         with:
           username:  ${{ secrets.BROWSERSTACK_USERNAME }}
@@ -131,7 +144,7 @@ jobs:
           build-name: ${{ github.ref }}
           project-name: "${{ github.repository }} - ${{ github.workflow }} on PHP ${{ matrix.php }}"
 
-      - name: 'Start local tunnel'
+      - name: 'Start BrowserStack local tunnel'
         uses: 'browserstack/github-actions/setup-local@master'
         with:
           local-testing: start
@@ -161,7 +174,7 @@ jobs:
           name: console
           path: tests/Browser/console
 
-      - name: 'Stop local tunnel'
+      - name: 'Stop BrowserStack local tunnel'
         uses: 'browserstack/github-actions/setup-local@master'
         with:
           local-testing: 'stop'
