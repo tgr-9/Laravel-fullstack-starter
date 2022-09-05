@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', [Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::view('/', 'dashboard')->name('home');
 
     Route::controller(Controllers\UserController::class)->prefix('/users')->group(function () {
         Route::get('', 'index')->name('users.home');
