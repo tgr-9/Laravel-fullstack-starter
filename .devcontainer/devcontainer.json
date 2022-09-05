@@ -1,0 +1,40 @@
+// https://aka.ms/devcontainer.json
+{
+  "name": "Existing Docker Compose (Extend)",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "laravel.test",
+  "workspaceFolder": "/var/www/html",
+  "settings": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
+    "editor.formatOnSave": false,
+    "files.associations": {
+      "*.css": "postcss"
+    },
+    "i18n-ally.localesPaths": [
+      "resources/lang"
+    ],
+    "prettier.enable": false
+  },
+  "extensions": [
+    "adrianwilczynski.alpine-js-intellisense",
+    "bmewburn.vscode-intelephense-client",
+    "cpylua.language-postcss",
+    "dbaeumer.vscode-eslint",
+    "editorconfig.editorconfig",
+    "github.vscode-pull-request-github",
+    "lokalise.i18n-ally",
+    "mikestead.dotenv",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg",
+    "rangav.vscode-thunder-client"
+  ],
+  "remoteUser": "sail",
+  "postCreateCommand": "chown -R 1000:1000 /var/www/html"
+  // "forwardPorts": [],
+  // "runServices": [],
+  // "shutdownAction": "none",
+}
