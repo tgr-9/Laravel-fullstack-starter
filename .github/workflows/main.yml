@@ -16,14 +16,17 @@ env:
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
   MAIL_FROM_ADDRESS: devtest@creasi.co
+  SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
+  SENTRY_TRACE_QUEUE_ENABLED: true
+  SENTRY_TRACES_SAMPLE_RATE: 1.0
+  VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  VITE_SENTRY_TRACE_QUEUE_ENABLED: true
+  VITE_SENTRY_TRACES_SAMPLE_RATE: 1.0
 
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Build
-
-    env:
-      MIX_SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
 
     steps:
       - name: Checkout
@@ -89,9 +92,6 @@ jobs:
       DUSK_HEADLESS_DISABLED: true
       LOG_CHANNEL: sentry
       TELESCOPE_ENABLED: false
-      SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
-      SENTRY_TRACE_QUEUE_ENABLED: true
-      VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
     steps:
       - name: Checkout sources
