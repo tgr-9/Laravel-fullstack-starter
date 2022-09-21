@@ -4,7 +4,7 @@ Thumbs.db
 Desktop.ini
 .directory
 .DS_Store
-._
+._*
 *.cache
 *.log
 *.old
@@ -18,13 +18,14 @@ Desktop.ini
 .env.*
 .env
 .php-version
+composer.lock
 coveralls-upload.json
 node_modules
+package-lock.json
 storage/*.key
 tests/clover.xml
 vendor
 yarn.lock
-package-lock.json
 
 .firebaserc
 Homestead.json
