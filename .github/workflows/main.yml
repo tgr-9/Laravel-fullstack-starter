@@ -52,8 +52,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: public
-          path: |
-            public/build
+          path: public/build
 
   tests:
     runs-on: ubuntu-latest
@@ -177,7 +176,7 @@ jobs:
       - name: 'Stop BrowserStack local tunnel'
         uses: 'browserstack/github-actions/setup-local@master'
         with:
-          local-testing: 'stop'
+          local-testing: stop
 
   deploy:
     runs-on: ubuntu-latest
