@@ -37,7 +37,7 @@
     }
   },
   "remoteUser": "sail",
-  "postCreateCommand": "chown -R 1000:1000 /var/www/html",
+  "postCreateCommand": "bash -i scripts/post-create.sh",
   // "forwardPorts": [],
   // "shutdownAction": "none",
   "runServices": [
