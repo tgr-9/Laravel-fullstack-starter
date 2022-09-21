@@ -18,6 +18,7 @@ Desktop.ini
 .env.*
 .env
 .php-version
+.pnpm-store
 composer.lock
 coveralls-upload.json
 node_modules
