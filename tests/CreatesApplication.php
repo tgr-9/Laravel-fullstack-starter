@@ -3,9 +3,14 @@
 namespace Tests;
 
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\WithFaker;
 
 trait CreatesApplication
 {
+    use WithFaker;
+    use DatabaseMigrations;
+
     /**
      * Creates the application.
      *
