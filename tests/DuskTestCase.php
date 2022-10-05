@@ -26,7 +26,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        if (! static::runningInSail() && ! static::hasBrowserStackKey()) {
+        if (! static::runningInSail()) {
             static::startChromeDriver();
         }
 
@@ -108,7 +108,7 @@ abstract class DuskTestCase extends BaseTestCase
                 ->setCapability('browserstack.localIdentifier', $bsLocalID);
         }
 
-        $caps->setCapability('browserVersion', '100.0');
+        // $caps->setCapability('browserVersion', '100.0');
 
         return $caps;
     }
@@ -134,7 +134,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     private static function getProjectName(): string
     {
-        if ($project = ($_SERVER['BROWSERSTACK_PROJECT_NAME'] ?? $_ENV['BROWSERSTACK_PROJECT_NAME'] ?? null)) {
+        if ($project = env('BROWSERSTACK_PROJECT_NAME')) {
             return $project;
         }
 
@@ -147,7 +147,7 @@ abstract class DuskTestCase extends BaseTestCase
             return 'https://'.env('BROWSERSTACK_USERNAME').':'.env('BROWSERSTACK_ACCESS_KEY').'@hub.browserstack.com/wd/hub';
         }
 
-        return $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515';
+        return env('DUSK_DRIVER_URL', 'http://localhost:9515');
     }
 
     protected static function createServerProcess()
