@@ -23,6 +23,10 @@ env:
   VITE_SENTRY_TRACE_QUEUE_ENABLED: true
   VITE_SENTRY_TRACES_SAMPLE_RATE: 1.0
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
