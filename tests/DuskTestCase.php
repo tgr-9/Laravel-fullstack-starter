@@ -65,7 +65,7 @@ abstract class DuskTestCase extends BaseTestCase
                 ->setCapability('browserstack.local', true)
                 ->setCapability('browserstack.localIdentifier', env('BROWSERSTACK_LOCAL_IDENTIFIER'))
                 ->setCapability('build', env('BROWSERSTACK_BUILD_NAME'))
-                ->setCapability('project', env('BROWSERSTACK_PROJECT_NAME'));
+                ->setCapability('project', env('BROWSERSTACK_PROJECT_NAME'), env('APP_NAME'));
         }
 
         return RemoteWebDriver::create(static::getDriverURL(), $capabilities);
@@ -82,17 +82,7 @@ abstract class DuskTestCase extends BaseTestCase
             return false;
         }
 
-        return ($_SERVER['DUSK_HEADLESS_DISABLED'] ?? $_ENV['DUSK_HEADLESS_DISABLED']) === true;
-    }
-
-    /**
-     * Determine if the browser window should start maximized.
-     *
-     * @return bool
-     */
-    protected function shouldStartMaximized()
-    {
-        return ($_SERVER['DUSK_START_MAXIMIZED'] ?? $_ENV['DUSK_START_MAXIMIZED']) === true;
+        return isset($_SERVER['DUSK_HEADLESS_DISABLED']) || isset($_ENV['DUSK_HEADLESS_DISABLED']);
     }
 
     /**
