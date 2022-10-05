@@ -38,9 +38,9 @@ jobs:
       - name: Setup Node.JS
         uses: actions/setup-node@v3
         with:
-          cache: 'pnpm'
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
+          cache: pnpm
+          node-version: 16.x
+          registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
         run: pnpm install
@@ -78,7 +78,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php: ['8.0', '8.1']
+        php: ['8.0', '8.1', '8.2']
 
     env:
       APP_URL: http://127.0.0.1:8000
@@ -135,7 +135,7 @@ jobs:
           max_attempts: 3
           command: composer update --prefer-dist --no-interaction --no-progress
 
-      - name: 'Setup BrowserStack env'  # Invokes the setup-env action
+      - name: Setup BrowserStack env  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master
         with:
           username:  ${{ secrets.BROWSERSTACK_USERNAME }}
@@ -143,8 +143,8 @@ jobs:
           build-name: ${{ github.ref }}
           project-name: "${{ github.repository }} - ${{ github.workflow }} on PHP ${{ matrix.php }}"
 
-      - name: 'Start BrowserStack local tunnel'
-        uses: 'browserstack/github-actions/setup-local@master'
+      - name: Start BrowserStack local tunnel
+        uses: browserstack/github-actions/setup-local@master
         with:
           local-testing: start
           local-logging-level: all-logs
@@ -173,8 +173,8 @@ jobs:
           name: console
           path: tests/Browser/console
 
-      - name: 'Stop BrowserStack local tunnel'
-        uses: 'browserstack/github-actions/setup-local@master'
+      - name: Stop BrowserStack local tunnel
+        uses: browserstack/github-actions/setup-local@master
         with:
           local-testing: stop
 
