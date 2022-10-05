@@ -12,25 +12,25 @@
     "prepare": "husky install scripts/husky"
   },
   "dependencies": {
-    "@sentry/browser": "^7.13.0",
-    "@sentry/tracing": "^7.13.0",
+    "@sentry/browser": "^7.14.1",
+    "@sentry/tracing": "^7.14.1",
     "alpinejs": "^3.10.3",
-    "axios": "^0.27.2",
+    "axios": "^1.0.0",
     "date-fns": "^2.29.3"
   },
   "devDependencies": {
     "@antfu/eslint-config-vue": "^0.27.0",
     "@commitlint/cli": "^17.1.2",
     "@commitlint/config-conventional": "^17.1.0",
-    "@fontsource/nunito": "^4.5.10",
+    "@fontsource/nunito": "^4.5.11",
     "@types/alpinejs": "^3.7.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.23.1",
+    "eslint": "^8.24.0",
     "husky": "^8.0.1",
     "laravel-vite-plugin": "^0.6.1",
     "lint-staged": "^13.0.3",
-    "typescript": "^4.8.3",
-    "vite": "^3.1.3",
+    "typescript": "^4.8.4",
+    "vite": "^3.1.4",
     "vite-plugin-windicss": "^1.8.8",
     "windicss": "^3.5.6"
   },
