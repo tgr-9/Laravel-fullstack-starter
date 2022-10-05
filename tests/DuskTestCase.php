@@ -59,13 +59,7 @@ abstract class DuskTestCase extends BaseTestCase
         $capabilities = DesiredCapabilities::chrome()
             ->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        if (static::hasBrowserStackKey()) {
-            $capabilities
-                // ->setCapability('browserstack.local', true)
-                // ->setCapability('browserstack.localIdentifier', env('BROWSERSTACK_LOCAL_IDENTIFIER'))
-                ->setCapability('build', self::getBuildName())
-                ->setCapability('project', self::getProjectName());
-        }
+        self::withBrowserStackCapabilities($capabilities);
 
         return RemoteWebDriver::create(static::getDriverURL(), $capabilities);
     }
@@ -92,6 +86,31 @@ abstract class DuskTestCase extends BaseTestCase
     protected static function hasBrowserStackKey()
     {
         return isset($_SERVER['BROWSERSTACK_ACCESS_KEY']) || isset($_ENV['BROWSERSTACK_ACCESS_KEY']);
+    }
+
+    protected static function withBrowserStackCapabilities(DesiredCapabilities $caps): DesiredCapabilities
+    {
+        if (! static::hasBrowserStackKey()) {
+            return $caps;
+        }
+
+        $caps->setCapability('bstack:options', [
+            // 'os' => 'Windows',
+            // 'osVersion' => '10',
+            'projectName' => self::getProjectName(),
+            'buildName' => self::getBuildName(),
+            'seleniumVersion' => '4.0.0',
+        ]);
+
+        if ($bsLocalID = env('BROWSERSTACK_LOCAL_IDENTIFIER')) {
+            $caps
+                ->setCapability('browserstack.local', true)
+                ->setCapability('browserstack.localIdentifier', $bsLocalID);
+        }
+
+        $caps->setCapability('browserVersion', '100.0');
+
+        return $caps;
     }
 
     /**
@@ -125,7 +144,7 @@ abstract class DuskTestCase extends BaseTestCase
     protected static function getDriverURL()
     {
         if (static::hasBrowserStackKey()) {
-            return 'https://'.env('BROWSERSTACK_USERNAME').':'.env('BROWSERSTACK_ACCESS_KEY').'@hub-cloud.browserstack.com/wd/hub';
+            return 'https://'.env('BROWSERSTACK_USERNAME').':'.env('BROWSERSTACK_ACCESS_KEY').'@hub.browserstack.com/wd/hub';
         }
 
         return $_ENV['DUSK_DRIVER_URL'] ?? 'http://localhost:9515';
