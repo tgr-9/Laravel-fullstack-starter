@@ -15,14 +15,15 @@ services:
             - '${APP_PORT:-80}:80'
             - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
         environment:
-            WWWUSER: '${WWWUSER}'
+            APP_ENV: dev
             LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+            WWWUSER: '${WWWUSER}'
         volumes:
             - '.:/var/www/html'
         networks:
-            - sail
+            - creasi
         depends_on:
             - pgsql
             - redis
@@ -36,10 +37,10 @@ services:
             POSTGRES_USER: '${DB_USERNAME}'
             POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
         volumes:
-            - 'sail-pgsql:/var/lib/postgresql/data'
+            - 'creasi-pgsql:/var/lib/postgresql/data'
             - './vendor/laravel/sail/database/pgsql/create-testing-database.sql:/docker-entrypoint-initdb.d/10-create-testing-database.sql'
         networks:
-            - sail
+            - creasi
         healthcheck:
             test: ["CMD", "pg_isready", "-q", "-d", "${DB_DATABASE}", "-U", "${DB_USERNAME}"]
             retries: 3
@@ -49,18 +50,18 @@ services:
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
-            - 'sail-redis:/data'
+            - 'creasi-redis:/data'
         networks:
-            - sail
+            - creasi
         healthcheck:
             test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
 networks:
-    sail:
+    creasi:
         driver: bridge
 volumes:
-    sail-pgsql:
+    creasi-pgsql:
         driver: local
-    sail-redis:
+    creasi-redis:
         driver: local
