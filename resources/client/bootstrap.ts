@@ -37,6 +37,9 @@ axios.interceptors.response.use(response => response, (error: AxiosError) => {
   Sentry.captureException(error)
 })
 
+if (import.meta.env.VITE_API_URL)
+  axios.defaults.baseURL = import.meta.env.VITE_API_URL
+
 // window.axios = axios
 
 /**
