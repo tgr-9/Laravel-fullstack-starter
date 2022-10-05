@@ -74,7 +74,7 @@ jobs:
           - 5432:5432
         options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
-        image: redis:5.0
+        image: redis
         ports:
           - 6379:6379
         options: --entrypoint redis-server
@@ -104,13 +104,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, pdo_pgsql, gd, redis-phpredis/phpredis@5.3.5, igbinary, lzf, zstd, lz4
+          extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, redis, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: xdebug
         env:
-          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary --enable-redis-lzf --with-liblzf --enable-redis-zstd --with-libzstd --enable-redis-lz4 --with-liblz4
-          REDIS_LIBS: liblz4-dev, liblzf-dev, libzstd-dev
+          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary
 
       - name: Download assets
         id: download
@@ -126,10 +125,10 @@ jobs:
           echo "::set-output name=dir::$(composer config cache-files-dir)"
 
       - name: Cache Composer dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v2
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-${{ matrix.php }}-composer-
           restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
 
       - name: Install dependencies
@@ -161,7 +160,7 @@ jobs:
         run: php artisan test
 
       - name: Run e2e tests
-        run: php artisan dusk
+        run: php artisan dusk:install && php artisan dusk
 
       - name: Upload screenshots
         if: failure()
