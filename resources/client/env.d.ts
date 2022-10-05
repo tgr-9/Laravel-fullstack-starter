@@ -7,6 +7,7 @@ interface Window {
 }
 
 interface ImportMetaEnv {
+  VITE_API_URL?: string;
   VITE_SENTRY_DSN?: string;
   VITE_SENTRY_TRACES_SAMPLE_RATE?: number;
   VITE_SENTRY_TRACE_QUEUE_ENABLED?: string;
