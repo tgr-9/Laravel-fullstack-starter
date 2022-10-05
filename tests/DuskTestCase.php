@@ -49,18 +49,17 @@ abstract class DuskTestCase extends BaseTestCase
     {
         $options = (new ChromeOptions)->addArguments(collect([
             '--start-maximized',
-        ])->unless($this->hasHeadlessDisabled(), function ($items) {
+        ])->unless($this->headlessDisabled(), function ($items) {
             return $items->merge([
                 '--disable-gpu',
                 '--headless',
             ]);
         })->all());
 
-        $hasBrowserStack = static::hasBrowserStackKey();
         $capabilities = DesiredCapabilities::chrome()
             ->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        if ($hasBrowserStack) {
+        if (static::hasBrowserStackKey()) {
             $capabilities
                 ->setCapability('browserstack.local', true)
                 ->setCapability('browserstack.localIdentifier', env('BROWSERSTACK_LOCAL_IDENTIFIER'))
@@ -76,10 +75,10 @@ abstract class DuskTestCase extends BaseTestCase
      *
      * @return bool
      */
-    protected function hasHeadlessDisabled()
+    protected function headlessDisabled()
     {
         if (static::hasBrowserStackKey()) {
-            return false;
+            return true;
         }
 
         return isset($_SERVER['DUSK_HEADLESS_DISABLED']) || isset($_ENV['DUSK_HEADLESS_DISABLED']);
@@ -92,7 +91,6 @@ abstract class DuskTestCase extends BaseTestCase
      */
     protected static function hasBrowserStackKey()
     {
-        // return false;
         return isset($_SERVER['BROWSERSTACK_ACCESS_KEY']) || isset($_ENV['BROWSERSTACK_ACCESS_KEY']);
     }
 
