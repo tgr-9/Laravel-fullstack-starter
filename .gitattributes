@@ -6,6 +6,7 @@
 *.md diff=markdown
 *.php diff=php
 
+/docs                 export-ignore
 # /tests              export-ignore
 # /phpunit.xml        export-ignore
 # /tailwind.config.js export-ignore
@@ -17,4 +18,5 @@
 # /.gitignore         export-ignore
 # /.github            export-ignore
 # /.vscode            export-ignore
-CHANGELOG.md        export-ignore
+.github/README.md     export-ignore
+CHANGELOG.md          export-ignore
