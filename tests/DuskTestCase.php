@@ -61,10 +61,10 @@ abstract class DuskTestCase extends BaseTestCase
 
         if (static::hasBrowserStackKey()) {
             $capabilities
-                ->setCapability('browserstack.local', true)
-                ->setCapability('browserstack.localIdentifier', env('BROWSERSTACK_LOCAL_IDENTIFIER'))
-                ->setCapability('build', env('BROWSERSTACK_BUILD_NAME'))
-                ->setCapability('project', env('BROWSERSTACK_PROJECT_NAME'), env('APP_NAME'));
+                // ->setCapability('browserstack.local', true)
+                // ->setCapability('browserstack.localIdentifier', env('BROWSERSTACK_LOCAL_IDENTIFIER'))
+                ->setCapability('build', self::getBuildName())
+                ->setCapability('project', self::getProjectName());
         }
 
         return RemoteWebDriver::create(static::getDriverURL(), $capabilities);
@@ -92,6 +92,34 @@ abstract class DuskTestCase extends BaseTestCase
     protected static function hasBrowserStackKey()
     {
         return isset($_SERVER['BROWSERSTACK_ACCESS_KEY']) || isset($_ENV['BROWSERSTACK_ACCESS_KEY']);
+    }
+
+    /**
+     * Get build name
+     *
+     * @return string
+     */
+    private static function getBuildName(): string
+    {
+        if ($build = ($_SERVER['BROWSERSTACK_BUILD_NAME'] ?? $_ENV['BROWSERSTACK_BUILD_NAME'] ?? null)) {
+            return $build;
+        }
+
+        return \exec('echo "$(git branch --show-current)-$(git rev-parse --short HEAD)"');
+    }
+
+    /**
+     * Get project name
+     *
+     * @return string
+     */
+    private static function getProjectName(): string
+    {
+        if ($project = ($_SERVER['BROWSERSTACK_PROJECT_NAME'] ?? $_ENV['BROWSERSTACK_PROJECT_NAME'] ?? null)) {
+            return $project;
+        }
+
+        return \substr(\exec('git remote get-url origin'), 15, -4);
     }
 
     protected static function getDriverURL()
