@@ -1,9 +1,11 @@
 import { defineConfig } from 'windicss/helpers'
+// import colors from 'windicss/colors'
+// import defaultTheme from 'windicss/defaultTheme'
 
 export default defineConfig({
   extract: {
     include: [
-      'resources/js/**/*.{vue,js,ts}',
+      'resources/client/**/*.{vue,js,ts}',
       'resources/views/**/*.blade.php',
     ],
     exclude: ['node_modules', '.git'],
@@ -11,15 +13,16 @@ export default defineConfig({
   plugins: [
     require('windicss/plugin/typography'),
     require('windicss/plugin/forms'),
+    require('windicss/plugin/filters'),
+    require('windicss/plugin/line-clamp'),
   ],
-  safelist: ['prose', 'prose-sm', 'max-w-none'],
+  safelist: ['prose', 'prose-sm', 'max-w-none', 'hidden'],
   theme: {
     extend: {
       colors: {
-        'primary': '#388370',
-        'primary-light-1': '#B9C6C3',
-        'primary-light-2': '#BFBFBF',
-        'secondary': '#839F98',
+        // DEFAULT: colors.emerald.toString(),
+        primary: '#388370',
+        secondary: '#839F98',
       },
       fontFamily: {
         sans: ['Nunito', 'sans-serif'],
