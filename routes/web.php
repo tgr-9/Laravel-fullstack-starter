@@ -23,5 +23,3 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/{user}', 'edit')->name('users.edit');
     });
 });
-
-require __DIR__.'/auth.php';
