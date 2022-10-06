@@ -13,23 +13,16 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('password.confirm') }}">
+        <form method="POST" action="{{ route('password.confirm') }}" class="flex flex-col gap-4">
             @csrf
 
             <!-- Password -->
-            <div>
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-            </div>
+            <x-forms.control id="password" :label="__('Password')">
+                <x-forms.input id="password" type="password" name="password" required autocomplete="current-password" />
+            </x-forms.control>
 
             <div class="flex justify-end mt-4">
-                <x-button>
-                    {{ __('Confirm') }}
-                </x-button>
+                <x-forms.button type="submit">{{ __('Confirm') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>

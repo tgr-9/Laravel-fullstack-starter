@@ -9,50 +9,35 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-4">
             @csrf
 
             <!-- Name -->
-            <div>
-                <x-label for="name" :value="__('Name')" />
-
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
-            </div>
+            <x-forms.control id="name" :label="__('Name')" required>
+                <x-forms.input id="name" type="text" name="name" :value="old('name')" required autofocus placeholder="John Doe" />
+            </x-forms.control>
 
             <!-- Email Address -->
-            <div class="mt-4">
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-            </div>
+            <x-forms.control id="email" :label="__('Email')" required>
+                <x-forms.input id="email" type="email" name="email" :value="old('email')" required placeholder="john@example.com" />
+            </x-forms.control>
 
             <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="new-password" />
-            </div>
+            <x-forms.control id="password" :label="__('Password')" required>
+                <x-forms.input id="password" type="password" name="password" required autocomplete="new-password" />
+            </x-forms.control>
 
             <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required />
-            </div>
+            <x-forms.control id="password_confirmation" :label="__('Confirm Password')" required>
+                <x-forms.input id="password_confirmation" type="password" name="password_confirmation" required />
+            </x-forms.control>
 
             <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
+                <a class="underline text-emerald-800 hover:text-emerald-900" href="{{ route('login') }}">
                     {{ __('Already registered?') }}
                 </a>
 
-                <x-button class="ml-4">
-                    {{ __('Register') }}
-                </x-button>
+                <x-forms.button type="submit" variant="primary" class="ml-3">{{ __('Register') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>

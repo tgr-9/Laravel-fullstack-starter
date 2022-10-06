@@ -12,44 +12,35 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('login') }}">
+        <form method="POST" action="{{ route('login') }}" class="flex flex-col gap-4">
             @csrf
 
             <!-- Employee ID -->
-            <div>
-                <x-label for="employee_id" :value="__('Employee ID')" />
-
-                <x-input id="employee_id" class="block mt-1 w-full" type="text" name="employee_id" :value="old('employee_id')" required autofocus />
-            </div>
+            <x-forms.control id="employee_id" :label="__('Employee ID')">
+                <x-forms.input id="employee_id" type="text" name="employee_id" :value="old('employee_id')" required autofocus />
+            </x-forms.control>
 
             <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-            </div>
+            <x-forms.control id="password" :label="__('Password')">
+                <x-forms.input id="password" type="password" name="password" required autocomplete="current-password" />
+            </x-forms.control>
 
             <!-- Remember Me -->
-            <div class="block mt-4">
+            <div>
                 <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
+                    <x-forms.input id="remember_me" type="checkbox" name="remember" />
+                    <span class="ml-2 text-gray-600">{{ __('Remember me') }}</span>
                 </label>
             </div>
 
             <div class="flex items-center justify-end mt-4">
                 @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                    <a class="underline text-emerald-800 hover:text-emerald-900" href="{{ route('password.request') }}">
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif
 
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
+                <x-forms.button type="submit" variant="primary" class="ml-3">{{ __('Log in') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>

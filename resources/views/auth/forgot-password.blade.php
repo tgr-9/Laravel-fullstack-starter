@@ -16,20 +16,16 @@
         <!-- Validation Errors -->
         <x-auth-validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('password.email') }}">
+        <form method="POST" action="{{ route('password.email') }}" class="flex flex-col gap-4">
             @csrf
 
             <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
-            </div>
+            <x-forms.control id="email" :label="__('Email')">
+                <x-forms.input id="email" type="email" name="email" :value="old('email')" required autofocus />
+            </x-forms.control>
 
             <div class="flex items-center justify-end mt-4">
-                <x-button>
-                    {{ __('Email Password Reset Link') }}
-                </x-button>
+                <x-forms.button type="submit" variant="primary">{{ __('Email Password Reset Link') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>
