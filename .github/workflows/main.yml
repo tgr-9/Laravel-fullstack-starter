@@ -153,11 +153,11 @@ jobs:
           local-logging-level: all-logs
           local-identifier: random
 
-      - name: Run migrations
-        run: php artisan migrate --seed
-
       - name: Run unit tests
         run: php artisan test
+
+      - name: Cek test dir
+        run: ls -lhF tests/{Browser,Feature,Unit}
 
       - name: Run e2e tests
         run: |
