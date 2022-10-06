@@ -30,14 +30,14 @@ abstract class DuskTestCase extends BaseTestCase
             static::startChromeDriver();
         }
 
-        static::$webServerProc = static::createServerProcess();
-        static::$webServerProc->start();
+        // static::$webServerProc = static::createServerProcess();
+        // static::$webServerProc->start();
 
-        static::afterClass(function () {
-            if (static::$webServerProc) {
-                static::$webServerProc->stop();
-            }
-        });
+        // static::afterClass(function () {
+        //     if (static::$webServerProc) {
+        //         static::$webServerProc->stop();
+        //     }
+        // });
     }
 
     /**

@@ -1,58 +1,37 @@
 <x-guest-layout>
     <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
-
         <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        <x-forms.validation-errors class="mb-4" :errors="$errors" />
 
-        <form method="POST" action="{{ route('register') }}">
+        <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-4">
             @csrf
 
             <!-- Name -->
-            <div>
-                <x-label for="name" :value="__('Name')" />
-
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
-            </div>
+            <x-forms.control id="username" :label="__('auth.fields.username')" required>
+                <x-forms.input id="username" type="text" name="username" :value="old('username')" required autofocus placeholder="John Doe" />
+            </x-forms.control>
 
             <!-- Email Address -->
-            <div class="mt-4">
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-            </div>
+            <x-forms.control id="email" :label="__('auth.fields.email')" required>
+                <x-forms.input id="email" type="email" name="email" :value="old('email')" required placeholder="john@example.com" />
+            </x-forms.control>
 
             <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
-
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="new-password" />
-            </div>
+            <x-forms.control id="password" :label="__('auth.fields.password')" required>
+                <x-forms.input id="password" type="password" name="password" required autocomplete="new-password" />
+            </x-forms.control>
 
             <!-- Confirm Password -->
-            <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
-
-                <x-input id="password_confirmation" class="block mt-1 w-full"
-                                type="password"
-                                name="password_confirmation" required />
-            </div>
+            <x-forms.control id="password_confirmation" :label="__('auth.fields.confirm_password')" required>
+                <x-forms.input id="password_confirmation" type="password" name="password_confirmation" required />
+            </x-forms.control>
 
             <div class="flex items-center justify-end mt-4">
-                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
+                <a class="underline text-emerald-800 hover:text-emerald-900" href="{{ route('login') }}">
+                    {{ __('auth.actions.registered') }}
                 </a>
 
-                <x-button class="ml-4">
-                    {{ __('Register') }}
-                </x-button>
+                <x-forms.button type="submit" variant="primary" class="ml-3">{{ __('auth.actions.register') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>
