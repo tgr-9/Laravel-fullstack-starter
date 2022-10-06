@@ -160,7 +160,9 @@ jobs:
         run: php artisan test
 
       - name: Run e2e tests
-        run: php artisan dusk:install && php artisan dusk
+        run: |
+          php artisan serve > /dev/null 2>&1 &
+          php artisan dusk:install && php artisan dusk
 
       - name: Upload screenshots
         if: failure()
