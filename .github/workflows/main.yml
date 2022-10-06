@@ -156,13 +156,13 @@ jobs:
       - name: Run unit tests
         run: php artisan test
 
-      - name: Cek test dir
-        run: ls -lhF tests/{Browser,Feature,Unit}
+      - name: Start dev server
+        run: php artisan serve > /dev/null 2>&1 &
 
       - name: Run e2e tests
         run: |
-          php artisan serve > /dev/null 2>&1 &
-          php artisan dusk:install && php artisan dusk
+          ls -lhF tests/{Browser,Feature,Unit}
+          php artisan dusk
 
       - name: Upload e2e tests logs
         if: failure()
