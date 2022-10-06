@@ -1,4 +1,13 @@
 @import '@fontsource/nunito/400.css';
 @import '@fontsource/nunito/400-italic.css';
+@import '@fontsource/nunito/600.css';
+@import '@fontsource/nunito/600-italic.css';
 @import '@fontsource/nunito/700.css';
 @import '@fontsource/nunito/700-italic.css';
+
+.auth-bg {
+  background-image: url('/app-bg.jpeg');
+  background-position: top center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
