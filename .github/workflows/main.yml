@@ -164,19 +164,14 @@ jobs:
           php artisan serve > /dev/null 2>&1 &
           php artisan dusk:install && php artisan dusk
 
-      - name: Upload screenshots
+      - name: Upload e2e tests logs
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: screenshots
-          path: tests/Browser/screenshots
-
-      - name: Upload console logs
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: console
-          path: tests/Browser/console
+          name: e2e-logs
+          path: |
+            tests/Browser/console
+            tests/Browser/screenshots
 
       - name: Stop BrowserStack local tunnel
         uses: browserstack/github-actions/setup-local@master
