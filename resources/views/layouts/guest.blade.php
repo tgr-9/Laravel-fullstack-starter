@@ -11,10 +11,10 @@
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-1KQP24LR0L"></script>
 
         <!-- Scripts -->
-        @vite('resources/client/app.ts')
+        @vite(['resources/client/app.ts', 'resources/client/app.css'])
     </head>
 
-    <body class="font-sans antialiased">
+    <body class="font-sans antialiased auth-bg">
         <div class="text-gray-900">
             {{ $slot }}
         </div>

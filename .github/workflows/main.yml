@@ -10,7 +10,7 @@ on:
     types: [created]
 
 env:
-  APP_NAME: Creasi App
+  APP_NAME: Creasi Skeleton
   APP_ENV: testing
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
@@ -160,7 +160,9 @@ jobs:
         run: php artisan test
 
       - name: Run e2e tests
-        run: php artisan dusk:install && php artisan dusk
+        run: |
+          php artisan serve > /dev/null 2>&1 &
+          php artisan dusk:install && php artisan dusk
 
       - name: Upload screenshots
         if: failure()
