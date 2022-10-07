@@ -162,7 +162,9 @@ abstract class DuskTestCase extends BaseTestCase
      */
     private static function getBuildName(): string
     {
-        if ($build = ($_SERVER['BROWSERSTACK_BUILD_NAME'] ?? $_ENV['BROWSERSTACK_BUILD_NAME'] ?? null)) {
+        $build = ($_SERVER['BROWSERSTACK_BUILD_NAME'] ?? $_ENV['BROWSERSTACK_BUILD_NAME'] ?? null);
+
+        if ($build && (\strlen($build) > 0 && \strlen($build) <= 255)) {
             return $build;
         }
 
@@ -180,7 +182,7 @@ abstract class DuskTestCase extends BaseTestCase
             return $project;
         }
 
-        return \substr(\exec('git remote get-url origin'), 15, -4);
+        return \substr(\explode('/', \exec('git remote get-url origin'))[1], 0, -4);
     }
 
     protected static function getDriverURL()
