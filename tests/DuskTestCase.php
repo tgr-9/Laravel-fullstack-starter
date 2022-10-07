@@ -8,11 +8,12 @@ use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Illuminate\Support\Collection;
 use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
-use Symfony\Component\Process\Process;
+use Tests\Support\SupportsBrowserStack;
 
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
+    use SupportsBrowserStack;
 
     /**
      * @var \Symfony\Component\Process\Process
@@ -61,21 +62,12 @@ abstract class DuskTestCase extends BaseTestCase
         $capabilities = DesiredCapabilities::chrome()
             ->setCapability(ChromeOptions::CAPABILITY, $options);
 
-        self::withBrowserStackCapabilities($capabilities);
+        $driver = RemoteWebDriver::create(
+            $this->getDriverURL(),
+            $this->withBrowserStackCapabilities($capabilities)
+        );
 
-        $driver = RemoteWebDriver::create(static::getDriverURL(), $capabilities);
-
-        $this->afterApplicationCreated(fn () => $this->executeScript($driver, [
-            'action' => 'setSessionName',
-            'arguments' => ['name' => \class_basename($this)],
-        ]));
-
-        $this->beforeApplicationDestroyed(fn () => $this->executeScript($driver, [
-            'action' => 'setSessionStatus',
-            'arguments' => ['status' => 'passed'],
-        ]));
-
-        return $driver;
+        return $this->prepareBrowserStackSession($driver);
     }
 
     /**
@@ -93,20 +85,6 @@ abstract class DuskTestCase extends BaseTestCase
     }
 
     /**
-     * @param  \Facebook\WebDriver\Remote\RemoteWebDriver  $driver
-     * @param  array  $command
-     * @return void
-     */
-    private function executeScript($driver, $command): void
-    {
-        if (! static::hasBrowserStackKey()) {
-            return;
-        }
-
-        $driver->executeScript('browserstack_executor: '.\json_encode($command));
-    }
-
-    /**
      * Determine whether the Dusk command has disabled headless mode.
      *
      * @return bool
@@ -118,86 +96,5 @@ abstract class DuskTestCase extends BaseTestCase
         }
 
         return isset($_SERVER['DUSK_HEADLESS_DISABLED']) || isset($_ENV['DUSK_HEADLESS_DISABLED']);
-    }
-
-    /**
-     * Determine if the BrowserStack Key and User is set.
-     *
-     * @return bool
-     */
-    protected static function hasBrowserStackKey()
-    {
-        return isset($_SERVER['BROWSERSTACK_ACCESS_KEY']) || isset($_ENV['BROWSERSTACK_ACCESS_KEY']);
-    }
-
-    protected static function withBrowserStackCapabilities(DesiredCapabilities $caps): DesiredCapabilities
-    {
-        if (! static::hasBrowserStackKey()) {
-            return $caps;
-        }
-
-        $caps->setCapability('bstack:options', [
-            // 'os' => 'Windows',
-            // 'osVersion' => '10',
-            'projectName' => self::getProjectName(),
-            'buildName' => self::getBuildName(),
-            'seleniumVersion' => '4.0.0',
-        ]);
-
-        if ($bsLocalID = env('BROWSERSTACK_LOCAL_IDENTIFIER')) {
-            $caps
-                ->setCapability('browserstack.local', true)
-                ->setCapability('browserstack.localIdentifier', $bsLocalID);
-        }
-
-        // $caps->setCapability('browserVersion', '100.0');
-
-        return $caps;
-    }
-
-    /**
-     * Get build name
-     *
-     * @return string
-     */
-    private static function getBuildName(): string
-    {
-        $build = ($_SERVER['BROWSERSTACK_BUILD_NAME'] ?? $_ENV['BROWSERSTACK_BUILD_NAME'] ?? null);
-
-        if ($build && (\strlen($build) > 0 && \strlen($build) <= 255)) {
-            return $build;
-        }
-
-        return \exec('echo "$(git branch --show-current)-$(git rev-parse --short HEAD)"');
-    }
-
-    /**
-     * Get project name
-     *
-     * @return string
-     */
-    private static function getProjectName(): string
-    {
-        if ($project = env('BROWSERSTACK_PROJECT_NAME')) {
-            return $project;
-        }
-
-        return \substr(\explode('/', \exec('git remote get-url origin'))[1], 0, -4);
-    }
-
-    protected static function getDriverURL()
-    {
-        if (static::hasBrowserStackKey()) {
-            return 'https://'.env('BROWSERSTACK_USERNAME').':'.env('BROWSERSTACK_ACCESS_KEY').'@hub.browserstack.com/wd/hub';
-        }
-
-        return env('DUSK_DRIVER_URL', 'http://localhost:9515');
-    }
-
-    protected static function createServerProcess()
-    {
-        return (new Process([PHP_BINARY, 'artisan', 'serve', '--env=testing']))
-            ->setWorkingDirectory(realpath(__DIR__.'/../'))
-            ->setTimeout(null);
     }
 }
