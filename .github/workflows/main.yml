@@ -143,8 +143,6 @@ jobs:
         with:
           username:  ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          build-name: ${{ github.ref }}
-          project-name: "${{ github.repository }} on PHP ${{ matrix.php }}"
 
       - name: Start BrowserStack local tunnel
         uses: browserstack/github-actions/setup-local@master
@@ -153,30 +151,25 @@ jobs:
           local-logging-level: all-logs
           local-identifier: random
 
-      - name: Run migrations
-        run: php artisan migrate --seed
-
       - name: Run unit tests
         run: php artisan test
 
+      - name: Start dev server
+        run: php artisan serve > /dev/null 2>&1 &
+
       - name: Run e2e tests
         run: |
-          php artisan serve > /dev/null 2>&1 &
-          php artisan dusk:install && php artisan dusk
+          ls -lhF tests/{Browser,Feature,Unit}
+          php artisan dusk
 
-      - name: Upload screenshots
+      - name: Upload e2e tests logs
         if: failure()
         uses: actions/upload-artifact@v3
         with:
-          name: screenshots
-          path: tests/Browser/screenshots
-
-      - name: Upload console logs
-        if: failure()
-        uses: actions/upload-artifact@v3
-        with:
-          name: console
-          path: tests/Browser/console
+          name: e2e-logs
+          path: |
+            tests/Browser/console
+            tests/Browser/screenshots
 
       - name: Stop BrowserStack local tunnel
         uses: browserstack/github-actions/setup-local@master
