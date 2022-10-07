@@ -8,6 +8,7 @@ specifiers:
   '@sentry/browser': ^7.14.1
   '@sentry/tracing': ^7.14.1
   '@types/alpinejs': ^3.7.0
+  '@types/node': ^18.8.3
   alpinejs: ^3.10.3
   axios: ^1.0.0
   cross-env: ^7.0.3
@@ -34,6 +35,7 @@ devDependencies:
   '@commitlint/config-conventional': 17.1.0
   '@fontsource/nunito': 4.5.11
   '@types/alpinejs': 3.7.0
+  '@types/node': 18.8.3
   cross-env: 7.0.3
   eslint: 8.24.0
   husky: 8.0.1
@@ -492,6 +494,10 @@ packages:
 
   /@types/node/14.18.31:
     resolution: {integrity: sha512-vQAnaReSQkEDa8uwAyQby8bYGKu84R/deEc6mg5T8fX6gzCn8QW6rziSgsti1fNvsrswKUKPnVTi7uoB+u62Mw==}
+    dev: true
+
+  /@types/node/18.8.3:
+    resolution: {integrity: sha512-0os9vz6BpGwxGe9LOhgP/ncvYN5Tx1fNcd2TM3rD/aCGBkysb+ZWpXEocG24h6ZzOi13+VB8HndAQFezsSOw1w==}
     dev: true
 
   /@types/normalize-package-data/2.4.1:
