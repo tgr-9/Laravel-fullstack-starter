@@ -5,6 +5,8 @@ namespace Tests;
 use Facebook\WebDriver\Chrome\ChromeOptions;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Illuminate\Support\Collection;
+use Laravel\Dusk\Browser;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use Symfony\Component\Process\Process;
 
@@ -26,7 +28,7 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        if (! static::runningInSail() || ! static::hasBrowserStackKey()) {
+        if (! static::runningInSail() && ! static::hasBrowserStackKey()) {
             static::startChromeDriver();
         }
 
@@ -61,7 +63,47 @@ abstract class DuskTestCase extends BaseTestCase
 
         self::withBrowserStackCapabilities($capabilities);
 
-        return RemoteWebDriver::create(static::getDriverURL(), $capabilities);
+        $driver = RemoteWebDriver::create(static::getDriverURL(), $capabilities);
+
+        $this->afterApplicationCreated(fn () => $this->executeScript($driver, [
+            'action' => 'setSessionName',
+            'arguments' => ['name' => \class_basename($this)],
+        ]));
+
+        $this->beforeApplicationDestroyed(fn () => $this->executeScript($driver, [
+            'action' => 'setSessionStatus',
+            'arguments' => ['status' => 'passed'],
+        ]));
+
+        return $driver;
+    }
+
+    /**
+     * @param  Collection<int, Browser>  $browsers
+     * @return void
+     */
+    protected function storeSourceLogsFor($browsers)
+    {
+        parent::storeSourceLogsFor($browsers);
+
+        $browsers->each(fn (Browser $browser) => $this->executeScript($browser->driver, [
+            'action' => 'setSessionStatus',
+            'arguments' => ['status' => 'failed'],
+        ]));
+    }
+
+    /**
+     * @param  \Facebook\WebDriver\Remote\RemoteWebDriver  $driver
+     * @param  array  $command
+     * @return void
+     */
+    private function executeScript($driver, $command): void
+    {
+        if (! static::hasBrowserStackKey()) {
+            return;
+        }
+
+        $driver->executeScript('browserstack_executor: '.\json_encode($command));
     }
 
     /**

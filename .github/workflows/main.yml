@@ -143,8 +143,6 @@ jobs:
         with:
           username:  ${{ secrets.BROWSERSTACK_USERNAME }}
           access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-          build-name: ${{ github.ref }}
-          project-name: "${{ github.repository }} on PHP ${{ matrix.php }}"
 
       - name: Start BrowserStack local tunnel
         uses: browserstack/github-actions/setup-local@master
