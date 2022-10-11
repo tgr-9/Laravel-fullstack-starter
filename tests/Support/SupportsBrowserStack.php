@@ -3,9 +3,14 @@
 namespace Tests\Support;
 
 use Facebook\WebDriver\Remote\DesiredCapabilities;
-use Facebook\WebDriver\Remote\RemoteWebDriver;
+use Laravel\Dusk\Browser;
 use Symfony\Component\Process\Process;
 
+/**
+ * @mixin \Laravel\Dusk\TestCase
+ *
+ * @property-read static $browsers Illuminate\Support\Collection<int, Browser>
+ */
 trait SupportsBrowserStack
 {
     /**
@@ -18,19 +23,17 @@ trait SupportsBrowserStack
         return isset($_SERVER['BROWSERSTACK_ACCESS_KEY']) || isset($_ENV['BROWSERSTACK_ACCESS_KEY']);
     }
 
-    private function prepareBrowserStackSession(RemoteWebDriver $driver): RemoteWebDriver
+    /**
+     * Sending assertion result back to BrowserStack.
+     *
+     * @return void
+     */
+    protected function tearDownSupportsBrowserStack(): void
     {
-        $this->afterApplicationCreated(fn () => $this->executeScript($driver, [
-            'action' => 'setSessionName',
-            'arguments' => ['name' => \class_basename($this)],
-        ]));
-
-        $this->beforeApplicationDestroyed(fn () => $this->executeScript($driver, [
-            'action' => 'setSessionStatus',
-            'arguments' => ['status' => 'passed'],
-        ]));
-
-        return $driver;
+        $this->executeBrowserStackCommand('setSessionStatus', [
+            'status' => $this->hasFailed() ? 'failed' : 'passed',
+            'reason' => $this->getStatusMessage(),
+        ]);
     }
 
     private function withBrowserStackCapabilities(DesiredCapabilities $caps): DesiredCapabilities
@@ -42,8 +45,9 @@ trait SupportsBrowserStack
         $caps->setCapability('bstack:options', [
             // 'os' => 'Windows',
             // 'osVersion' => '10',
-            'projectName' => $this->getProjectName(),
             'buildName' => $this->getBuildName(),
+            'projectName' => $this->getProjectName(),
+            'sessionName' => \class_basename($this),
             'seleniumVersion' => '4.0.0',
         ]);
 
@@ -97,18 +101,18 @@ trait SupportsBrowserStack
         return env('DUSK_DRIVER_URL', 'http://localhost:9515');
     }
 
-    /**
-     * @param  \Facebook\WebDriver\Remote\RemoteWebDriver  $driver
-     * @param  array  $command
-     * @return void
-     */
-    private function executeScript($driver, $command): void
+    private function executeBrowserStackCommand(string $action, array $arguments): void
     {
         if (! static::hasBrowserStackKey()) {
             return;
         }
 
-        $driver->executeScript('browserstack_executor: '.\json_encode($command));
+        $browsers = static::$browsers ?? collect();
+        $command = \compact('action', 'arguments');
+
+        $browsers->each(
+            fn (Browser $browser) => $browser->driver->executeScript('browserstack_executor: '.\json_encode($command))
+        );
     }
 
     private static function createServerProcess()
