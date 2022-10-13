@@ -6,8 +6,10 @@ Desktop.ini
 .DS_Store
 ._*
 *.cache
+*.crt
 *.log
 *.old
+*.key
 *.pem
 *.tmp
 *.zip
@@ -18,15 +20,10 @@ Desktop.ini
 .env.*
 .env
 .php-version
-.pnpm-store
 composer.lock
 coveralls-upload.json
 node_modules
-package-lock.json
-storage/*.key
-tests/clover.xml
 vendor
-yarn.lock
 
 .firebaserc
 Homestead.json
@@ -35,8 +32,15 @@ docker-compose.override.yml
 runtime-config.json
 service-account.json
 
+# Node.js lock files
+.pnpm-store
+package-lock.json
+# pnpm-lock.yaml
+yarn.lock
+
 # But Keep these
 # --------------------------
 !.env.example
+!.env.*.example
 !.htaccess
 !.gitkeep
