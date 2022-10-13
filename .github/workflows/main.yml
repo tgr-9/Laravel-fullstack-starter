@@ -158,9 +158,7 @@ jobs:
         run: php artisan serve > /dev/null 2>&1 &
 
       - name: Run e2e tests
-        run: |
-          ls -lhF tests/{Browser,Feature,Unit}
-          php artisan dusk
+        run: php artisan dusk
 
       - name: Upload e2e tests logs
         if: failure()
