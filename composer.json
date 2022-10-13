@@ -25,6 +25,7 @@
     "sentry/sentry-laravel": "^2.12"
   },
   "require-dev": {
+    "creasi/dusk-browserstack": "^0.0.2",
     "laravel/dusk": "^7.0",
     "laravel/pint": "^1.1",
     "laravel/sail": "^1.15",
