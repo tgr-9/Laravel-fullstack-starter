@@ -120,6 +120,10 @@ By default laravel dusk will runs headlessly, if you willing to disable headless
 - **Commit Convention**: This project follows [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) using [@commitlint/config-conventional](https://github.com/conventional-changelog/commitlint/tree/master/@commitlint/config-conventional) as standart, so make sure you follow the rules.
 - **Code Style**: This project uses [`PSR12`](https://www.php-fig.org/psr/psr-12/) code standard and [`@antfu/eslint-config`](https://github.com/antfu/eslint-config), so make sure you follow the rules. But don't worry, your VSCode should handle it for you. Please consult to [this config](.vscode/settings.json) for more info.
 
+## Sponsors
+
+[![BrowserStack Logo](https://raw.githubusercontent.com/creasico/creasico.github.io/master/public/assets/browserstack-logo.png)](https://browserstack.com)
+
 ## License
 
-The Application will be open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The project is an open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
