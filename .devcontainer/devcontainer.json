@@ -20,7 +20,8 @@
         "ms-vscode-remote.remote-containers",
         "mtxr.sqltools",
         "mtxr.sqltools-driver-pg",
-        "rangav.vscode-thunder-client"
+        "rangav.vscode-thunder-client",
+        "voorjaar.windicss-intellisense"
       ],
       "settings": {
         "editor.codeActionsOnSave": {
