@@ -22,6 +22,7 @@ Desktop.ini
 .php-version
 composer.lock
 coveralls-upload.json
+phpunit.dusk.xml
 node_modules
 vendor
 

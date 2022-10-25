@@ -62,8 +62,15 @@
     "fix": [
       "pint --preset laravel"
     ],
-    "test": [
+    "test:unit": [
       "@php artisan test --env=testing"
+    ],
+    "test:e2e": [
+      "@php artisan dusk --env=testing"
+    ],
+    "test": [
+      "@test:unit",
+      "@test:e2e"
     ]
   },
   "extra": {
