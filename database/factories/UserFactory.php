@@ -18,8 +18,8 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => Str::slug($this->faker->name()),
-            'email' => $this->faker->unique()->safeEmail(),
+            'name' => $name = Str::slug($this->faker->name()),
+            'email' => str($name)->append('@example.com'),
             'email_verified_at' => now(),
             'password' => 'secret',
             'remember_token' => Str::random(10),
@@ -33,10 +33,8 @@ class UserFactory extends Factory
      */
     public function unverified()
     {
-        return $this->state(function (array $attributes) {
-            return [
-                'email_verified_at' => null,
-            ];
-        });
+        return $this->state([
+            'email_verified_at' => null,
+        ]);
     }
 }
