@@ -8,7 +8,10 @@ use Tests\TestCase;
 
 class UserTest extends TestCase
 {
-    public function test_hashing_password()
+    /**
+     * @test
+     */
+    public function hashing_password()
     {
         /** @var User $user */
         $user = User::factory()->create([

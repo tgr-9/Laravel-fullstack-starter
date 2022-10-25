@@ -23,12 +23,21 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      *
-     * @param  \App\Http\Requests\Auth\LoginRequest  $request
+     * @param  LoginRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(LoginRequest $request)
     {
         $request->authenticate();
+
+        if ($request->isJson()) {
+            $user = $request->user();
+            $token = $user->createToken('auth');
+
+            return response([
+                'user' => array_merge($user->toArray(), ['token' => $token->plainTextToken]),
+            ], 201);
+        }
 
         $request->session()->regenerate();
 
@@ -49,6 +58,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return $request->isJson()
+            ? response()->noContent()
+            : redirect('/');
     }
 }

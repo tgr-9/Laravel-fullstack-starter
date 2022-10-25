@@ -28,10 +28,8 @@ class UserController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $item = $request->validated();
-
         /** @var User $item */
-        $item = User::create($item);
+        $item = User::create($request->validated());
 
         return response($this->show($item), 201);
     }
@@ -52,9 +50,7 @@ class UserController extends Controller
      */
     public function update(UpdateRequest $request, User $user)
     {
-        $item = $request->validated();
-
-        $user->update($item);
+        $user->update($request->validated());
 
         return response($this->show($user), 200);
     }

@@ -12,6 +12,9 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string $name
  * @property string $email
  * @property \Carbon\CarbonImmutable|null $email_verified_at
+ * @property \Carbon\CarbonImmutable|null $created_at
+ * @property \Carbon\CarbonImmutable|null $updated_at
+ * @property bool $is_email_verified
  *
  * @method static \Database\Factories\UserFactory<static> factory()
  */
@@ -29,6 +32,10 @@ class User extends Authenticatable
         'email_verified_at' => 'immutable_datetime',
     ];
 
+    protected $appends = [
+        'is_email_verified',
+    ];
+
     public function setPasswordAttribute(string $value)
     {
         $this->attributes['password'] = \bcrypt($value);
@@ -37,5 +44,10 @@ class User extends Authenticatable
     public function getAuthIdentifierName()
     {
         return 'name';
+    }
+
+    public function getIsEmailVerifiedAttribute(): bool
+    {
+        return $this->attributes['email_verified_at'] !== null;
     }
 }
