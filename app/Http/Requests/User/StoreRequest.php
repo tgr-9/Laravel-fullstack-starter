@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
 /**
- * @method \App\Models\User user()
+ * @method \App\Models\User|null user()
  */
 class StoreRequest extends FormRequest
 {
@@ -29,9 +29,9 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => Password::min(6),
+            'username' => ['required', 'string', 'unique:users,name'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => Password::defaults(),
         ];
     }
 }

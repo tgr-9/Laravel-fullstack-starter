@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @method \App\Models\User|null user()
+ */
 class LoginRequest extends FormRequest
 {
     /**
@@ -18,7 +21,7 @@ class LoginRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user() === null;
     }
 
     /**
@@ -44,10 +47,11 @@ class LoginRequest extends FormRequest
     public function authenticate()
     {
         $this->ensureIsNotRateLimited();
-        $credentials = $this->only('username', 'password');
 
-        $credentials['name'] = $credentials['username'];
-        unset($credentials['username']);
+        $credentials = tap($this->only('username', 'password'), function (&$credentials) {
+            $credentials['name'] = $credentials['username'];
+            unset($credentials['username']);
+        });
 
         if (! Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
