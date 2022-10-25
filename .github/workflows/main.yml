@@ -58,9 +58,9 @@ jobs:
           name: public
           path: public/build
 
-  tests:
+  units:
     runs-on: ubuntu-latest
-    name: Test with PHP ${{ matrix.php }}
+    name: Unit Test with PHP ${{ matrix.php }}
     needs: build
 
     services:
@@ -87,10 +87,84 @@ jobs:
     env:
       APP_URL: http://127.0.0.1:8000
       APP_KEY: ${{ secrets.APP_KEY }}
-      # AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      # AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      # AWS_DEFAULT_REGION: ap-southeast-3
-      # AWS_BUCKET: creasi-staging
+      DB_PASSWORD: secret
+      DUSK_HEADLESS_DISABLED: true
+      LOG_CHANNEL: sentry
+      TELESCOPE_ENABLED: false
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, redis, zip
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+          coverage: xdebug
+        env:
+          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary
+
+      - name: Download assets
+        id: download
+        uses: actions/download-artifact@v3
+        with:
+          name: public
+          path: public/build
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: |
+          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ matrix.php }}-composer-
+          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        uses: nick-invision/retry@v1
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Run unit tests
+        run: php artisan test
+
+  e2e:
+    runs-on: ubuntu-latest
+    name: Integration Test on BrowserStack
+    needs: units
+
+    services:
+      postgresql:
+        image: postgres:14
+        env:
+          POSTGRES_DB: creasico
+          POSTGRES_USER: creasico
+          POSTGRES_PASSWORD: secret
+        ports:
+          - 5432:5432
+        options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
+      redis:
+        image: redis
+        ports:
+          - 6379:6379
+        options: --entrypoint redis-server
+
+    strategy:
+      matrix:
+        php: ['8.0']
+
+    env:
+      APP_URL: http://127.0.0.1:8000
+      APP_KEY: ${{ secrets.APP_KEY }}
       DB_PASSWORD: secret
       DUSK_HEADLESS_DISABLED: true
       LOG_CHANNEL: sentry
@@ -151,9 +225,6 @@ jobs:
           local-logging-level: all-logs
           local-identifier: random
 
-      - name: Run unit tests
-        run: php artisan test
-
       - name: Start dev server
         run: php artisan serve > /dev/null 2>&1 &
 
@@ -177,7 +248,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy
-    needs: tests
+    needs: e2e
     if: ${{ github.ref_name == 'master' && github.event_name == 'push' }}
 
     environment:
