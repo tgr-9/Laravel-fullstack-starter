@@ -8,7 +8,10 @@ use Tests\DuskTestCase;
 
 class ForgotPasswordTest extends DuskTestCase
 {
-    public function testExample()
+    /**
+     * @test
+     */
+    public function example()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new ForgotPassword);

@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
-use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 class VerifyEmailController extends Controller
@@ -13,12 +12,14 @@ class VerifyEmailController extends Controller
      * Mark the authenticated user's email address as verified.
      *
      * @param  \Illuminate\Foundation\Auth\EmailVerificationRequest  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      */
     public function __invoke(EmailVerificationRequest $request)
     {
         $request->fulfill();
 
-        return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
+        return $request->isJson()
+            ? response()->json(['status' => 'OK'])
+            : redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
     }
 }

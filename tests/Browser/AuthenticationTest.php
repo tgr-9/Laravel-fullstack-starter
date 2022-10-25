@@ -7,9 +7,12 @@ use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Login;
 use Tests\DuskTestCase;
 
-class LoginTest extends DuskTestCase
+class AuthenticationTest extends DuskTestCase
 {
-    public function testInvalidLogin()
+    /**
+     * @test
+     */
+    public function should_not_be_able_to_authenticate_using_invalid_credential()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Login)
@@ -20,7 +23,10 @@ class LoginTest extends DuskTestCase
         });
     }
 
-    public function testUserLogin()
+    /**
+     * @test
+     */
+    public function should_be_able_to_authenticate_using_existing_credential()
     {
         /** @var User */
         $user = User::factory()->create([
@@ -34,5 +40,13 @@ class LoginTest extends DuskTestCase
                 ->press('@login')
                 ->assertRouteIs('home');
         });
+    }
+
+    /**
+     * @test
+     */
+    public function should_be_able_to_logout()
+    {
+        $this->markTestIncomplete('not yet implemented');
     }
 }

@@ -6,9 +6,12 @@ use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\Register;
 use Tests\DuskTestCase;
 
-class RegisterTest extends DuskTestCase
+class RegistrationTest extends DuskTestCase
 {
-    public function testExample()
+    /**
+     * @test
+     */
+    public function example()
     {
         $this->browse(function (Browser $browser) {
             $browser->visit(new Register);
