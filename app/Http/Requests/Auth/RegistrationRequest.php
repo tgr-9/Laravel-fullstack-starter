@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Password;
 
 /**
- * @method \App\Models\User user()
+ * @method \App\Models\User|null user()
  */
 class RegistrationRequest extends FormRequest
 {
@@ -17,7 +17,7 @@ class RegistrationRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return $this->user() === null;
     }
 
     /**
@@ -28,9 +28,9 @@ class RegistrationRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'password' => ['required', 'confirmed', Password::min(6)],
+            'username' => ['required', 'string', 'unique:users,name'],
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
 }
