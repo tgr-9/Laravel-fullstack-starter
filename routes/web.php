@@ -2,6 +2,7 @@
 
 use App\Http\Controllers;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::view(RouteServiceProvider::HOME, 'dashboard')->name('home');
+    Route::get(RouteServiceProvider::HOME, function (Request $request) {
+        return $request->isJson() ? response(404) : view('dashboard');
+    })->name('home');
 
     Route::controller(Controllers\UserController::class)->prefix('/users')->group(function () {
         Route::get('', 'index')->name('users.home');
