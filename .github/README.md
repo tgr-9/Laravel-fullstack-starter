@@ -1,5 +1,5 @@
-[![Version](https://img.shields.io/packagist/v/creasi/laravel-project)](https://packagist.org/packages/creasi/laravel-project)
-[![License](https://img.shields.io/packagist/l/creasi/laravel-project)](https://github.com/creasico/laravel-project/blob/master/LICENSE)
+[![Version](https://img.shields.io/packagist/v/creasi/project)](https://packagist.org/packages/creasi/project)
+[![License](https://img.shields.io/packagist/l/creasi/project)](https://github.com/creasico/laravel-project/blob/master/LICENSE)
 [![Actions Status](https://github.com/creasico/laravel-project/actions/workflows/main.yml/badge.svg)](https://github.com/creasico/laravel-project/actions)
 
 # Application Skeleton
