@@ -5,6 +5,8 @@
 # see: https://redd.it/2jzp6k
 # .codeclimate.yml    export-ignore
 # .coveralls.yml      export-ignore
+.devcontainer         export-ignore
+.dockerignore         export-ignore
 # .editorconfig       export-ignore
 # .gitattributes      export-ignore
 # .gitignore          export-ignore
@@ -15,6 +17,7 @@ CHANGELOG.md          export-ignore
 composer.lock         export-ignore
 # phpunit.*           export-ignore
 # docs                export-ignore
+docker-compose.yml    export-ignore
 # jsconfig.json       export-ignore
 # package.json        export-ignore
 # tailwind.config.*   export-ignore
