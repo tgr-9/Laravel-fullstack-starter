@@ -14,11 +14,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        if (User::all()->count() === 0) {
-            User::factory()->create([
-                'name' => 'creasi',
-                'email' => 'admin@creasi.dev',
-            ]);
+        $this->createInitialUsers();
+    }
+
+    /**
+     * Create Initial Users.
+     *
+     * @return void
+     */
+    private function createInitialUsers(): void
+    {
+        if (User::all()->count() > 0) {
+            return;
         }
+
+        User::factory()->create([
+            'name' => 'creasi',
+            'email' => 'admin@creasi.dev',
+        ]);
     }
 }
