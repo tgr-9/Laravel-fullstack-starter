@@ -1,12 +1,5 @@
 /// <reference types="vite/client" />
 
-declare interface Window {
-  dateFormat: (date: Date, fmt: string) => string
-  numberFormat: (num: number) => string
-  axios: any
-  // extend the window
-}
-
 interface ImportMetaEnv {
   VITE_API_URL?: string;
   VITE_SENTRY_DSN?: string;

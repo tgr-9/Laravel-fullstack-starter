@@ -1,6 +1,7 @@
 import alpine from 'alpinejs'
+import type { Alpine } from 'alpinejs'
 import axios from 'axios'
-import type { AxiosError } from 'axios'
+import type { AxiosError, AxiosStatic } from 'axios'
 import { format } from 'date-fns'
 import { enUS as en, id } from 'date-fns/locale'
 import * as Sentry from '@sentry/browser'
@@ -9,6 +10,17 @@ import { BrowserTracing } from '@sentry/tracing'
 import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
+
+declare global {
+  interface Window {
+    Alpine: Alpine
+    axios: AxiosStatic
+    dateFormat: (date: Date, fmt: string) => string
+    numberFormat: (num: number) => string
+    Livewire?: any
+    // extend the window
+  }
+}
 
 // import TimeAgo from './util/timeago'
 const {
@@ -44,6 +56,7 @@ axios.interceptors.response.use(response => response, (error: AxiosError) => {
 if (import.meta.env.VITE_API_URL)
   axios.defaults.baseURL = import.meta.env.VITE_API_URL
 
+window.Alpine = alpine
 window.axios = axios
 
 const locales: { [key in string]: Locale } = { id, en }
@@ -69,20 +82,20 @@ window.numberFormat = (num: number) => {
 // window.Pusher = Pusher;
 
 // window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: import.meta.env.VITE_PUSHER_APP_KEY,
-//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-//     forceTLS: true
+//   broadcaster: 'pusher',
+//   key: import.meta.env.VITE_PUSHER_APP_KEY,
+//   cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//   forceTLS: true
 // });
 
 // Alpine.plugin(TimeAgo.configure({ locale }))
 
-alpine.start()
-
 // const dataLayer = window.dataLayer || []
 // const gtag = window.gtag = (...args) => dataLayer.push(args)
 
-// window.addEventListener('DOMContentLoaded', () => {
-//   gtag('js', new Date())
-//   gtag('config', 'G-1KQP24LR0L')
-// })
+window.addEventListener('DOMContentLoaded', () => {
+  // gtag('js', new Date())
+  // gtag('config', 'G-1KQP24LR0L')
+
+  alpine.start()
+})
