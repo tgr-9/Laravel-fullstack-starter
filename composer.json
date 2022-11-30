@@ -29,7 +29,6 @@
     "deployer/deployer": "^7.0",
     "laravel/dusk": "^7.0",
     "laravel/pint": "^1.1",
-    "laravel/sail": "^1.15",
     "laravel/telescope": "^4.9",
     "laravel/tinker": "^2.7",
     "mockery/mockery": "^1.4.4",
