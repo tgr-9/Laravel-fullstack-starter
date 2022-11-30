@@ -15,7 +15,7 @@ env:
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
-  MAIL_FROM_ADDRESS: devtest@creasi.co
+  MAIL_FROM_ADDRESS: devtest@creasi.dev
   SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
   SENTRY_TRACE_QUEUE_ENABLED: true
   SENTRY_TRACES_SAMPLE_RATE: 1.0
@@ -103,7 +103,7 @@ jobs:
           extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, redis, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
-          coverage: xdebug
+          coverage: none
         env:
           REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary
 
@@ -132,7 +132,9 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 3
-          command: composer update --prefer-dist --no-interaction --no-progress
+          command: |
+            composer config -g github-oauth.github.com ${{ secrets.PAT }}
+            composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run unit tests
         run: php artisan test
@@ -210,7 +212,9 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 3
-          command: composer update --prefer-dist --no-interaction --no-progress
+          command: |
+            composer config -g github-oauth.github.com ${{ secrets.PAT }}
+            composer update --prefer-dist --no-interaction --no-progress
 
       - name: Setup BrowserStack env  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master
@@ -261,6 +265,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+          coverage: none
+
       - name: Prepare
         run: |
           [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
@@ -270,6 +283,15 @@ jobs:
           chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
+      - name: Install dependencies
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: |
+            composer config -g github-oauth.github.com ${{ secrets.PAT }}
+            composer update --prefer-dist --no-interaction --no-progress
+
       - name: Download assets
         id: download
         uses: actions/download-artifact@v3
@@ -277,10 +299,5 @@ jobs:
           name: public
           path: public/build
 
-      # - name: Deploy repo
-      #   run: |
-      #     git fetch creasico@creasi.co:~/git/wanho.git
-      #     git push -fu creasico@creasi.co:~/git/wanho.git HEAD:master
-
-      - name: Deploy assets
-        run: rsync -zrtv public/build creasi.co:skeleton.creasi.dev/public/
+      - name: Deploy repo
+        run: ./vendor/bin/dep deploy
