@@ -1,0 +1,109 @@
+name: Code Quality
+
+on:
+  push:
+    tags: ['[0-9].[0-9].[0-9]']
+  release:
+    types: [created]
+
+env:
+  APP_NAME: Creasi Skeleton
+  APP_ENV: testing
+  # AWS_ENDPOINT: 'https://is3.cloudhost.id'
+  # AWS_DEFAULT_REGION: 'ap-southeast-3'
+  # AWS_BUCKET: creasi-staging
+  MAIL_FROM_ADDRESS: devtest@creasi.dev
+  SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
+  SENTRY_TRACE_QUEUE_ENABLED: true
+  SENTRY_TRACES_SAMPLE_RATE: 1.0
+  VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  VITE_SENTRY_TRACE_QUEUE_ENABLED: true
+  VITE_SENTRY_TRACES_SAMPLE_RATE: 1.0
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2.2.4
+
+      - name: Setup Node.JS
+        uses: actions/setup-node@v3
+        with:
+          cache: pnpm
+          node-version: 16.x
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build assets
+        run: pnpm build
+
+      - name: Store assets
+        uses: actions/upload-artifact@v3
+        with:
+          name: public
+          path: public/build
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy
+    needs: build
+    if: ${{ github.ref_name == 'master' && github.event_name == 'push' }}
+
+    environment:
+      name: staging
+      url: https://skeleton.creasi.dev
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+          coverage: none
+
+      - name: Prepare
+        run: |
+          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
+          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
+          echo "${{ secrets.STAGING_SERVER_SSH_HOSTS }}" >> $HOME/.ssh/known_hosts
+          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
+          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
+          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
+
+      - name: Install dependencies
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: |
+            composer config -g github-oauth.github.com ${{ secrets.PAT }}
+            composer update --prefer-dist --no-interaction --no-progress
+
+      - name: Download assets
+        id: download
+        uses: actions/download-artifact@v3
+        with:
+          name: public
+          path: public/build
+
+      - name: Deploy repo
+        run: ./vendor/bin/dep deploy

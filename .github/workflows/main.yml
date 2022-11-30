@@ -3,11 +3,11 @@ name: Code Quality
 on:
   push:
     branches: [master]
+    paths: ['**.php', '**.js', '**.ts', '**.vue']
   pull_request:
-    types: [opened, synchronize, reopened]
     branches: [master]
-  release:
-    types: [created]
+    types: [opened, synchronize, reopened]
+    paths: ['**.php', '**.js', '**.ts', '**.vue']
 
 env:
   APP_NAME: Creasi Skeleton
