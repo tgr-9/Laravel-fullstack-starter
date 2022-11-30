@@ -26,6 +26,7 @@
   },
   "require-dev": {
     "creasi/dusk-browserstack": "^0.0.2",
+    "deployer/deployer": "^7.0",
     "laravel/dusk": "^7.0",
     "laravel/pint": "^1.1",
     "laravel/sail": "^1.15",
@@ -59,6 +60,7 @@
     "post-create-project-cmd": [
       "@php artisan key:generate --ansi"
     ],
+    "dep": "vendor/bin/dep",
     "fix": [
       "pint --preset laravel"
     ],
