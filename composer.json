@@ -22,7 +22,7 @@
     "laravel/sanctum": "^3.0",
     "league/flysystem-aws-s3-v3": "^3.0",
     "predis/predis": "^2.0",
-    "sentry/sentry-laravel": "^2.12"
+    "sentry/sentry-laravel": "^3.1"
   },
   "require-dev": {
     "creasi/dusk-browserstack": "^0.0.2",
