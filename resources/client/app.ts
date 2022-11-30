@@ -7,7 +7,7 @@ import { enUS as en, id } from 'date-fns/locale'
 import * as Sentry from '@sentry/browser'
 import { BrowserTracing } from '@sentry/tracing'
 
-import 'virtual:windi-devtools'
+// import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
 
