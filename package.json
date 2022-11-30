@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@7.5.0",
+  "packageManager": "pnpm@7.17.1",
   "author": "Creasi Developers <developers@creasi.co>",
   "engines": {
     "node": "14.x || 16.x"
@@ -24,11 +24,11 @@
     "@commitlint/config-conventional": "^17.3.0",
     "@fontsource/nunito": "^4.5.11",
     "@types/alpinejs": "^3.7.1",
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.11.10",
     "cross-env": "^7.0.3",
     "eslint": "^8.28.0",
     "husky": "^8.0.2",
-    "laravel-vite-plugin": "^0.6.1",
+    "laravel-vite-plugin": "^0.7.1",
     "lint-staged": "^13.0.4",
     "typescript": "^4.9.3",
     "vite": "^3.2.4",
