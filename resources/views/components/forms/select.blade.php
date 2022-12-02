@@ -1,11 +1,28 @@
+@props([
+    'name' => null,
+    'required' => false,
+    'disabled' => false,
+    'readonly' => false,
+])
+
+@aware([
+    'id',
+    'required' => false,
+    'error' => null,
+])
+
 @php
 $class = [
-    'rounded shadow border border-gray-300 px-4 py-2 transition ease-in-out duration-150',
-    'ring-gray-300 focus:ring focus:ring-gray-200 focus:outline-gray-400',
-    'disabled:bg-gray-100 readonly:bg-gray-50'
+    'shadow border-gray-300 transition ease-in-out duration-150 disabled:bg-gray-100 readonly:bg-gray-50',
+    'focus:ring-primary focus:outline-none focus:border-primary focus-visible:ring-primary focus:ring-opacity-20',
 ];
+
+$name = $name ?? $id;
 @endphp
 
-<select {!! $attributes->merge(['class' => \implode(' ', $class) ]) !!}>
+<select @disabled($disabled)
+    {{ $required ? 'required aria-required' : '' }}
+    {{ $readonly ? 'readonly aria-readonly' : '' }}
+    {!! $attributes->merge(['class' => \implode(' ', $class), 'id' => $id, 'name' => $name ]) !!}>
     {{ $slot }}
 </select>
