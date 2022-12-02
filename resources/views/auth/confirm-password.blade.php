@@ -12,10 +12,10 @@
 
             <!-- Password -->
             <x-forms.control id="password" :label="__('auth.fields.password')">
-                <x-forms.input id="password" type="password" name="password" required autocomplete="current-password" />
+                <x-forms.input required type="password" autocomplete="current-password" />
             </x-forms.control>
 
-            <div class="flex justify-end mt-4">
+            <div class="flex items-center justify-end pt-4 border-t-1">
                 <x-forms.button type="submit">{{ __('auth.actions.confirm') }}</x-forms.button>
             </div>
         </form>

@@ -11,25 +11,20 @@
 
             <!-- Employee ID -->
             <x-forms.control id="username" :label="__('auth.fields.username')">
-                <x-forms.input id="username" type="text" name="username" :value="old('username')" required autofocus placeholder="John Doe" />
+                <x-forms.input required type="text" :value="old('username')" placeholder="John Doe" autofocus />
             </x-forms.control>
 
             <!-- Password -->
             <x-forms.control id="password" :label="__('auth.fields.password')">
-                <x-forms.input id="password" type="password" name="password" required autocomplete="current-password" />
+                <x-forms.input required type="password" autocomplete="current-password" />
             </x-forms.control>
 
             <!-- Remember Me -->
-            <div>
-                <label for="remember" class="inline-flex items-center">
-                    <x-forms.input id="remember" type="checkbox" name="remember" />
-                    <span class="ml-2 text-gray-600">{{ __('auth.fields.remember') }}</span>
-                </label>
-            </div>
+            <x-forms.checkbox id="remember" :label="__('auth.fields.remember')" />
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center justify-between pt-4 border-t-1">
                 @if (Route::has('password.request'))
-                    <a class="underline text-emerald-800 hover:text-emerald-900" href="{{ route('password.request') }}">
+                    <a class="underline text-primary hover:text-emerald-900" href="{{ route('password.request') }}">
                         {{ __('auth.actions.forgot') }}
                     </a>
                 @endif
