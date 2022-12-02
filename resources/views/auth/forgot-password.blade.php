@@ -15,10 +15,14 @@
 
             <!-- Email Address -->
             <x-forms.control id="email" :label="__('auth.fields.email')">
-                <x-forms.input id="email" type="email" name="email" :value="old('email')" required autofocus />
+                <x-forms.input required type="email" :value="old('email')" placeholder="john@example.com" autofocus />
             </x-forms.control>
 
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center justify-between pt-4 border-t-1">
+                <a class="underline text-primary hover:text-emerald-900" href="{{ route('login') }}">
+                    {{ __('auth.actions.login') }}
+                </a>
+
                 <x-forms.button type="submit" variant="primary">{{ __('auth.actions.request') }}</x-forms.button>
             </div>
         </form>

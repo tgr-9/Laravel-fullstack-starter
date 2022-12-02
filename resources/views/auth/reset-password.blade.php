@@ -11,23 +11,21 @@
 
             <!-- Email Address -->
             <x-forms.control id="email" :label="__('auth.fields.email')">
-                <x-forms.input id="email" type="email" name="email" :value="old('email', $request->email)" required />
+                <x-forms.input required type="email" :value="old('email', $request->email)" placeholder="john@example.com" />
             </x-forms.control>
 
             <!-- Password -->
             <x-forms.control id="password" :label="__('auth.fields.password')">
-                <x-forms.input id="password" type="password" name="password" required autocomplete="new-password" />
+                <x-forms.input required type="password" autocomplete="new-password" />
             </x-forms.control>
 
             <!-- Confirm Password -->
             <x-forms.control id="password_confirmation" :label="__('auth.fields.confirm_password')">
-                <x-forms.input id="password_confirmation" type="password" name="password_confirmation" required />
+                <x-forms.input required type="password" />
             </x-forms.control>
 
-            <div class="flex items-center justify-end mt-4">
-                <x-forms.button type=submit>
-                    {{ __('auth.actions.reset') }}
-                </x-forms.button>
+            <div class="flex items-center justify-end pt-4 border-t-1">
+                <x-forms.button type="submit">{{ __('auth.actions.reset') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>
