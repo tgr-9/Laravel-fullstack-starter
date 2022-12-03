@@ -1,8 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="flex-1 font-semibold text-xl text-gray-800 leading-none">
-            {{ __('dashboard.routes.index') }}
-        </h2>
+        {{ __('dashboard.routes.index') }}
     </x-slot>
 
     <div class="bg-white overflow-hidden p-6 shadow-sm sm:rounded-lg sm:border border-gray-200">

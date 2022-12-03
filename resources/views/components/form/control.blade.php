@@ -15,12 +15,12 @@ $class = [
 @endphp
 
 <div {{ $attributes->merge(['class' => implode(' ', $class)]) }}>
-    <x-forms.label for="{{ $id }}" class="font-semibold text-md">
+    <x-form.label for="{{ $id }}" class="font-semibold text-md">
         <span>{{ $label }}</span>
         @if($required)
         <span class="text-red-500">*</span>
         @endif
-    </x-forms.label>
+    </x-form.label>
 
     {{ $slot }}
 

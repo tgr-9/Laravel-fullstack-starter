@@ -6,7 +6,7 @@ switch ($align) {
         $alignmentClasses = 'origin-top-left left-0';
         break;
     case 'top':
-        $alignmentClasses = 'origin-top';
+        $alignmentClasses = 'origin-bottom-left bottom-[100%]';
         break;
     case 'right':
     default:
@@ -22,9 +22,9 @@ switch ($width) {
 @endphp
 
 <div class="relative" x-data="{ open: false }" @click.outside="open = false" @close.stop="open = false">
-    <div @click="open = ! open">
+    <button type="button" @click="open = ! open" {{ $trigger->attributes->class(['flex', 'gap-1', 'items-center', 'focus:outline-none', 'focus:text-gray-700']) }}>
         {{ $trigger }}
-    </div>
+    </button>
 
     <div x-show="open"
          x-transition:enter="transition ease-out duration-200"
@@ -33,11 +33,11 @@ switch ($width) {
          x-transition:leave="transition ease-in duration-75"
          x-transition:leave-start="transform opacity-100 scale-100"
          x-transition:leave-end="transform opacity-0 scale-95"
-         class="absolute z-50 mt-2 {{ $width }} rounded-md shadow-lg {{ $alignmentClasses }}"
-         style="display: none;"
+         class="absolute z-50 {{ $width }} rounded-md shadow-lg {{ $alignmentClasses }}"
+         {{-- style="display: none;" --}}
          @click="open = false">
         <div class="rounded-md ring-1 ring-black ring-opacity-5 {{ $contentClasses }}">
-            {{ $content }}
+            {{ $slot }}
         </div>
     </div>
 </div>
