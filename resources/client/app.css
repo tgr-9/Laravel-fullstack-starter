@@ -11,3 +11,7 @@
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+a {
+  @apply text-primary focus:outline-primary focus-visible:outline-primary;
+}
