@@ -31,7 +31,7 @@
                     {{ __('auth.actions.registered') }}
                 </a>
 
-                <x-forms.button type="submit" variant="primary" class="ml-3">{{ __('auth.actions.register') }}</x-forms.button>
+                <x-forms.button type="submit" variant="primary">{{ __('auth.actions.register') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>
