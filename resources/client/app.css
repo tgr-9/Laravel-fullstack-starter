@@ -6,12 +6,11 @@
 @import '@fontsource/nunito/700-italic.css';
 
 .auth-bg {
-  background-image: url('/app-bg.jpeg');
   background-position: top center;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 a {
-  @apply text-primary focus:outline-primary focus-visible:outline-primary;
+  @apply text-primary focus:outline-emerald-700 focus-visible:outline-emerald-700;
 }

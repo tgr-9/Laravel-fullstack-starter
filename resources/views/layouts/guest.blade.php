@@ -7,15 +7,12 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1KQP24LR0L"></script>
-
         <!-- Scripts -->
         @vite(['resources/client/app.ts', 'resources/client/app.css'])
     </head>
 
-    <body class="font-sans antialiased auth-bg">
-        <div class="text-gray-900">
+    <body class="font-sans antialiased auth-bg" style="background-image: url('{{ asset('/app-bg.jpeg') }}');">
+        <div class="text-gray-700">
             {{ $slot }}
         </div>
     </body>
