@@ -7,26 +7,25 @@
 
         <title>{{ config('app.name', 'Laravel') }} - @yield('title', 'Dashboard')</title>
 
-        <!-- Global site tag (gtag.js) - Google Analytics -->
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1KQP24LR0L"></script>
-
         <!-- Scripts -->
         @vite(['resources/client/app.ts', 'resources/client/app.css'])
     </head>
 
     <body class="font-sans antialiased">
-        <div id="app" class="min-h-screen bg-gray-100">
-            @include('layouts.navigation')
-
+        <div id="app" class="min-h-screen bg-gray-50 relative text-gray-700">
             <!-- Page Heading -->
-            <header class="bg-white shadow">
-                <div class="flex items-center max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <header class="bg-white w-full shadow">
+                <nav class="relative border-b border-gray-100">
+                    @include('layouts.navigation')
+                </nav>
+
+                <div class="flex items-center container-fluid py-4 px-4 sm:px-6">
                     {{ $header }}
                 </div>
             </header>
 
             <!-- Page Content -->
-            <main>
+            <main class="py-12 container mx-auto sm:px-6">
                 {{ $slot }}
             </main>
         </div>

@@ -1,5 +1,5 @@
 <x-guest-layout>
-    <x-auth-card>
+    <x-auth.card>
         <!-- Validation Errors -->
         <x-forms.validation-errors class="mb-4" :errors="$errors" />
 
@@ -34,5 +34,5 @@
                 <x-forms.button type="submit" variant="primary">{{ __('auth.actions.register') }}</x-forms.button>
             </div>
         </form>
-    </x-auth-card>
+    </x-auth.card>
 </x-guest-layout>

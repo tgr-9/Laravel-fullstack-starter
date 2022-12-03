@@ -1,7 +1,7 @@
 <x-guest-layout>
-    <x-auth-card>
+    <x-auth.card>
         <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+        <x-auth.session-status class="mb-4" :status="session('status')" />
 
         <!-- Validation Errors -->
         <x-forms.validation-errors class="mb-4" :errors="$errors" />
@@ -32,5 +32,5 @@
                 <x-forms.button type="submit" variant="primary">{{ __('auth.actions.login') }}</x-forms.button>
             </div>
         </form>
-    </x-auth-card>
+    </x-auth.card>
 </x-guest-layout>
