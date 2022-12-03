@@ -13,6 +13,6 @@
 ])
 
 <div {{ $attributes->merge(['class' => 'inline-flex items-center gap-2']) }}>
-    <x-forms.input id="{{ $id }}" type="checkbox" />
-    <x-forms.label for="{{ $id }}">{{ $label }}</x-forms.label>
+    <x-form.input id="{{ $id }}" type="checkbox" />
+    <x-form.label for="{{ $id }}">{{ $label }}</x-form.label>
 </div>

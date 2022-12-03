@@ -1,38 +1,33 @@
 <x-guest-layout>
     <x-auth.card>
-        <!-- Validation Errors -->
-        <x-forms.validation-errors class="mb-4" :errors="$errors" />
-
-        <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-4">
-            @csrf
-
+        <x-form method="POST" :action="route('register')">
             <!-- Name -->
-            <x-forms.control id="username" :label="__('auth.fields.username')">
-                <x-forms.input required type="text" :value="old('username')" placeholder="John Doe" autofocus />
-            </x-forms.control>
+            <x-form.control id="username" :label="__('auth.fields.username')">
+                <x-form.input required type="text" :value="old('username')" placeholder="John Doe" autofocus />
+            </x-form.control>
 
             <!-- Email Address -->
-            <x-forms.control id="email" :label="__('auth.fields.email')">
-                <x-forms.input required type="email" :value="old('email')" placeholder="john@example.com" />
-            </x-forms.control>
+            <x-form.control id="email" :label="__('auth.fields.email')">
+                <x-form.input required type="email" :value="old('email')" placeholder="john@example.com" />
+            </x-form.control>
 
             <!-- Password -->
-            <x-forms.control id="password" :label="__('auth.fields.password')">
-                <x-forms.input required type="password" autocomplete="new-password" />
-            </x-forms.control>
+            <x-form.control id="password" :label="__('auth.fields.password')">
+                <x-form.input required type="password" autocomplete="new-password" />
+            </x-form.control>
 
             <!-- Confirm Password -->
-            <x-forms.control id="password_confirmation" :label="__('auth.fields.confirm_password')">
-                <x-forms.input required type="password" />
-            </x-forms.control>
+            <x-form.control id="password_confirmation" :label="__('auth.fields.confirm_password')">
+                <x-form.input required type="password" />
+            </x-form.control>
 
-            <div class="flex items-center justify-between pt-4 border-t-1">
+            <x-slot name="buttons">
                 <a class="underline text-primary hover:text-emerald-900" href="{{ route('login') }}">
                     {{ __('auth.actions.registered') }}
                 </a>
 
-                <x-forms.button type="submit" variant="primary">{{ __('auth.actions.register') }}</x-forms.button>
-            </div>
-        </form>
+                <x-form.button type="submit" variant="primary">{{ __('auth.actions.register') }}</x-form.button>
+            </x-slot>
+        </x-form>
     </x-auth.card>
 </x-guest-layout>

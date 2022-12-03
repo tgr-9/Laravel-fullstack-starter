@@ -9,7 +9,7 @@
 @php
 $theme = in_array($theme, ['primary', 'secondary']) ? $theme : 'primary';
 $width = $width !== null ? $width : ($square ? 256 : 291) ;
-$height = $height !== null ? $height : ($square ? 256 : 56) ;
+$height = $height !== null ? $height : ($square ? $width : 56) ;
 $colors = [
     'primary' => [
         'square' => [

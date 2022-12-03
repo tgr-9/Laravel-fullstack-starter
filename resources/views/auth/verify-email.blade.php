@@ -10,13 +10,13 @@
             <form method="POST" action="{{ route('verification.send') }}">
                 @csrf
 
-                <x-forms.button type="submit" variant="primary">{{ __('auth.actions.resend') }}</x-forms.button>
+                <x-form.button type="submit" variant="primary">{{ __('auth.actions.resend') }}</x-form.button>
             </form>
 
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
 
-                <x-forms.button type="submit">{{ __('auth.actions.logout') }}</x-forms.button>
+                <x-form.button type="submit">{{ __('auth.actions.logout') }}</x-form.button>
             </form>
         </div>
     </x-auth.card>

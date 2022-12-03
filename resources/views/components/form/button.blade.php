@@ -1,5 +1,6 @@
 @props([
     'type' => 'button',
+    'href' => null,
     'variant' => null,
     'size' => null,
 ])
@@ -51,6 +52,12 @@ switch($variant) {
 };
 @endphp
 
-<button {!! $attributes->merge([ 'type' => $type, 'class' => \implode(' ', $class) ]) !!}>
+@if(! is_null($href))
+<a href="{{ $href }}" {{ $attributes->class($class) }}>
+    {{ $slot }}
+</a>
+@else
+<button type="{{ $type }}" {!! $attributes->class($class) !!}>
     {{ $slot }}
 </button>
+@endif
