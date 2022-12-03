@@ -29,7 +29,7 @@
                     </a>
                 @endif
 
-                <x-forms.button type="submit" variant="primary" class="ml-3">{{ __('auth.actions.login') }}</x-forms.button>
+                <x-forms.button type="submit" variant="primary">{{ __('auth.actions.login') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>

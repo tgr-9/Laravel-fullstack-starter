@@ -25,7 +25,7 @@
             </x-forms.control>
 
             <div class="flex items-center justify-end pt-4 border-t-1">
-                <x-forms.button type="submit">{{ __('auth.actions.reset') }}</x-forms.button>
+                <x-forms.button type="submit" variant="primary">{{ __('auth.actions.reset') }}</x-forms.button>
             </div>
         </form>
     </x-auth-card>
