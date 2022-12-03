@@ -21,8 +21,12 @@ export default defineConfig({
     extend: {
       colors: {
         // DEFAULT: colors.emerald.toString(),
-        primary: '#388370',
-        secondary: '#839F98',
+        primary: {
+          DEFAULT: '#388370',
+        },
+        secondary: {
+          DEFAULT: '#839F98',
+        },
       },
       fontFamily: {
         sans: ['Nunito', 'sans-serif'],
