@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\User;
 
-use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 /**
@@ -12,26 +12,19 @@ use Illuminate\Validation\Rules\Password;
 class UpdateRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize(User $user)
-    {
-        return $this->user()->can('update', $user);
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array
      */
     public function rules()
     {
+        $user = $this->user();
+
         return [
-            'username' => ['required', 'string', 'unique:users,name'],
-            'email' => ['required', 'email', 'exists:users,email'],
-            'password' => Password::defaults(),
+            'name' => ['required', 'string', Rule::unique('users', 'name')->ignore($user->id)],
+            'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
+            'password' => ['nullable', 'confirmed', Password::defaults()],
+            'old-password' => ['required_unless:password,null'],
         ];
     }
 }
