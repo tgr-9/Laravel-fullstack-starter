@@ -12,10 +12,12 @@ class MenuComposer
             [
                 'route' => 'home',
                 'label' => __('dashboard.routes.index'),
+                'children' => ['home'],
             ],
             [
-                'route' => 'users.home',
+                'route' => 'users.index',
                 'label' => __('users.routes.index'),
+                'children' => ['users.index', 'users.create', 'users.edit'],
             ],
         ]);
     }
