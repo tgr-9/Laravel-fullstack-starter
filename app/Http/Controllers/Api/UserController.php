@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreRequest;
 use App\Http\Requests\User\UpdateRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -19,7 +21,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::paginate();
+        $users = User::query()->latest('created_at')->paginate();
+
+        return UserResource::collection($users);
     }
 
     /**
@@ -31,16 +35,17 @@ class UserController extends Controller
         /** @var User $item */
         $item = User::create($request->validated());
 
-        return response($this->show($item), 201);
+        return $this->show($item, $request)->setStatusCode(201);
     }
 
     /**
      * @param  User  $user
-     * @return User
+     * @param  Request  $request
+     * @return UserResource
      */
-    public function show(User $user)
+    public function show(User $user, Request $request)
     {
-        return $user;
+        return UserResource::make($user)->toResponse($request);
     }
 
     /**
@@ -52,7 +57,7 @@ class UserController extends Controller
     {
         $user->update($request->validated());
 
-        return response($this->show($user), 200);
+        return $this->show($user, $request);
     }
 
     /**
@@ -63,6 +68,6 @@ class UserController extends Controller
     {
         $user->delete();
 
-        return response(null, 204);
+        return response()->noContent();
     }
 }
