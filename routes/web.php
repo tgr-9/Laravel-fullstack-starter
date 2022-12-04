@@ -16,14 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['middleware' => 'auth'], function () {
+Route::middleware('auth')->group(function () {
     Route::get(RouteServiceProvider::HOME, function (Request $request) {
         return $request->isJson() ? response(404) : view('dashboard');
     })->name('home');
 
-    Route::controller(Controllers\UserController::class)->prefix('/users')->group(function () {
+    Route::controller(Controllers\UserController::class)->prefix('users')->group(function () {
         Route::get('', 'index')->name('users.home');
-        Route::get('/create', 'create')->name('users.create');
-        Route::get('/{user}', 'edit')->name('users.edit');
+        Route::get('create', 'create')->name('users.create');
+        Route::get('{user}', 'edit')->name('users.edit');
     });
 });
