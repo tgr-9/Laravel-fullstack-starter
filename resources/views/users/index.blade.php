@@ -13,8 +13,8 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="w-4 text-left">{{ __('users.table.name') }}</th>
-                        <th class="w-3 text-left">{{ __('users.table.email') }}</th>
+                        <th class="w-4/8 text-left">{{ __('users.table.name') }}</th>
+                        <th class="w-3/8 text-left">{{ __('users.table.email') }}</th>
                         <th class="action">{{ __('actions.tables.column') }}</th>
                     </tr>
                 </thead>
