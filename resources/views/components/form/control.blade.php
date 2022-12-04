@@ -4,7 +4,6 @@
     'hint' => null,
     'required' => false,
     'inline' => false,
-    'error' => null,
 ])
 
 @php
