@@ -15,7 +15,7 @@
             </x-form.control>
 
             <!-- Remember Me -->
-            <x-form.checkbox id="remember" :label="__('auth.fields.remember')" />
+            <x-form.checkbox id="remember" value="1">{{ __('auth.fields.remember') }}</x-form.checkbox>
 
             <x-slot name="buttons">
                 @if (Route::has('password.request'))

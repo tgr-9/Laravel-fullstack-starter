@@ -3,10 +3,21 @@
     'method'
 ])
 
+@php
+$override = false;
+if (! in_array(strtolower($method), ['get', 'post'])) {
+    $override = $method;
+    $method = 'POST';
+}
+@endphp
+
 <x-form.validation-errors class="mb-4" :errors="$errors" />
 
-<form method="{{ $method }}" action="{{ $action }}" class="flex flex-col gap-4">
+<form class="flex flex-col gap-4" {{ $attributes->merge(['method' => $method, 'action' => $action, 'x-data' => '{}']) }}>
     @csrf
+    @if($override)
+    @method($override)
+    @endif
 
     {{ $slot }}
 

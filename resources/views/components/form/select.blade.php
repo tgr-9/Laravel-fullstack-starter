@@ -23,6 +23,6 @@ $name = $name ?? $id;
 <select @disabled($disabled)
     {{ $required ? 'required aria-required' : '' }}
     {{ $readonly ? 'readonly aria-readonly' : '' }}
-    {!! $attributes->merge(['class' => \implode(' ', $class), 'id' => $id, 'name' => $name ]) !!}>
+    {!! $attributes->class($class)->merge(['id' => $id, 'name' => $name ]) !!}>
     {{ $slot }}
 </select>
