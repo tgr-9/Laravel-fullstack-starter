@@ -25,7 +25,7 @@ return [
     ],
 
     'fields' => [
-        'email' => 'Surel',
+        'email' => 'Email',
         'username' => 'Nama Pengguna',
         'password' => 'Kata Sandi',
         'new_password' => 'Kata Sandi Baru',

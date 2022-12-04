@@ -13,24 +13,28 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th class="w-4 text-left">User</th>
-                        <th class="w-3 text-left">Email</th>
-                        <th class="w-1/8 text-center">Action</th>
+                        <th class="w-4 text-left">{{ __('users.table.name') }}</th>
+                        <th class="w-3 text-left">{{ __('users.table.email') }}</th>
+                        <th class="w-1/8 text-center">{{ __('actions.tables.column') }}</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     <template x-if="busy">
                         <tr class="no-content">
-                            <td colspan="3" class="text-center">Loading</td>
+                            <td colspan="3" class="text-center">{{ __('actions.no-content') }}</td>
                         </tr>
                     </template>
                     <template x-for="user in users.data">
                         <tr :key="user.id">
-                            <td x-text="user.name"></td>
-                            <td x-text="user.email"></td>
+                            <td>
+                                <a :href="route.concat('/', user.id)" x-text="user.name"></a>
+                            </td>
+                            <td>
+                                <a :href="'mailto:'.concat(user.email)" target="__blank" x-text="user.email"></a>
+                            </td>
                             <td class="text-center">
-                                action
+                                {{ __('actions.tables.column') }}
                             </td>
                         </tr>
                     </template>
