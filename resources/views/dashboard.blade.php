@@ -3,7 +3,7 @@
         {{ __('dashboard.routes.index') }}
     </x-slot>
 
-    <div class="bg-white overflow-hidden p-6 shadow-sm sm:rounded-lg sm:border border-gray-200">
+    <x-card class="p-6">
         <h3 class="">{{ __('dashboard.welcome-notice', ['user' => Auth::user()->name]) }}</h3>
-    </div>
+    </x-card>
 </x-app-layout>
