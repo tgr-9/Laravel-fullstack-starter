@@ -17,13 +17,16 @@ class UserController extends Controller
     }
 
     /**
+     * @param  Request  $request
      * @return \Illuminate\Database\Eloquent\Collection<int, User>
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::query()->latest('created_at')->paginate();
+        $users = User::query()
+            ->where('id', '<>', $request->user()->id)
+            ->latest('created_at');
 
-        return UserResource::collection($users);
+        return UserResource::collection($users->paginate());
     }
 
     /**
