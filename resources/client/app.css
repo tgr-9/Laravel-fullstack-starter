@@ -16,18 +16,22 @@ a {
 }
 
 .table {
-  @apply w-full;
+  @apply w-full text-sm;
 
   th, td {
-    @apply px-3 py-2;
+    @apply px-3 py-2 select-none;
+
+    &.action {
+      @apply w-1/12 text-center;
+    }
   }
 
   thead tr {
-    @apply bg-gray-100;
+    @apply bg-gray-100 uppercase text-gray-500;
   }
 
   tbody tr {
-    @apply border-t-1 border-t-gray-200 hover:bg-gray-50;
+    @apply border-t-1 border-t-gray-200 hover:bg-gray-50 cursor-pointer;
 
     &.no-content {
       @apply leading-10;
