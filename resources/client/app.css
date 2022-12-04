@@ -14,3 +14,23 @@
 a {
   @apply text-primary focus:outline-emerald-700 focus-visible:outline-emerald-700;
 }
+
+.table {
+  @apply w-full;
+
+  th, td {
+    @apply px-3 py-2;
+  }
+
+  thead tr {
+    @apply bg-gray-100;
+  }
+
+  tbody tr {
+    @apply border-t-1 border-t-gray-200 hover:bg-gray-50;
+
+    &.no-content {
+      @apply leading-10;
+    }
+  }
+}
