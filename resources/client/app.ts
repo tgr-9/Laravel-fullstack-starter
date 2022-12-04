@@ -7,6 +7,9 @@ import { enUS as en, id } from 'date-fns/locale'
 import 'virtual:windi.css'
 import '~/app.css'
 
+import '~/libs/sentry'
+import '~/libs/axios'
+
 declare global {
   interface Window {
     Alpine: Alpine
