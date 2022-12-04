@@ -53,7 +53,7 @@ class NewPasswordController extends Controller
             }
         );
 
-        if ($request->isJson()) {
+        if ($request->expectsJson()) {
             return \response()->json([
                 'message' => __($status),
                 'errors' => $status != Password::PASSWORD_RESET ?: [

@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
     public function store(RegistrationRequest $request)
     {
         $user = User::create([
-            'name' => $request->name,
+            'name' => $request->username,
             'email' => $request->email,
             'password' => $request->password,
         ]);
@@ -41,7 +41,7 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        if ($request->isJson()) {
+        if ($request->expectsJson()) {
             return response()->json([
                 'message' => __('auth.notices.verify-email'),
             ], 201);

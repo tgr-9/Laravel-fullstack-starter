@@ -18,7 +18,7 @@ class VerifyEmailController extends Controller
     {
         $request->fulfill();
 
-        return $request->isJson()
+        return $request->expectsJson()
             ? response()->json(['status' => 'OK'])
             : redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
     }
