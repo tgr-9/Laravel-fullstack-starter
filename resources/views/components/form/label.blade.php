@@ -1,5 +1,12 @@
-@props(['value' => null])
+@props(['for'])
 
-<label {!! $attributes->merge(['class' => 'text-gray-700 select-none']) !!}>
-    {{ $value ?? $slot }}
+@aware([
+    'required' => false,
+])
+
+<label {{ $attributes->class(['select-none'])->merge(['for' => $for]) }}>
+    {{ $slot }}
+    @if($required)
+        <span class="text-red-500">*</span>
+    @endif
 </label>

@@ -53,11 +53,7 @@ switch($variant) {
 @endphp
 
 @if(! is_null($href))
-<a href="{{ $href }}" {{ $attributes->class($class) }}>
-    {{ $slot }}
-</a>
+<a {{ $attributes->class($class)->merge(['href' => $href]) }}>{{ $slot }}</a>
 @else
-<button type="{{ $type }}" {!! $attributes->class($class) !!}>
-    {{ $slot }}
-</button>
+<button {!! $attributes->class($class)->merge(['type' => $type]) !!}>{{ $slot }}</button>
 @endif

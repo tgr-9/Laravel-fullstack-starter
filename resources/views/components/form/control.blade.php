@@ -9,18 +9,13 @@
 
 @php
 $class = [
-    'text-gray-700 gap-1',
+    'gap-1',
     ($inline ? 'inline-flex items-center' : 'flex flex-col')
 ];
 @endphp
 
-<div {{ $attributes->merge(['class' => implode(' ', $class)]) }}>
-    <x-form.label for="{{ $id }}" class="font-semibold text-md">
-        <span>{{ $label }}</span>
-        @if($required)
-        <span class="text-red-500">*</span>
-        @endif
-    </x-form.label>
+<div {{ $attributes->class($class)->merge() }}>
+    <x-form.label for="{{ $id }}" class="font-semibold text-md">{{ $label }}</x-form.label>
 
     {{ $slot }}
 
