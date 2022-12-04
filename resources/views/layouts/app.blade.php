@@ -21,7 +21,7 @@
                 </x-slot>
 
                 @foreach ($menuItems as $menu)
-                    <x-nav.link :href="route($menu['route'])" :active="request()->routeIs($menu['route'])">{{ $menu['label'] }}</x-nav.link>
+                    <x-nav.link :href="route($menu['route'])" :active="request()->routeIs(...$menu['children'])">{{ $menu['label'] }}</x-nav.link>
                 @endforeach
             </x-nav>
 
