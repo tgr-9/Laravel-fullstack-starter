@@ -22,7 +22,7 @@ Route::middleware('auth')->group(function () {
     })->name('home');
 
     Route::controller(Controllers\UserController::class)->prefix('users')->group(function () {
-        Route::get('', 'index')->name('users.index');
+        Route::get('', 'index')->name('users.home');
         Route::get('create', 'create')->name('users.create');
         Route::get('{user}', 'edit')->name('users.edit');
     });

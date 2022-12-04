@@ -15,9 +15,9 @@ class MenuComposer
                 'children' => ['home'],
             ],
             [
-                'route' => 'users.index',
+                'route' => 'users.home',
                 'label' => __('users.routes.index'),
-                'children' => ['users.index', 'users.create', 'users.edit'],
+                'children' => ['users.home', 'users.create', 'users.edit'],
             ],
         ]);
     }
