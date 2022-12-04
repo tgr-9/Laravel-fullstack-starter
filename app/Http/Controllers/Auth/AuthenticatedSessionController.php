@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\UserResource;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -30,13 +31,11 @@ class AuthenticatedSessionController extends Controller
     {
         $request->authenticate();
 
-        if ($request->isJson()) {
+        if ($request->expectsJson()) {
             $user = $request->user();
             $token = $user->createToken('auth');
 
-            return response([
-                'user' => array_merge($user->toArray(), ['token' => $token->plainTextToken]),
-            ], 201);
+            return UserResource::make($user)->additional(['token' => $token->plainTextToken]);
         }
 
         $request->session()->regenerate();
@@ -58,7 +57,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerateToken();
 
-        return $request->isJson()
+        return $request->expectsJson()
             ? response()->noContent()
             : redirect('/');
     }
