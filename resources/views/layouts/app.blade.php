@@ -20,7 +20,9 @@
                     </a>
                 </x-slot>
 
-                <x-nav.link :href="route('home')" :active="request()->routeIs('home')">{{ __('dashboard.routes.index') }}</x-nav.link>
+                @foreach ($menuItems as $menu)
+                    <x-nav.link :href="route($menu['route'])" :active="request()->routeIs($menu['route'])">{{ $menu['label'] }}</x-nav.link>
+                @endforeach
             </x-nav>
 
             <!-- Page Content -->
