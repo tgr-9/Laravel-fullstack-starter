@@ -9,8 +9,8 @@
         </nav>
     </div>
 
-    <footer class="w-full flex-grow-0 flex-shrink-0 relative p-2">
-        <x-dropdown align="top">
+    <footer class="w-full flex-grow-0 flex-shrink-0 p-2">
+        <x-dropdown placement="top-left">
             <x-slot name="trigger" class="select-none justify-between w-full cursor-pointer">
                 <div class="font-medium px-2 text-left">
                     <div class="text-base text-gray-800">{{ Auth::user()->name }}</div>
@@ -22,6 +22,7 @@
                 </svg>
             </x-slot>
 
+            <x-dropdown.link x-bind:href="'#'">Account</x-dropdown.link>
             <x-auth.logout :is-dropdown="true" />
         </x-dropdown>
     </footer>

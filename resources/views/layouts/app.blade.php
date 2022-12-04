@@ -50,6 +50,8 @@
                     {{ $slot }}
                 </div>
             </main>
+
+            <div id="dropdowns-wrapper"></div>
         </div>
     </body>
 </html>
