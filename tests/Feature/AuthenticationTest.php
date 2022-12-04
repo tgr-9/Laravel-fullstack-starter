@@ -85,7 +85,8 @@ class AuthenticationTest extends TestCase
 
         $response->assertStatus(201);
         $response->assertJsonStructure([
-            'user' => ['id', 'name', 'email', 'is_email_verified', 'token'],
+            'data' => ['id', 'name', 'email'],
+            'token',
         ]);
 
         $this->postJson('/logout')->assertStatus(204);

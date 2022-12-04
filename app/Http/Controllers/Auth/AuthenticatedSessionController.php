@@ -35,7 +35,10 @@ class AuthenticatedSessionController extends Controller
             $user = $request->user();
             $token = $user->createToken('auth');
 
-            return UserResource::make($user)->additional(['token' => $token->plainTextToken]);
+            return UserResource::make($user)
+                ->additional(['token' => $token->plainTextToken])
+                ->toResponse($request)
+                ->setStatusCode(201);
         }
 
         $request->session()->regenerate();
