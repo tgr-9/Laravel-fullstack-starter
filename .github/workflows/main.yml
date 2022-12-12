@@ -1,6 +1,8 @@
 name: Code Quality
 
 on:
+  schedule: # scheduled to run at 23.00 on Saturday (UTC), means 6.00 on Monday (WIB)
+    - cron: '0 23 * * 6'
   push:
     branches: [master]
     paths: ['**.php', '**.js', '**.ts', '**.vue']
@@ -300,4 +302,10 @@ jobs:
           path: public/build
 
       - name: Deploy repo
-        run: ./vendor/bin/dep deploy
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 2
+          max_attempts: 3
+          command: |
+            ./vendor/bin/dep deploy:unlock
+            ./vendor/bin/dep deploy
