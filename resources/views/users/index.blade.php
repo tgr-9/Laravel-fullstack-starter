@@ -4,7 +4,12 @@
     </x-slot>
 
     <x-card>
-        <div x-data="{ users: {}, busy: true, route: @js(route('users.index')), web: @js(route('users.home')) }"
+        <div x-data="{
+                users: {},
+                busy: true,
+                route: @js(route('users.index')),
+                web: @js(route('users.home'))
+            }"
             x-init="$nextTick(async () => {
                 const { data: body } = await axios.get(route)
                 users = body
