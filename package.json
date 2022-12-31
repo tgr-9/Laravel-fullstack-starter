@@ -1,7 +1,7 @@
 {
   "version": "0.0.0",
   "private": true,
-  "packageManager": "pnpm@7.17.1",
+  "packageManager": "pnpm@7.21.0",
   "author": "Creasi Developers <developers@creasi.co>",
   "engines": {
     "node": "14.x || 16.x"
