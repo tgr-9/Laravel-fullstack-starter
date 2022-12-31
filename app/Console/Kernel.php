@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
+        $schedule->command('queue:restart')->everyTwoHours();
         $schedule->command('queue:retry')->hourly();
         $schedule->command('sanctum:prune-expired')->daily();
         $schedule->command('auth:clear-resets')->daily();
