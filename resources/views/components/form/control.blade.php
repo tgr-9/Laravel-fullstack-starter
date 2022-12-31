@@ -19,7 +19,7 @@ $class = [
     {{ $slot }}
 
     @if($hint)
-    <p class="text-gray-500">{{ $hint }}</p>
+        <p class="text-gray-500">{{ $hint }}</p>
     @endif
 
     @error($id)
