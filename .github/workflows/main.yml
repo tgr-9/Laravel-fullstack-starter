@@ -4,10 +4,10 @@ on:
   schedule: # scheduled to run at 23.00 on Saturday (UTC), means 6.00 on Monday (WIB)
     - cron: '0 23 * * 6'
   push:
-    branches: [master]
+    branches: [main]
     paths: ['**.php', '**.js', '**.ts', '**.vue']
   pull_request:
-    branches: [master]
+    branches: [main]
     types: [opened, synchronize, reopened]
     paths: ['**.php', '**.js', '**.ts', '**.vue']
 
@@ -255,7 +255,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy
     needs: e2e
-    if: ${{ github.ref_name == 'master' && github.event_name == 'push' }}
+    if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
 
     environment:
       name: staging
