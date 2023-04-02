@@ -5,25 +5,27 @@ on:
     - cron: '0 23 * * 6'
   push:
     branches: [main]
-    paths: ['**.php', '**.js', '**.ts', '**.vue']
+    paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
-    paths: ['**.php', '**.js', '**.ts', '**.vue']
+    paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
 
 env:
   APP_NAME: Creasi Skeleton
   APP_ENV: testing
+  APP_URL: http://127.0.0.1:8000
+  APP_KEY: ${{ secrets.APP_KEY }}
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
+  DB_DATABASE: creasico
+  DB_USERNAME: creasico
+  DB_PASSWORD: secret
   MAIL_FROM_ADDRESS: devtest@creasi.dev
   SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
   SENTRY_TRACE_QUEUE_ENABLED: true
   SENTRY_TRACES_SAMPLE_RATE: 1.0
-  VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-  VITE_SENTRY_TRACE_QUEUE_ENABLED: true
-  VITE_SENTRY_TRACES_SAMPLE_RATE: 1.0
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -34,12 +36,17 @@ jobs:
     runs-on: ubuntu-latest
     name: Build
 
+    env:
+      VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      VITE_SENTRY_TRACE_QUEUE_ENABLED: true
+      VITE_SENTRY_TRACES_SAMPLE_RATE: 1.0
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v2
 
       - name: Setup Node.JS
         uses: actions/setup-node@v3
@@ -65,34 +72,24 @@ jobs:
     name: Unit Test with PHP ${{ matrix.php }}
     needs: build
 
+    env:
+      TELESCOPE_ENABLED: false
+
     services:
       postgresql:
         image: postgres:14
         env:
-          POSTGRES_DB: creasico
-          POSTGRES_USER: creasico
-          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: ${{ env.DB_DATABASE }}
+          POSTGRES_USER: ${{ env.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
 
     strategy:
       fail-fast: false
       matrix:
         php: ['8.0', '8.1', '8.2']
-
-    env:
-      APP_URL: http://127.0.0.1:8000
-      APP_KEY: ${{ secrets.APP_KEY }}
-      DB_PASSWORD: secret
-      DUSK_HEADLESS_DISABLED: true
-      LOG_CHANNEL: sentry
-      TELESCOPE_ENABLED: false
 
     steps:
       - name: Checkout sources
@@ -102,12 +99,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, redis, zip
+          extensions: curl, dom, gd, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: none
-        env:
-          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary
 
       - name: Download assets
         id: download
@@ -134,9 +129,7 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 3
-          command: |
-            composer config -g github-oauth.github.com ${{ secrets.PAT }}
-            composer update --prefer-dist --no-interaction --no-progress
+          command: composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run unit tests
         run: php artisan test
@@ -146,42 +139,29 @@ jobs:
     name: Integration Test on BrowserStack
     needs: units
 
+    env:
+      DUSK_HEADLESS_DISABLED: true
+      TELESCOPE_ENABLED: false
+
     services:
       postgresql:
         image: postgres:14
         env:
-          POSTGRES_DB: creasico
-          POSTGRES_USER: creasico
-          POSTGRES_PASSWORD: secret
+          POSTGRES_DB: ${{ env.DB_DATABASE }}
+          POSTGRES_USER: ${{ env.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
-      redis:
-        image: redis
-        ports:
-          - 6379:6379
-        options: --entrypoint redis-server
-
-    strategy:
-      matrix:
-        php: ['8.0']
-
-    env:
-      APP_URL: http://127.0.0.1:8000
-      APP_KEY: ${{ secrets.APP_KEY }}
-      DB_PASSWORD: secret
-      DUSK_HEADLESS_DISABLED: true
-      LOG_CHANNEL: sentry
-      TELESCOPE_ENABLED: false
 
     steps:
       - name: Checkout sources
         uses: actions/checkout@v3
 
-      - name: Setup PHP ${{ matrix.php }}
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 8.2
           extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, redis, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
@@ -206,17 +186,15 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-composer-
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
+          key: ${{ runner.os }}-composer-
+          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
         uses: nick-invision/retry@v2
         with:
           timeout_minutes: 5
           max_attempts: 3
-          command: |
-            composer config -g github-oauth.github.com ${{ secrets.PAT }}
-            composer update --prefer-dist --no-interaction --no-progress
+          command: composer update --prefer-dist --no-interaction --no-progress
 
       - name: Setup BrowserStack env  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master
@@ -270,11 +248,24 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.2
           extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: |
+          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-
+          restore-keys: ${{ runner.os }}-composer-
 
       - name: Prepare
         run: |
@@ -290,9 +281,7 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 3
-          command: |
-            composer config -g github-oauth.github.com ${{ secrets.PAT }}
-            composer update --prefer-dist --no-interaction --no-progress
+          command: composer update --prefer-dist --no-interaction --no-progress
 
       - name: Download assets
         id: download

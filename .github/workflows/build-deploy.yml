@@ -9,9 +9,14 @@ on:
 env:
   APP_NAME: Creasi Skeleton
   APP_ENV: testing
+  APP_URL: http://127.0.0.1:8000
+  APP_KEY: ${{ secrets.APP_KEY }}
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
+  DB_DATABASE: creasico
+  DB_USERNAME: creasico
+  DB_PASSWORD: secret
   MAIL_FROM_ADDRESS: devtest@creasi.dev
   SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
   SENTRY_TRACE_QUEUE_ENABLED: true
@@ -49,7 +54,7 @@ jobs:
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
       - name: Set up pnpm
-        uses: pnpm/action-setup@v2.2.4
+        uses: pnpm/action-setup@v2
 
       - name: Setup Node.JS
         uses: actions/setup-node@v3
@@ -66,7 +71,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.2
           extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
           tools: composer:v2
           coverage: none
@@ -80,6 +85,12 @@ jobs:
             composer config -g github-oauth.github.com ${{ secrets.PAT }}
             composer update --prefer-dist --no-interaction --no-progress
 
-      - name: Deploy staging
-        run: ./vendor/bin/dep deploy
+      - name: Deploy repo
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 2
+          max_attempts: 3
+          command: |
+            ./vendor/bin/dep deploy:unlock
+            ./vendor/bin/dep deploy
 
