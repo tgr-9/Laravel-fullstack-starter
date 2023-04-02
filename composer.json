@@ -17,7 +17,7 @@
     "php": ">=8.0",
     "fakerphp/faker": "^1.9.1",
     "guzzlehttp/guzzle": "^7.2",
-    "laravel/framework": "^9.24",
+    "laravel/framework": "^9.52",
     "laravel/sanctum": "^3.0",
     "league/flysystem-aws-s3-v3": "^3.0",
     "predis/predis": "^2.0",
@@ -32,9 +32,9 @@
     "laravel/telescope": "^4.9",
     "laravel/tinker": "^2.7",
     "mockery/mockery": "^1.4.4",
-    "nunomaduro/collision": "^6.1",
-    "phpunit/phpunit": "^9.5.10",
-    "spatie/laravel-ignition": "^1.0"
+    "nunomaduro/collision": "^6.4",
+    "phpunit/phpunit": "^9.6",
+    "spatie/laravel-ignition": "^1.6"
   },
   "autoload": {
     "psr-4": {
@@ -84,7 +84,10 @@
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
   },
   "minimum-stability": "dev",
   "prefer-stable": true
