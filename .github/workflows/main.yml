@@ -271,7 +271,6 @@ jobs:
         run: |
           [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
           echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
-          echo "${{ secrets.STAGING_SERVER_SSH_HOSTS }}" >> $HOME/.ssh/known_hosts
           echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
           chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
