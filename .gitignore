@@ -20,7 +20,7 @@ Desktop.ini
 .env.*
 .env
 .php-version
-composer.lock
+# composer.lock
 coveralls-upload.json
 phpunit.dusk.xml
 node_modules
