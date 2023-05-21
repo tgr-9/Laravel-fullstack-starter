@@ -6,8 +6,8 @@
 
 ## Requirements
 
-- PHP `>= v8.0` and Composer `>= v2.0`
-- Node.js `>= v16.0` and PNPM `v7.x`
+- PHP `>= v8.1` and Composer `>= v2.0`
+- Node.js `>= v16.0` and PNPM `v8.x`
 - Database Server (MySQL, MariaDB or PostgreSQL)
 
 ## Setup
@@ -34,8 +34,12 @@
    # for PostgreSQL (presumably you've already have postgresql client)
    $ createdb <db-bame>
    ```
-
-5. You're good to go
+5. All things set? then run
+   ```shell
+   $ php artisan migrate --seed  # run database migration
+   $ pnpm build                  # compile front-end assets
+   ```
+6. You're good to go
 
 ## Development
 
@@ -53,7 +57,9 @@ So, please make sure you've already install the dependencies as stated in the [S
 
 This skeleton is already have pre-configured for testing using built-in and official testing utility of Laravel Framework, which is `phpunit` and `laravel dusk`.
 
-All we need to do is spare another database solely for testing purposes. The reason behind it is while we run our tests, it will reset all of our existing development database. For more information please consult to the [official documentation](https://laravel.com/docs/9.x/testing#environment).
+### Unit Tests
+
+All we need to do is spare another database for testing. The reason behind it is while we run our tests, it will reset all of our existing development database. For more information please consult to the [official documentation](https://laravel.com/docs/testing#environment).
 
 Once you've create new database, you can copy your `.env` file to `.env.testing` and update the database configuration with the newly created database.
 
@@ -61,7 +67,7 @@ Once you've create new database, you can copy your `.env` file to `.env.testing`
 $ composer test:unit       # to run unit test
 ```
 
-### Laravel Dusk
+### Integration Tests
 
 Before you begin tests using laravel dusk, please make sure you've already install the webdriver with the following command
 
@@ -75,15 +81,17 @@ By default that command will install the latest ChromeDriver meaning you'll have
 $ composer test:e2e        # to run end-to-end test using larvel-dusk
 ```
 
-By default laravel dusk will runs headlessly, if you willing to disable headless mode, just comment out `DUSK_HEADLESS_DISABLED` in your `.env.testing` file. For more info please consult to the [official documentation](https://laravel.com/docs/dusk)
+By default laravel dusk will runs headlessly, if you willing to disable headless mode, just uncomment `DUSK_HEADLESS_DISABLED` in your `.env.testing` file. For more info please consult to the [official documentation](https://laravel.com/docs/dusk)
 
-## Notes
+The `.env.example` also preconfigured with `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` which is necessary to run integration testing on [BrowserStack](https://automate.browserstack.com/), feel free to comment out those variables if you don't want to run it locally. Please consult to their official [documentation](https://www.browserstack.com/docs/local-testing) for local testing.
+
+## Contributing
 - **Commit Convention**: This project follows [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) using [@commitlint/config-conventional](https://github.com/conventional-changelog/commitlint/tree/master/@commitlint/config-conventional) as standart, so make sure you follow the rules.
-- **Code Style**: This project uses [`PSR12`](https://www.php-fig.org/psr/psr-12/) code standard and [`@antfu/eslint-config`](https://github.com/antfu/eslint-config), so make sure you follow the rules. But don't worry, your VSCode should handle it for you. Please consult to [this config](.vscode/settings.json) for more info.
+- **Code Style**: This project uses [`Laravel Pint`](https://laravel.com/docs/pint) with `laravel` preset and [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) as coding standard, so make sure you follow the rules. But don't worry, your VSCode should handle it for you. Please consult to [this config](.vscode/settings.json) for more info.
 
 ## Sponsors
 
-[![BrowserStack Logo](https://raw.githubusercontent.com/creasico/creasico.github.io/master/public/assets/browserstack-logo.png)](https://browserstack.com)
+[![BrowserStack Logo](https://d98b8t1nnulk5.cloudfront.net/production/images/layout/logo-header.png?1469004780)](https://browserstack.com)
 
 ## License
 

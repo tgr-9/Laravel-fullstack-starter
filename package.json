@@ -9,8 +9,8 @@
     "prepare": "husky install scripts/husky"
   },
   "dependencies": {
-    "@sentry/browser": "^7.51.2",
-    "@sentry/tracing": "^7.51.2",
+    "@sentry/browser": "^7.52.1",
+    "@sentry/tracing": "^7.52.1",
     "alpinejs": "^3.12.1",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0"
@@ -21,14 +21,14 @@
     "@commitlint/config-conventional": "^17.6.3",
     "@fontsource/nunito": "^4.5.12",
     "@types/alpinejs": "^3.7.1",
-    "@types/node": "^18.16.9",
+    "@types/node": "^18.16.13",
     "cross-env": "^7.0.3",
-    "eslint": "^8.40.0",
+    "eslint": "^8.41.0",
     "husky": "^8.0.3",
-    "laravel-vite-plugin": "^0.7.6",
+    "laravel-vite-plugin": "^0.7.7",
     "lint-staged": "^13.2.2",
     "typescript": "~5.0.4",
-    "vite": "~4.3.5",
+    "vite": "~4.3.8",
     "vite-plugin-windicss": "^1.9.0",
     "windicss": "^3.5.6"
   },

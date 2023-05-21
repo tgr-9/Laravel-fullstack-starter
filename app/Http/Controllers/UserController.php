@@ -28,7 +28,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param  User  $user
      * @return \Illuminate\Contracts\View\View|\Illuminate\Contracts\View\Factory
      */
     public function edit(User $user)
