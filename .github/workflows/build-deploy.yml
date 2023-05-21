@@ -92,6 +92,6 @@ jobs:
           timeout_minutes: 2
           max_attempts: 3
           command: |
-            ./vendor/bin/dep deploy:unlock
-            ./vendor/bin/dep deploy
+            composer dep deploy:unlock
+            composer dep deploy
 
