@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7a384bbb6f3717ec0a933335b7b7176a",
+    "content-hash": "2b8395d3c55110da464dd011b79f23fb",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6965,16 +6965,16 @@
         },
         {
             "name": "creasi/dusk-browserstack",
-            "version": "0.1.0",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/creasico/laravel-dusk-browserstack.git",
-                "reference": "451965bf853c28f5c767a98d1fa7604dee74d951"
+                "reference": "6dfee58d938c78455ad404baf14664c8c4f9541d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/451965bf853c28f5c767a98d1fa7604dee74d951",
-                "reference": "451965bf853c28f5c767a98d1fa7604dee74d951",
+                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/6dfee58d938c78455ad404baf14664c8c4f9541d",
+                "reference": "6dfee58d938c78455ad404baf14664c8c4f9541d",
                 "shasum": ""
             },
             "require": {
@@ -6985,6 +6985,7 @@
             "require-dev": {
                 "laravel/pint": "^1.1"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": []
@@ -7015,7 +7016,7 @@
                 "issues": "https://github.com/creasico/laravel-dusk-browserstack/issues",
                 "source": "https://github.com/creasico/laravel-dusk-browserstack"
             },
-            "time": "2023-05-21T13:28:13+00:00"
+            "time": "2023-05-21T13:45:19+00:00"
         },
         {
             "name": "deployer/deployer",
@@ -9754,7 +9755,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "creasi/dusk-browserstack": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
