@@ -14,7 +14,7 @@
     "source": "https://github.com/creasico/laravel-project"
   },
   "require": {
-    "php": ">=8.0",
+    "php": ">=8.1",
     "fakerphp/faker": "^1.9.1",
     "guzzlehttp/guzzle": "^7.2",
     "laravel/framework": "^10.10",
