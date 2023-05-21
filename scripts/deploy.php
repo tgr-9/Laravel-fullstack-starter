@@ -22,7 +22,7 @@ host('creasi.dev')
 
 desc('Deploy static assets');
 task('deploy:assets', function () {
-    runLocally('rsync -zrtv public/build/* creasi.dev:{{release_path}}/public/build');
+    runLocally('rsync -zrtv ../public/build/* creasi.dev:{{release_or_current_path}}/public/build');
 });
 
 // Hooks
