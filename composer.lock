@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b8586180dadc91c4fbbb4b678dcd09a",
+    "content-hash": "7a384bbb6f3717ec0a933335b7b7176a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -975,16 +975,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "1.5.2",
+            "version": "1.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "b94b2807d85443f9719887892882d0329d1e2598"
+                "reference": "67ab6e18aaa14d753cc148911d273f6e6cb6721e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/b94b2807d85443f9719887892882d0329d1e2598",
-                "reference": "b94b2807d85443f9719887892882d0329d1e2598",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/67ab6e18aaa14d753cc148911d273f6e6cb6721e",
+                "reference": "67ab6e18aaa14d753cc148911d273f6e6cb6721e",
                 "shasum": ""
             },
             "require": {
@@ -994,11 +994,6 @@
                 "symfony/phpunit-bridge": "^4.4 || ^5.1"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.5-dev"
-                }
-            },
             "autoload": {
                 "files": [
                     "src/functions_include.php"
@@ -1039,7 +1034,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.5.2"
+                "source": "https://github.com/guzzle/promises/tree/1.5.3"
             },
             "funding": [
                 {
@@ -1055,7 +1050,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-28T14:55:35+00:00"
+            "time": "2023-05-21T12:31:43+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -6970,21 +6965,22 @@
         },
         {
             "name": "creasi/dusk-browserstack",
-            "version": "0.0.2",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/creasico/laravel-dusk-browserstack.git",
-                "reference": "7feeea2be81d79911e5f3f848c2b1a3f0f7907ce"
+                "reference": "451965bf853c28f5c767a98d1fa7604dee74d951"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/7feeea2be81d79911e5f3f848c2b1a3f0f7907ce",
-                "reference": "7feeea2be81d79911e5f3f848c2b1a3f0f7907ce",
+                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/451965bf853c28f5c767a98d1fa7604dee74d951",
+                "reference": "451965bf853c28f5c767a98d1fa7604dee74d951",
                 "shasum": ""
             },
             "require": {
                 "laravel/dusk": "^7.0",
-                "php": "^8.0"
+                "php": "^8.0",
+                "phpunit/phpunit": "^10.0.1"
             },
             "require-dev": {
                 "laravel/pint": "^1.1"
@@ -7019,7 +7015,7 @@
                 "issues": "https://github.com/creasico/laravel-dusk-browserstack/issues",
                 "source": "https://github.com/creasico/laravel-dusk-browserstack"
             },
-            "time": "2022-10-13T04:46:36+00:00"
+            "time": "2023-05-21T13:28:13+00:00"
         },
         {
             "name": "deployer/deployer",
