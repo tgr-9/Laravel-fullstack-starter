@@ -52,8 +52,10 @@ jobs:
           chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
-      - name: Set up pnpm
+      - name: Setup pnpm
         uses: pnpm/action-setup@v2
+        with:
+          version: 8
 
       - name: Setup Node.JS
         uses: actions/setup-node@v3

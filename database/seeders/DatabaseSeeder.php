@@ -19,8 +19,6 @@ class DatabaseSeeder extends Seeder
 
     /**
      * Create Initial Users.
-     *
-     * @return void
      */
     private function createInitialUsers(): void
     {

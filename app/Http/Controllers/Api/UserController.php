@@ -17,7 +17,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param  Request  $request
      * @return \Illuminate\Database\Eloquent\Collection<int, User>
      */
     public function index(Request $request)
@@ -30,7 +29,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param  StoreRequest  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(StoreRequest $request)
@@ -42,8 +40,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param  User  $user
-     * @param  Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(User $user, Request $request)
@@ -52,8 +48,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param  UpdateRequest  $request
-     * @param  User  $user
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(UpdateRequest $request, User $user)
@@ -64,7 +58,6 @@ class UserController extends Controller
     }
 
     /**
-     * @param  User  $user
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(User $user)

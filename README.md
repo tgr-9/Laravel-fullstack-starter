@@ -4,8 +4,8 @@
 
 ## Requirements
 
-- PHP `>= v8.0` and Composer `>= v2.0`
-- Node.js `>= v16.0` and PNPM `v7.x`
+- PHP `>= v8.1` and Composer `>= v2.0`
+- Node.js `>= v16.0` and PNPM `v8.x`
 - Database Server (MySQL, MariaDB or PostgreSQL)
 
 ## License
