@@ -60,7 +60,7 @@
       "@php artisan key:generate --ansi"
     ],
     "dep": [
-      "vendor/bin/dep"
+      "vendor/bin/dep -f scripts/deploy.php"
     ],
     "fix": [
       "pint --preset laravel"
