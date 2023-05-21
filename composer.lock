@@ -6966,16 +6966,16 @@
         },
         {
             "name": "creasi/dusk-browserstack",
-            "version": "0.1.1",
+            "version": "0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/creasico/laravel-dusk-browserstack.git",
-                "reference": "6dfee58d938c78455ad404baf14664c8c4f9541d"
+                "reference": "41aca0427b7dfda6f8d75c65b8e070b1224e5db8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/6dfee58d938c78455ad404baf14664c8c4f9541d",
-                "reference": "6dfee58d938c78455ad404baf14664c8c4f9541d",
+                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/41aca0427b7dfda6f8d75c65b8e070b1224e5db8",
+                "reference": "41aca0427b7dfda6f8d75c65b8e070b1224e5db8",
                 "shasum": ""
             },
             "require": {
@@ -7016,7 +7016,7 @@
                 "issues": "https://github.com/creasico/laravel-dusk-browserstack/issues",
                 "source": "https://github.com/creasico/laravel-dusk-browserstack"
             },
-            "time": "2023-05-21T13:45:19+00:00"
+            "time": "2023-05-21T18:47:27+00:00"
         },
         {
             "name": "deployer/deployer",
