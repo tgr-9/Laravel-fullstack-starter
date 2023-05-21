@@ -59,7 +59,9 @@
     "post-create-project-cmd": [
       "@php artisan key:generate --ansi"
     ],
-    "dep": "vendor/bin/dep",
+    "dep": [
+      "vendor/bin/dep"
+    ],
     "fix": [
       "pint --preset laravel"
     ],
