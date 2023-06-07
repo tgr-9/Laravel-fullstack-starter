@@ -1,27 +1,25 @@
 # Enforce Unix newlines
 * text=lf
 
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+
 # Exclude unused files
-# see: https://redd.it/2jzp6k
-# .codeclimate.yml    export-ignore
-# .coveralls.yml      export-ignore
-.devcontainer         export-ignore
-.dockerignore         export-ignore
-# .gitattributes      export-ignore
-# .gitignore          export-ignore
-# .github             export-ignore
-.github/README.md     export-ignore
-# .vscode             export-ignore
-CHANGELOG.md          export-ignore
-# phpunit.*           export-ignore
-# resources/docs      export-ignore
-docker-compose.yml    export-ignore
-# jsconfig.json       export-ignore
-# package.json        export-ignore
-# pnpm-lock.yaml      export-ignore
-# tailwind.config.*   export-ignore
-# scripts             export-ignore
-# tests               export-ignore
-# tsconfig.json       export-ignore
-# vite.config.*       export-ignore
-# windi.config.*      export-ignore
+/.devcontainer        export-ignore
+/.dockerignore        export-ignore
+# /.gitattributes       export-ignore
+# /.gitignore           export-ignore
+# /.github              export-ignore
+# /docs                 export-ignore
+# /resources/docs       export-ignore
+# /tests                export-ignore
+# /package.json         export-ignore
+/docker-compose.yml   export-ignore
+# /phpunit.xml          export-ignore
+# /tsconfig.json        export-ignore
+# /vite.config.ts       export-ignore
+# /pnpm-lock.yaml       export-ignore
+/CHANGELOG.md         export-ignore
