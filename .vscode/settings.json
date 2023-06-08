@@ -4,8 +4,7 @@
   },
   "editor.formatOnSave": false,
   "files.associations": {
-    "*.css": "postcss",
-    ".env.*": "dotenv"
+    "*.css": "postcss"
   },
   "i18n-ally.sourceLanguage": "en",
   "i18n-ally.keystyle": "nested",
