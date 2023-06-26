@@ -17,10 +17,8 @@
     "php": ">=8.1",
     "fakerphp/faker": "^1.9.1",
     "guzzlehttp/guzzle": "^7.2",
-    "laravel/framework": "^10.10",
+    "laravel/framework": "^10.0",
     "laravel/sanctum": "^3.0",
-    "league/flysystem-aws-s3-v3": "^3.0",
-    "predis/predis": "^2.0",
     "sentry/sentry-laravel": "^3.1"
   },
   "require-dev": {
@@ -33,7 +31,7 @@
     "laravel/tinker": "^2.7",
     "mockery/mockery": "^1.4.4",
     "nunomaduro/collision": "^7.5",
-    "phpunit/phpunit": "^10.1",
+    "phpunit/phpunit": "^10.0",
     "spatie/laravel-ignition": "^2.1"
   },
   "autoload": {
