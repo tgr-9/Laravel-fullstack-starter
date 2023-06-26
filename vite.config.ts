@@ -14,6 +14,12 @@ export default defineConfig(({ mode }) => {
       },
     },
 
+    define: {
+      'import.meta.env.APP_NAME': JSON.stringify(env.APP_NAME),
+      'import.meta.env.APP_LOCALE': JSON.stringify(env.APP_LOCALE),
+      'import.meta.env.APP_URL': JSON.stringify(env.APP_URL),
+    },
+
     plugins: [
       /**
        * @see https://laravel.com/docs/vite
@@ -37,7 +43,7 @@ export default defineConfig(({ mode }) => {
         injectRegister: 'script',
         registerType: 'autoUpdate',
         devOptions: {
-          enabled: mode !== 'production',
+          enabled: (mode !== 'production' && !!env.APP_DEBUG),
         },
         strategies: 'generateSW',
         workbox: {
