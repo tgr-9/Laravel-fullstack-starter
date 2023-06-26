@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c31dfc235e2989cf27872cefc89c392e",
+    "content-hash": "05f5c9e259094706a66452198d038085",
     "packages": [
         {
             "name": "brick/math",
@@ -6685,16 +6685,16 @@
         },
         {
             "name": "creasi/dusk-browserstack",
-            "version": "0.1.2",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/creasico/laravel-dusk-browserstack.git",
-                "reference": "41aca0427b7dfda6f8d75c65b8e070b1224e5db8"
+                "reference": "ed7c599807bd1b4ce36791afdd6bdf8935f01a18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/41aca0427b7dfda6f8d75c65b8e070b1224e5db8",
-                "reference": "41aca0427b7dfda6f8d75c65b8e070b1224e5db8",
+                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/ed7c599807bd1b4ce36791afdd6bdf8935f01a18",
+                "reference": "ed7c599807bd1b4ce36791afdd6bdf8935f01a18",
                 "shasum": ""
             },
             "require": {
@@ -6735,7 +6735,7 @@
                 "issues": "https://github.com/creasico/laravel-dusk-browserstack/issues",
                 "source": "https://github.com/creasico/laravel-dusk-browserstack"
             },
-            "time": "2023-05-21T18:47:27+00:00"
+            "time": "2023-06-26T21:26:21+00:00"
         },
         {
             "name": "deployer/deployer",
