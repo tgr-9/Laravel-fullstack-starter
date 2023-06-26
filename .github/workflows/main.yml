@@ -100,7 +100,7 @@ jobs:
           extensions: curl, dom, gd, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
-          coverage: none
+          coverage: xdebug
 
       - name: Download assets
         id: download
@@ -160,12 +160,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, redis, zip
+          extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: xdebug
-        env:
-          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary
 
       - name: Download assets
         id: download
