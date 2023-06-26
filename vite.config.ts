@@ -51,7 +51,7 @@ export default defineConfig(({ mode }) => {
           start_url: env.APP_URL,
           display: 'fullscreen',
           background_color: '#ffffff',
-          lang: 'en',
+          lang: env.APP_LOCALE || 'id',
           scope: '/',
           theme_color: '#ffffff',
           orientation: 'any',
