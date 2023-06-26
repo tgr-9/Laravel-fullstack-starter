@@ -64,7 +64,7 @@
       "pint --preset laravel"
     ],
     "test:unit": [
-      "@php artisan test --env=testing"
+      "@php artisan test --env=testing --coverage"
     ],
     "test:e2e": [
       "@php artisan dusk --env=testing"
