@@ -1,6 +1,6 @@
 {
-  "include": ["resources/client/**/*"],
-  "exclude": ["build", "node_modules"],
+  "include": ["*.config.ts", "resources/client/**/*"],
+  "exclude": ["build", "node_modules", "vendor"],
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "public",

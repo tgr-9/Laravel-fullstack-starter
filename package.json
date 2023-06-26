@@ -6,24 +6,25 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
+    "lint": "eslint --ext .ts,.json,.vue resources",
     "prepare": "husky install scripts/husky"
   },
   "dependencies": {
-    "@sentry/browser": "^7.55.2",
-    "@sentry/tracing": "^7.55.2",
+    "@sentry/browser": "^7.56.0",
+    "@sentry/tracing": "^7.56.0",
     "alpinejs": "^3.12.2",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config-vue": "^0.39.5",
-    "@commitlint/cli": "^17.6.5",
-    "@commitlint/config-conventional": "^17.6.5",
+    "@commitlint/cli": "^17.6.6",
+    "@commitlint/config-conventional": "^17.6.6",
+    "@creasico/eslint-config": "^0.0.1",
     "@fontsource/nunito": "^5.0.3",
-    "@types/alpinejs": "^3.7.1",
+    "@types/alpinejs": "^3.7.2",
     "@types/node": "^18.16.18",
     "cross-env": "^7.0.3",
-    "eslint": "^8.42.0",
+    "eslint": "^8.43.0",
     "husky": "^8.0.3",
     "laravel-vite-plugin": "^0.7.8",
     "lint-staged": "^13.2.2",
@@ -56,6 +57,10 @@
       "node": true,
       "browser": true
     },
-    "extends": "@antfu/vue"
+    "extends": "@creasico/eslint-config/vue",
+    "parserOptions": {
+      "tsconfigRootDir": ".",
+      "project": "./tsconfig.json"
+    }
   }
 }
