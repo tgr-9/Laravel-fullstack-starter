@@ -130,7 +130,7 @@ jobs:
           command: composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run unit tests
-        run: php artisan test
+        run: php artisan test --coverage
 
   e2e:
     runs-on: ubuntu-latest
