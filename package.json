@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@sentry/browser": "^7.56.0",
-    "@sentry/tracing": "^7.56.0",
     "alpinejs": "^3.12.2",
     "axios": "^1.4.0",
     "date-fns": "^2.30.0"

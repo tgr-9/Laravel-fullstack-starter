@@ -1,5 +1,4 @@
-import { init } from '@sentry/browser'
-import { BrowserTracing } from '@sentry/tracing'
+import { BrowserTracing, init } from '@sentry/browser'
 
 const {
   VITE_SENTRY_DSN,
