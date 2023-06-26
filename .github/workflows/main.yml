@@ -23,9 +23,7 @@ env:
   DB_USERNAME: creasico
   DB_PASSWORD: secret
   MAIL_FROM_ADDRESS: devtest@creasi.dev
-  SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
-  SENTRY_TRACE_QUEUE_ENABLED: true
-  SENTRY_TRACES_SAMPLE_RATE: 1.0
+  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -38,8 +36,6 @@ jobs:
 
     env:
       VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-      VITE_SENTRY_TRACE_QUEUE_ENABLED: true
-      VITE_SENTRY_TRACES_SAMPLE_RATE: 1.0
 
     steps:
       - name: Checkout
@@ -104,7 +100,7 @@ jobs:
           extensions: curl, dom, gd, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
-          coverage: none
+          coverage: xdebug
 
       - name: Download assets
         id: download
@@ -134,7 +130,7 @@ jobs:
           command: composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run unit tests
-        run: php artisan test
+        run: php artisan test --coverage
 
   e2e:
     runs-on: ubuntu-latest
@@ -164,12 +160,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, redis, zip
+          extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: xdebug
-        env:
-          REDIS_CONFIGURE_OPTS: --enable-redis --enable-redis-igbinary
 
       - name: Download assets
         id: download

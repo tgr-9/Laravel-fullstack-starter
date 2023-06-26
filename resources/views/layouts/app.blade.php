@@ -7,7 +7,12 @@
 
         <title>{{ config('app.name', 'Laravel') }} - @yield('title', 'Dashboard')</title>
 
+        <link rel="icon" type="image/svg+xml" href="{{ asset('/assets/favicon.svg') }}">
+        <link rel="apple-touch-icon" href="{{ asset('/assets/icon-192x192.png') }}">
+        <link rel="manifest" href="{{ asset('/build/manifest.webmanifest') }}" />
+
         <!-- Scripts -->
+        <script src="{{ asset('build/registerSW.js') }}"></script>
         @vite(['resources/client/app.ts', 'resources/client/app.css'])
     </head>
 
