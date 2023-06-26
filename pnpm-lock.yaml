@@ -4,9 +4,6 @@ dependencies:
   '@sentry/browser':
     specifier: ^7.56.0
     version: 7.56.0
-  '@sentry/tracing':
-    specifier: ^7.56.0
-    version: 7.56.0
   alpinejs:
     specifier: ^3.12.2
     version: 3.12.2
@@ -1993,13 +1990,6 @@ packages:
       '@sentry/core': 7.56.0
       '@sentry/types': 7.56.0
       '@sentry/utils': 7.56.0
-    dev: false
-
-  /@sentry/tracing@7.56.0:
-    resolution: {integrity: sha512-Qy7lJdC2YBk9T8JFt4da7xHB3pTZH6yUiIwo5edmSBv2cY6MQ0QZgLzsjJurjf47+/WecVYYKdye9q4twsBlDA==}
-    engines: {node: '>=8'}
-    dependencies:
-      '@sentry-internal/tracing': 7.56.0
     dev: false
 
   /@sentry/types@7.56.0:
