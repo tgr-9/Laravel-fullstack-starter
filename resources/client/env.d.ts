@@ -1,6 +1,9 @@
 /// <reference types="vite/client" />
 
 interface ImportMetaEnv {
+  APP_NAME?: string;
+  APP_LOCALE?: 'id' | 'en';
+  APP_URL?: string;
   VITE_API_URL?: string;
   VITE_SENTRY_DSN?: string;
   VITE_SENTRY_TRACES_SAMPLE_RATE?: number;

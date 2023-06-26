@@ -1,4 +1,9 @@
 import { defineConfig } from 'windicss/helpers'
+import typography from 'windicss/plugin/typography'
+import forms from 'windicss/plugin/forms'
+import filters from 'windicss/plugin/filters'
+import lineClamp from 'windicss/plugin/line-clamp'
+
 // import colors from 'windicss/colors'
 // import defaultTheme from 'windicss/defaultTheme'
 
@@ -11,10 +16,10 @@ export default defineConfig({
     exclude: ['node_modules', '.git'],
   },
   plugins: [
-    require('windicss/plugin/typography'),
-    require('windicss/plugin/forms'),
-    require('windicss/plugin/filters'),
-    require('windicss/plugin/line-clamp'),
+    typography(),
+    forms,
+    filters,
+    lineClamp,
   ],
   safelist: ['prose', 'prose-sm', 'max-w-none', 'hidden'],
   theme: {

@@ -17,15 +17,13 @@
     "php": ">=8.1",
     "fakerphp/faker": "^1.9.1",
     "guzzlehttp/guzzle": "^7.2",
-    "laravel/framework": "^10.10",
+    "laravel/framework": "^10.0",
     "laravel/sanctum": "^3.0",
-    "league/flysystem-aws-s3-v3": "^3.0",
-    "predis/predis": "^2.0",
     "sentry/sentry-laravel": "^3.1"
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.7",
-    "creasi/dusk-browserstack": "^0.1.1",
+    "creasi/dusk-browserstack": "^0.1.2",
     "deployer/deployer": "^7.0",
     "laravel/dusk": "^7.0",
     "laravel/pint": "^1.1",
@@ -33,7 +31,7 @@
     "laravel/tinker": "^2.7",
     "mockery/mockery": "^1.4.4",
     "nunomaduro/collision": "^7.5",
-    "phpunit/phpunit": "^10.1",
+    "phpunit/phpunit": "^10.0",
     "spatie/laravel-ignition": "^2.1"
   },
   "autoload": {
@@ -66,7 +64,7 @@
       "pint --preset laravel"
     ],
     "test:unit": [
-      "@php artisan test --env=testing"
+      "@php artisan test --env=testing --coverage"
     ],
     "test:e2e": [
       "@php artisan dusk --env=testing"
