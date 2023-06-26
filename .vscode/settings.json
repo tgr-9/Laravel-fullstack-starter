@@ -6,11 +6,12 @@
   "files.associations": {
     "*.css": "postcss"
   },
-  "i18n-ally.sourceLanguage": "en",
+  "i18n-ally.sourceLanguage": "id",
   "i18n-ally.keystyle": "nested",
   "i18n-ally.enabledFrameworks": ["laravel", "vue", "vue-sfc"],
   "i18n-ally.localesPaths": [
     "resources/lang"
   ],
-  "prettier.enable": false
+  "prettier.enable": false,
+  "typescript.tsdk": "node_modules/typescript/lib"
 }
