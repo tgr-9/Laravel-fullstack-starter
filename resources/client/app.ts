@@ -1,62 +1,56 @@
-import alpine from 'alpinejs'
-import type { Alpine } from 'alpinejs'
-import { format } from 'date-fns'
-import { enUS as en, id } from 'date-fns/locale'
+import { createInertiaApp } from '@inertiajs/vue3'
+import { BrowserTracing, init } from '@sentry/vue'
+import naive from 'naive-ui'
+import { createI18n } from 'vue-i18n'
+import type { DefineComponent } from 'vue'
+import { createApp, h } from 'vue'
+import { ZiggyVue } from 'ziggy/vue'
 
-// import 'virtual:windi-devtools'
+import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
 
-import '~/libs/sentry'
-import '~/libs/axios'
+import '~/bootstrap'
+import { Ziggy } from '~/ziggy.cjs'
+import AppLayout from '~/layouts/app-layout.vue'
 
-declare global {
-  interface Window {
-    Alpine: Alpine
-    dateFormat: (date: Date, fmt: string) => string
-    numberFormat: (num: number) => string
-  }
-}
+const locale = document.documentElement.lang
 
-window.Alpine = alpine
+createInertiaApp({
+  title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
+  resolve: (name) => {
+    const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
+    const page = pages[`./pages/${name}.vue`]
 
-const locales: { [key in string]: Locale } = { id, en }
-const locale = locales[document.documentElement.lang]
+    page.default.layout = page.default.layout || AppLayout
 
-window.dateFormat = (date: Date, fmt: string) => {
-  return format(date, fmt, { locale })
-}
+    return page
+  },
+  setup({ el, App, props, plugin }) {
+    const i18n = createI18n({
+      legacy: false,
+      locale,
+      messages: {},
+    })
 
-window.numberFormat = (num: number) => {
-  return new Intl.NumberFormat(document.documentElement.lang).format(num)
-}
+    const app = createApp({ render: () => h(App, props) })
+      .use(plugin)
+      .use(ZiggyVue, Ziggy)
+      .use(i18n)
+      .use(naive)
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
+    if (import.meta.env.VITE_SENTRY_DSN) {
+      init({
+        app,
+        dsn: import.meta.env.VITE_SENTRY_DSN,
+        environment: import.meta.env.APP_ENV,
+        integrations: [new BrowserTracing()],
+        trackComponents: true,
+        tracesSampleRate: 1.0,
+        logErrors: true,
+      })
+    }
 
-// import Echo from 'laravel-echo';
-
-// import Pusher from 'pusher-js';
-// window.Pusher = Pusher;
-
-// window.Echo = new Echo({
-//   broadcaster: 'pusher',
-//   key: import.meta.env.VITE_PUSHER_APP_KEY,
-//   cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-//   forceTLS: true
-// });
-
-// Alpine.plugin(TimeAgo.configure({ locale }))
-
-// const dataLayer = window.dataLayer || []
-// const gtag = window.gtag = (...args) => dataLayer.push(args)
-
-window.addEventListener('DOMContentLoaded', () => {
-  // gtag('js', new Date())
-  // gtag('config', 'G-1KQP24LR0L')
-
-  alpine.start()
+    app.mount(el)
+  },
 })

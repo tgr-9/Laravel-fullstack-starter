@@ -1,4 +1,8 @@
+/// <reference lib="DOM" />
 /// <reference types="vite/client" />
+/// <reference types="vue/ref-macros" />
+/// <reference types="vite-plugin-pwa/client" />
+/// <reference types="@intlify/unplugin-vue-i18n/messages" />
 
 interface ImportMetaEnv {
   APP_NAME?: string;
@@ -13,4 +17,10 @@ interface ImportMetaEnv {
   // VITE_PUSHER_PORT?: string;
   // VITE_PUSHER_SCHEME?: string;
   // VITE_PUSHER_APP_CLUSTER?: string;
+}
+
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  const component: DefineComponent<{}, {}, any>
+  export default component
 }
