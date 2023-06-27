@@ -82,6 +82,8 @@ export default defineConfig(({ mode }) => {
           `${rootdir}/components`,
           `${rootdir}/layouts`,
         ],
+        directoryAsNamespace: true,
+        include: [/\.vue$/, /\.vue\?vue/],
         resolvers: [
           NaiveUiResolver(),
         ],
@@ -100,12 +102,13 @@ export default defineConfig(({ mode }) => {
        * @see https://vite-pwa-org.netlify.app/guide
        */
       pwa({
-        injectRegister: 'script',
-        registerType: 'autoUpdate',
         devOptions: {
           enabled: (mode !== 'production' && !!env.APP_DEBUG),
         },
-        strategies: 'generateSW',
+        filename: 'sw.ts',
+        srcDir: rootdir,
+        registerType: 'autoUpdate',
+        strategies: 'injectManifest',
         workbox: {
           globPatterns: ['**/*.{ts,js,css,html,ico,png,svg}'],
           navigateFallback: null,

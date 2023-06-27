@@ -6,7 +6,7 @@ import type { DefineComponent } from 'vue'
 import { createApp, h } from 'vue'
 import { ZiggyVue } from 'ziggy/vue'
 
-import 'virtual:windi-devtools'
+// import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
 

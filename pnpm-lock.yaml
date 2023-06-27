@@ -54,6 +54,9 @@ devDependencies:
   '@vitejs/plugin-vue':
     specifier: ^4.2.3
     version: 4.2.3(vite@4.3.9)(vue@3.3.4)
+  '@vue/compiler-sfc':
+    specifier: ^3.3.4
+    version: 3.3.4
   '@vueuse/core':
     specifier: ^10.2.0
     version: 10.2.0(vue@3.3.4)
@@ -102,6 +105,24 @@ devDependencies:
   windicss:
     specifier: ^3.5.6
     version: 3.5.6
+  workbox-build:
+    specifier: ^7.0.0
+    version: 7.0.0
+  workbox-core:
+    specifier: ^7.0.0
+    version: 7.0.0
+  workbox-precaching:
+    specifier: ^7.0.0
+    version: 7.0.0
+  workbox-routing:
+    specifier: ^7.0.0
+    version: 7.0.0
+  workbox-strategies:
+    specifier: ^7.0.0
+    version: 7.0.0
+  workbox-window:
+    specifier: ^7.0.0
+    version: 7.0.0
   ziggy-js:
     specifier: ^1.6.0
     version: 1.6.0
