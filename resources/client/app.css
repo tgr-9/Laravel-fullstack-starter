@@ -5,6 +5,10 @@
 @import '@fontsource/nunito/700.css';
 @import '@fontsource/nunito/700-italic.css';
 
+#app {
+  @apply min-h-screen w-full;
+}
+
 .auth-bg {
   background-position: top center;
   background-repeat: no-repeat;
