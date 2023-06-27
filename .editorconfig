@@ -12,7 +12,7 @@ trim_trailing_whitespace = true
 insert_final_newline = false
 trim_trailing_whitespace = false
 
-[*.{css,js,json,ts,svg,xml,yml,yaml}]
+[*.{css,js,json,ts,svg,vue,xml,yml,yaml}]
 indent_size = 2
 
 [resources/**.conf]
