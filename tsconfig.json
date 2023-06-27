@@ -13,7 +13,7 @@
     "sourceMap": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "isolatedModules": true,
+    // "isolatedModules": true,
     "declaration": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -21,10 +21,10 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ESNext", "DOM", "WebWorker"],
-    "typeRoots": ["resources/client"],
+    "typeRoots": ["./resources/client"],
     "types": [
-      // "./auto-imports",
-      // "./components",
+      "./auto-imports",
+      "./components",
       // "vitest",
       "vite/client"
       // "vite-plugin-pages/client",
