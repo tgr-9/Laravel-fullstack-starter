@@ -24,13 +24,38 @@ return [
         'forgot-password' => 'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
     ],
 
-    'fields' => [
-        'email' => 'Email',
-        'username' => 'Username',
-        'password' => 'Password',
-        'new_password' => 'New Password',
-        'confirm_password' => 'Confirm Password',
-        'remember' => 'Remember Me',
+    'username' => [
+        'label' => 'Username',
+        'placeholder' => 'Please type your username',
+        // 'description' => null,
+    ],
+
+    'email' => [
+        'label' => 'Email',
+        'placeholder' => 'johndoe@example.com',
+        // 'description' => null,
+    ],
+
+    'password' => [
+        'label' => 'Password',
+        'placeholder' => 'Please type your password',
+        // 'description' => null,
+    ],
+
+    'new_password' => [
+        'label' => 'New Password',
+        'placeholder' => 'Please type your new password',
+        // 'description' => null,
+    ],
+
+    'confirm_password' => [
+        'label' => 'Confirm Password',
+        'placeholder' => 'Please re-type your new password',
+        // 'description' => null,
+    ],
+
+    'remember' => [
+        'label' => 'Remember me',
     ],
 
     'actions' => [

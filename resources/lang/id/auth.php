@@ -24,13 +24,38 @@ return [
         'forgot-password' => 'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
     ],
 
-    'fields' => [
-        'email' => 'Email',
-        'username' => 'Nama Pengguna',
-        'password' => 'Kata Sandi',
-        'new_password' => 'Kata Sandi Baru',
-        'confirm_password' => 'Konfirmasi Kata Sandi',
-        'remember' => 'Ingat Saya',
+    'username' => [
+        'label' => 'Nama Pengguna',
+        'placeholder' => 'Tuliskan nama pengguna Anda',
+        // 'description' => null,
+    ],
+
+    'email' => [
+        'label' => 'Email',
+        'placeholder' => 'johndoe@example.com',
+        // 'description' => null,
+    ],
+
+    'password' => [
+        'label' => 'Kata Sandi',
+        'placeholder' => 'Tuliskan kata sandi',
+        // 'description' => null,
+    ],
+
+    'new_password' => [
+        'label' => 'New Kata Sandi',
+        'placeholder' => 'Tuliskan kata sandi baru',
+        // 'description' => null,
+    ],
+
+    'confirm_password' => [
+        'label' => 'Konfirmasi Kata Sandi',
+        'placeholder' => 'Tulis ulang kata sandi baru',
+        // 'description' => null,
+    ],
+
+    'remember' => [
+        'label' => 'Ingat saya',
     ],
 
     'actions' => [
