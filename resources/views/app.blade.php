@@ -9,6 +9,10 @@
         <link rel="apple-touch-icon" href="{{ asset('/assets/icon-192x192.png') }}">
         <link rel="manifest" href="{{ asset('/build/manifest.webmanifest') }}" />
 
+        <script>
+        window.__translations = @json($translations)
+        </script>
+
         <!-- Scripts -->
         @vite(['resources/client/app.ts', 'resources/client/app.css'])
 
