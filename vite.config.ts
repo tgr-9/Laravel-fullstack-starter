@@ -60,15 +60,11 @@ export default defineConfig(({ mode }) => {
         input: [
           `${rootdir}/app.ts`,
         ],
+        // valetTls: true,
         // refresh: true,
       }),
 
-      vue({
-        include: [/\.vue$/],
-        template: {
-          // transformAssetUrl,
-        },
-      }),
+      vue(),
 
       /**
        * @see https://windicss.org/integrations/vite.html
@@ -85,10 +81,8 @@ export default defineConfig(({ mode }) => {
           `${rootdir}/store`,
         ],
         imports: [
-          '@vueuse/core',
-          {
-            'naive-ui': [],
-          },
+          { '@vueuse/core': [] },
+          { 'naive-ui': [] },
           'vue-i18n',
           'vue/macros',
           'vue',
