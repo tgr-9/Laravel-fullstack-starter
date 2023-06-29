@@ -22,6 +22,29 @@ export default defineConfig(({ mode }) => {
       },
     },
 
+    optimizeDeps: {
+      include: [],
+      exclude: [
+        'vue-demi',
+      ],
+    },
+
+    build: {
+      reportCompressedSize: false,
+      chunkSizeWarningLimit: 2000,
+      rollupOptions: {
+        output: {
+          /**
+           * @see https://rollupjs.org/configuration-options/#output-manualchunks
+           */
+          manualChunks: (id) => {
+            if (id.includes('node_modules'))
+              return 'vendor'
+          },
+        },
+      },
+    },
+
     define: {
       'import.meta.env.APP_NAME': JSON.stringify(env.APP_NAME),
       'import.meta.env.APP_LOCALE': JSON.stringify(env.APP_LOCALE),
