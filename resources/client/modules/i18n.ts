@@ -20,7 +20,5 @@ export const install: AppModuleInstall = ({ app }): void => {
     messages,
   })
 
-  console.log(window.__translations) // eslint-disable-line no-console
-
   app.use(i18n)
 }
