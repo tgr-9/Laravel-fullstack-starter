@@ -17,18 +17,16 @@ use Inertia\Inertia;
 |
 */
 
-Route::get(RouteServiceProvider::HOME, function (Request $request) {
-    if ($request->isJson()) {
-        return response(404);
-    }
-
-    return Inertia::render('dashboard');
-})->name('home');
 Route::middleware('auth')->group(function () {
+    Route::get(RouteServiceProvider::HOME, function (Request $request) {
+        if ($request->expectsJson()) {
+            return response(404);
+        }
 
-    Route::controller(Controllers\UserController::class)->prefix('users')->group(function () {
-        Route::get('', 'index')->name('users.home');
-        Route::get('create', 'create')->name('users.create');
-        Route::get('{user}', 'edit')->name('users.edit');
-    });
+        return Inertia::render('dashboard');
+    })->name('home');
+
+    Route::resource('users', Controllers\UserController::class)
+        ->only('index', 'create', 'edit')
+        ->names(['index' => 'users.home']);
 });
