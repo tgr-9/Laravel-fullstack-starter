@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { useRegisterSW } from 'virtual:pwa-register/vue'
 
+const { errors: _ } = defineProps<{
+  errors: Object
+}>()
+
 const { offlineReady } = useRegisterSW({
   immediate: true,
 })
