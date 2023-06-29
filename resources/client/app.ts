@@ -10,7 +10,7 @@ import '~/bootstrap'
 import AppLayout from '~/layouts/app-layout.vue'
 
 interface AppModuleContext {
-  app: App
+  app: App<Element>
 }
 
 declare global {
