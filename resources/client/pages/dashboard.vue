@@ -6,4 +6,6 @@ import { Head as iHead } from '@inertiajs/vue3'
   <i-head title="Dashboard" />
 
   <h3>Welcome To Dashboard</h3>
+
+  <a :href="$route('users.home')"></a>
 </template>

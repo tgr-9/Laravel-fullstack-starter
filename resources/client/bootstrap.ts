@@ -3,12 +3,8 @@ import axios from 'axios'
 import type { AxiosError, AxiosStatic } from 'axios'
 import { format } from 'date-fns'
 import { enUS as en, id } from 'date-fns/locale'
-import type Router from 'ziggy/Router'
 
 declare global {
-  function route(): Router
-  function route(name: string, params?: Record<string, any>, absolute?: boolean): string
-
   interface Window {
     dateFormat: (date: Date, fmt: string) => string
     numberFormat: (num: number) => string
