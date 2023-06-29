@@ -1,6 +1,11 @@
 {
-  "include": ["*.config.ts", "resources/client/**/*.ts", "resources/client/**/*.vue"],
-  "exclude": ["build", "node_modules", "vendor", "resources/client/ziggy.cjs"],
+  "include": [
+    "*.config.ts",
+    "resources/client/components.d.ts",
+    "resources/client/**/*.ts",
+    "resources/client/**/*.vue"
+  ],
+  "exclude": ["build", "node_modules", "vendor", "**/*.js", "**/*.cjs"],
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "public",
@@ -13,7 +18,7 @@
     "sourceMap": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
-    // "isolatedModules": true,
+    "isolatedModules": true,
     "declaration": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
@@ -21,19 +26,16 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ESNext", "DOM", "WebWorker"],
-    "typeRoots": ["./resources/client"],
+    "typeRoots": [
+      "./node_modules/@types/",
+      "./resources/client/"
+    ],
     "types": [
-      "./auto-imports",
-      "./components",
-      // "vitest",
       "vite/client"
-      // "vite-plugin-pages/client",
       // "vite-plugin-pwa/client",
-      // "vite-plugin-vue-layouts/client"
     ],
     "paths": {
-      "~/*": ["resources/client/*"],
-      "ziggy/*": ["vendor/tightenco/ziggy/src/js/*"]
+      "~/*": ["resources/client/*"]
     }
   }
 }
