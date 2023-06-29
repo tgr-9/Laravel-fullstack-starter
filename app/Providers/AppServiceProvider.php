@@ -3,9 +3,12 @@
 namespace App\Providers;
 
 use App\View\Composers\MenuComposer;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\View as ViewFacade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -38,6 +41,22 @@ class AppServiceProvider extends ServiceProvider
             Mail::alwaysTo($devMail);
         }
 
-        View::composer(['layouts.app'], MenuComposer::class);
+        ViewFacade::composer(['layouts.app'], MenuComposer::class);
+
+        ViewFacade::composer('app', function (View $view) {
+            $locales = [];
+
+            foreach (File::directories(\resource_path('lang')) as $dir) {
+                $trans = [];
+
+                foreach (File::files($dir) as $file) {
+                    $trans[\basename($file, '.php')] = require $file;
+                }
+
+                $locales[\basename($dir)] = Arr::dot($trans);
+            }
+
+            $view->with('translations', $locales);
+        });
     }
 }

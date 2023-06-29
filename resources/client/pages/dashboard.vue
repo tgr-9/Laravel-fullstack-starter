@@ -5,7 +5,5 @@ import { Head as iHead } from '@inertiajs/vue3'
 <template>
   <i-head title="Dashboard" />
 
-  <h3>Welcome To Dashboard</h3>
-
-  <a :href="$route('users.home')"></a>
+  <h3>{{ $t('dashboard.welcome-notice', { user: 'John Doe' }) }}</h3>
 </template>

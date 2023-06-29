@@ -7,12 +7,14 @@ export {}
 type ZiggyRoutes = typeof Ziggy.routes
 
 declare global {
+  type AppLocale = 'id' | 'en'
   const axios: AxiosStatic
   function route(): Router
   function route(name: keyof ZiggyRoutes, params?: Record<string, any>, absolute?: boolean): string
 
   interface Window {
     axios: AxiosStatic
+    __translations: Record<AppLocale, any>
   }
 }
 
