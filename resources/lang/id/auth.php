@@ -18,10 +18,19 @@ return [
     'throttle' => 'Terlalu banyak percobaan login. Silakan coba lagi dalam :seconds detik.',
 
     'notices' => [
-        'verify-email' => 'Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.',
-        'verification-link-sent' => 'A new verification link has been sent to the email address you provided during registration.',
-        'confirm-password' => 'This is a secure area of the application. Please confirm your password before continuing.',
-        'forgot-password' => 'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
+        'verify-email' => 'Terima kasih telah mendaftar! Sebelum memulai, silakan verifikasi alamat email dengan klik link yang baru saja kami kirimkan. Jika Anda tidak menerima email tersebut, dengan senang hati akan kami kirim kembali.',
+        'verification-link-sent' => 'Link verifikasi baru saja terkirim ke alamat email yang anda cantumkan pada saat registrasi.',
+        'confirm-password' => 'Silakan konfirmasi kata sandi anda sebelum melanjutkan.',
+        'forgot-password' => 'Lupa kata sandi anda? Tidak masalah. Silakan tuliskan alamat email anda dan akan kami kirimkan petunjuk untuk membuat kata sandi baru untuk Anda.',
+    ],
+
+    'routes' => [
+        'login' => 'Login',
+        'register' => 'Register',
+        'confirm-password' => 'Konfirmasi Kata Sandi',
+        'forgot-password' => 'Lupa Kata Sandi',
+        'reset-password' => 'Reset Kata Sandi',
+        'verify-email' => 'Verifikasi Email',
     ],
 
     'username' => [
