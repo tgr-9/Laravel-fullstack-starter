@@ -41,7 +41,7 @@ return [
 
     'email' => [
         'label' => 'Email',
-        'placeholder' => 'johndoe@example.com',
+        'placeholder' => 'E.g johndoe@example.com',
         // 'description' => null,
     ],
 
