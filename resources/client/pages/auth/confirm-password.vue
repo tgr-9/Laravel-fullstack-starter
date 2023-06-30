@@ -10,15 +10,21 @@ const { errors: _ } = defineProps<{
   errors: Object
 }>()
 
-// const form = ref<FormInst | null>()
+interface ConfirmPasswordForm extends Record<string, unknown> {
+  password: string
+}
 
-const values = useForm({
+const model = useForm<ConfirmPasswordForm>({
   password: '',
 })
 
+const validation = reactiveComputed<{ [k in keyof Partial<ConfirmPasswordForm>]: 'error' | undefined }>(() => ({
+  password: model.errors.password !== undefined ? 'error' : undefined,
+}))
+
 function submit() {
-  values.post(route('password.confirm'), {
-    onFinish: () => values.reset('password'),
+  model.post(route('password.confirm'), {
+    onFinish: () => model.reset('password'),
   })
 }
 </script>
@@ -26,21 +32,27 @@ function submit() {
 <template>
   <i-head :title="$t('auth.routes.confirm-password')" />
 
-  <n-card :title="$t('auth.routes.reset-password')" size="medium" style="width: 450px; border-radius: 10px">
+  <n-card :title="$t('auth.routes.reset-password')" size="medium">
     <div class="mb-4 text-sm text-gray-600">
       {{ $t('auth.notices.confirm-password') }}
     </div>
 
-    <n-form :model="values" class="form-login" @submit.prevent="submit">
-      <n-form-item :label="$t('auth.password.label')" path="password">
+    <n-form :model="model" class="form-login" @submit.prevent="submit">
+      <n-form-item
+        :label="$t('auth.password.label')"
+        :feedback="model.errors.password"
+        :validation-status="validation.password"
+        path="password"
+      >
         <n-input
-          v-model:value="values.password"
+          v-model:value="model.password"
           :placeholder="$t('auth.password.placeholder')"
-          :loading="values.processing"
-          :disabled="values.processing"
+          :loading="model.processing"
+          :disabled="model.processing"
+          :autofocus="true"
+          show-password-on="mousedown"
           type="password"
           autocomplete="current-password"
-          style="padding: 3px 10px; border-radius: 5px;"
         />
       </n-form-item>
 
@@ -48,8 +60,8 @@ function submit() {
         <n-button
           type="primary"
           attr-type="submit"
-          :disabled="values.processing"
-          :loading="values.processing"
+          :disabled="model.processing"
+          :loading="model.processing"
           style="width: 100%;"
           @click="submit"
         >

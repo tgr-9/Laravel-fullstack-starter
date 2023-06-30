@@ -10,35 +10,45 @@ const { errors: _ } = defineProps<{
   errors: Object
 }>()
 
-// const form = ref<FormInst | null>()
+interface ForgotPasswordForm extends Record<string, unknown> {
+  email: string
+}
 
-const values = useForm({
+const model = useForm<ForgotPasswordForm>({
   email: '',
 })
 
+const validation = reactiveComputed<{ [k in keyof Partial<ForgotPasswordForm>]: 'error' | undefined }>(() => ({
+  email: model.errors.email !== undefined ? 'error' : undefined,
+}))
+
 function submit() {
-  values.post(route('password.email'))
+  model.post(route('password.email'))
 }
 </script>
 
 <template>
   <i-head :title="$t('auth.routes.forgot-password')" />
 
-  <n-card :title="$t('auth.routes.forgot-password')" size="medium" style="width: 450px; border-radius: 10px">
+  <n-card :title="$t('auth.routes.forgot-password')" size="medium">
     <div class="mb-4 text-sm text-gray-600">
       {{ $t('auth.notices.forgot-password') }}
     </div>
 
-    <n-form :model="values" class="form-login" @submit.prevent="submit">
-      <n-form-item :label="$t('auth.email.label')" path="email">
+    <n-form :model="model" class="form-login" @submit.prevent="submit">
+      <n-form-item
+        :label="$t('auth.email.label')"
+        :feedback="model.errors.email"
+        :validation-status="validation.email"
+        path="email"
+      >
         <n-input
-          v-model:value="values.email"
+          v-model:value="model.email"
           :placeholder="$t('auth.email.placeholder')"
-          :loading="values.processing"
-          :disabled="values.processing"
+          :loading="model.processing"
+          :disabled="model.processing"
           :autofocus="true"
           attr-type="email"
-          style="padding: 3px 10px; border-radius: 5px"
         />
       </n-form-item>
 
@@ -46,8 +56,8 @@ function submit() {
         <n-button
           type="primary"
           attr-type="submit"
-          :disabled="values.processing"
-          :loading="values.processing"
+          :disabled="model.processing"
+          :loading="model.processing"
           style="width: 100%;"
           @click="submit"
         >
