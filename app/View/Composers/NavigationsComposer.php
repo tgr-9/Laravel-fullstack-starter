@@ -23,9 +23,18 @@ class NavigationsComposer
                 'icon' => 'tabler:dashboard',
             ],
             [
-                'route' => 'users.home',
-                'label' => __('users.routes.index'),
-                'icon' => 'tabler:users',
+                'type' => 'group',
+                'label' => 'Management',
+                'children' => [
+                    [
+                        'route' => 'users.home',
+                        'label' => __('users.routes.index'),
+                        'icon' => 'tabler:users',
+                    ],
+                ],
+            ],
+            [
+                'type' => 'devider',
             ],
             [
                 'route' => null,
