@@ -43,12 +43,12 @@ function submit() {
         path="email"
       >
         <n-input
+          id="email"
           v-model:value="model.email"
           :placeholder="$t('auth.email.placeholder')"
           :loading="model.processing"
           :disabled="model.processing"
           :autofocus="true"
-          attr-type="email"
         />
       </n-form-item>
 
