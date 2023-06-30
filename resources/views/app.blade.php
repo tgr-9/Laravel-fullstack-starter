@@ -10,7 +10,8 @@
         <link rel="manifest" href="{{ asset('/build/manifest.webmanifest') }}" />
 
         <script>
-        window.__translations = @json($translations)
+            window.__navigations = @json($navigations);
+            window.__translations = @json($translations);
         </script>
 
         <!-- Scripts -->

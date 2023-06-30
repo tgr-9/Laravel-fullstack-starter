@@ -3,6 +3,7 @@ import ziggyRoute from 'ziggy-js'
 import type { PageProps, Page } from '@inertiajs/core'
 import type { RouteParam, RouteParamsWithQueryOverload, Config } from 'ziggy-js'
 import type { AppRoutes } from '~/modules/ziggy'
+import type { NavigationType, NavigationItem } from '~/composables/navigations'
 
 export {}
 
@@ -43,6 +44,8 @@ declare global {
 
   const axios: AxiosStatic
   const route: typeof ziggyRoute
+
+  const __navigations: Record<NavigationType, NavigationItem[]>
 
   interface Window {
     axios: AxiosStatic
