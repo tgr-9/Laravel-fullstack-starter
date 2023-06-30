@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/vue'
-import { router } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3'
 import type { MenuOption } from 'naive-ui'
 import type { AppRoutes } from '~/modules/ziggy'
 
@@ -14,39 +14,54 @@ export interface NavigationItem {
 
 interface NavigationOption {
   options: MenuOption[]
-  expandedKeys?: string[]
+  updateCollapse: (collapsed: boolean) => void
+  updateActiveKey: (key: string) => void
+  updateExpandedKeys: (keys: string[]) => void
 }
 
-function renderIcon(icon: string) {
-  return () => h(Icon, { icon })
-}
+function transformMenu(parent?: MenuOption) {
+  return (nav: NavigationItem) => {
+    const key = nav.route?.replace(/\./g, '-') || nav.label.toLowerCase().replace(/\s/g, '-')
+    const menu: MenuOption = {
+      key: [parent?.key, key].filter(k => !!k).join('.'),
+      icon: () => h(Icon, { icon: nav.icon }),
+      active: nav.route ? route().current(nav.route) : false,
+      label: () => {
+        const children = { default: () => nav.label }
 
-function generateRandomKey(length: number) {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  let result = ''
-  for (let i = 0; i < length; i++)
-    result += chars.charAt(Math.floor(Math.random() * chars.length))
+        return nav.route
+          ? h(Link, { href: route(nav.route) }, children)
+          : h('a', { href: '#' }, children)
+      },
+    }
 
-  return result
-}
+    if (!menuPreference.value.activeKey && menu.active)
+      menuPreference.value.activeKey = menu.key as string
 
-function transformMenu(nav: NavigationItem): MenuOption {
-  const menu: MenuOption = {
-    key: nav.route?.replace(/\./g, '-') || generateRandomKey(10),
-    label: () => h('div', { onClick: () => router.visit(nav.route!) }, { default: () => nav.label }),
-    icon: renderIcon(nav.icon),
+    if (menuPreference.value.expandedKeys.length === 0 && menu.active && !!parent)
+      menuPreference.value.expandedKeys = [parent.key as string]
+
+    if (nav.children)
+      menu.children = nav.children.map(transformMenu(menu))
+
+    return menu
   }
-
-  if (nav.children)
-    menu.children = nav.children.map(transformMenu)
-
-  return menu
 }
 
 export function useNavigation(type: NavigationType): NavigationOption {
-  const options: MenuOption[] = __navigations[type].map(transformMenu)
+  const options: MenuOption[] = __navigations[type].map(transformMenu())
 
-  const expandedKeys = undefined
+  function updateCollapse(collapsed: boolean) {
+    menuPreference.value.collapsed = collapsed
+  }
 
-  return { options, expandedKeys }
+  function updateActiveKey(key: string) {
+    menuPreference.value.activeKey = key
+  }
+
+  function updateExpandedKeys(keys: string[]) {
+    menuPreference.value.expandedKeys = keys
+  }
+
+  return { options, updateCollapse, updateActiveKey, updateExpandedKeys }
 }

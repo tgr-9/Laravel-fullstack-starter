@@ -3,9 +3,14 @@ import type { RemovableRef } from '@vueuse/core'
 import { darkTheme, dateEnUS, dateIdID, enUS, idID } from 'naive-ui'
 import type { GlobalTheme, NDateLocale, NLocale } from 'naive-ui'
 
-interface AppPreference {
+export interface AppPreference {
   locale: string
-  siderCollapsed: boolean
+}
+
+export interface MenuPreference {
+  collapsed: boolean
+  activeKey?: string
+  expandedKeys: string[]
 }
 
 interface NaiveConfig {
@@ -14,9 +19,13 @@ interface NaiveConfig {
   dateLocale: NDateLocale
 }
 
-export const appPreference: RemovableRef<AppPreference> = useSessionStorage<AppPreference>('site-preference', {
+export const appPreference: RemovableRef<AppPreference> = useSessionStorage<AppPreference>('app-preference', {
   locale: document.documentElement.lang,
-  siderCollapsed: false,
+})
+
+export const menuPreference: RemovableRef<MenuPreference> = useSessionStorage<MenuPreference>('menu-preference', {
+  collapsed: false,
+  expandedKeys: [],
 })
 
 export function useNaiveConfig(): NaiveConfig {
