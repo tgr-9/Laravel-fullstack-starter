@@ -19,19 +19,13 @@ class NavigationsComposer
         return [
             [
                 'route' => 'home',
-                'label' => __('dashboard.routes.index'),
+                'label' => __('dashboard.menu'),
                 'icon' => 'tabler:dashboard',
             ],
             [
-                'type' => 'group',
-                'label' => 'Management',
-                'children' => [
-                    [
-                        'route' => 'users.home',
-                        'label' => __('users.routes.index'),
-                        'icon' => 'tabler:users',
-                    ],
-                ],
+                'route' => 'users.home',
+                'label' => __('users.menu'),
+                'icon' => 'tabler:users',
             ],
             [
                 'type' => 'devider',
@@ -58,6 +52,30 @@ class NavigationsComposer
 
     protected function user()
     {
-        return [];
+        return [
+            [
+                'route' => null,
+                'label' => __('account.profile.menu'),
+                'icon' => 'tabler:user',
+            ],
+            [
+                'route' => null,
+                'label' => __('account.settings.menu'),
+                'icon' => 'tabler:settings',
+            ],
+            [
+                'route' => null,
+                'label' => __('account.supports.menu'),
+                'icon' => 'tabler:help',
+            ],
+            [
+                'type' => 'devider',
+            ],
+            [
+                'route' => 'logout',
+                'label' => __('auth.actions.logout'),
+                'icon' => 'tabler:logout',
+            ],
+        ];
     }
 }
