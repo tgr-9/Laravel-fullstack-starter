@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { Head as iHead } from '@inertiajs/vue3'
+import { Head as iHead, usePage } from '@inertiajs/vue3'
+
+const { props } = usePage()
 </script>
 
 <template>
   <i-head title="Dashboard" />
 
-  <h3>{{ $t('dashboard.welcome-notice', { user: 'John Doe' }) }}</h3>
+  <h3>{{ $t('dashboard.welcome-notice', { user: props.auth.user?.name }) }}</h3>
 
   <a :href="$route('home')">
     Home
