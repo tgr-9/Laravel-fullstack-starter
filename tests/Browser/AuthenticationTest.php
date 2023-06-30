@@ -15,11 +15,14 @@ class AuthenticationTest extends DuskTestCase
     public function should_not_be_able_to_authenticate_using_invalid_credential()
     {
         $this->browse(function (Browser $browser) {
-            $browser->visit(new Login)
+            $page = $browser->visit(new Login);
+
+            $page->assertFocused('#username input[type="text"]')
                 ->type('@username', 'johndoe')
                 ->type('@password', 'secret')
-                ->press('@login')
-                ->assertSee(__('auth.failed'));
+                ->pressAndWaitFor('@login', 1);
+
+            $page->assertSee(__('auth.failed'));
         });
     }
 
@@ -34,11 +37,14 @@ class AuthenticationTest extends DuskTestCase
         ]);
 
         $this->browse(function (Browser $browser) use ($user) {
-            $browser->visit(new Login)
+            $page = $browser->visit(new Login);
+
+            $page->assertFocused('#username input[type="text"]')
                 ->type('@username', $user->name)
                 ->type('@password', 'secret')
-                ->press('@login')
-                ->assertRouteIs('home');
+                ->pressAndWaitFor('@login', 2);
+
+            $page->assertSee(__('dashboard.welcome-notice', ['user' => $user->name]));
         });
     }
 
