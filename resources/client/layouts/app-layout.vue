@@ -36,7 +36,7 @@ onMounted(async () => {
         <main-logo width="150" />
       </n-layout-sider>
 
-      <n-layout-content content-style="padding: 12px">
+      <n-layout-content>
         <n-space vertical size="large">
           <slot />
         </n-space>
@@ -46,14 +46,7 @@ onMounted(async () => {
 </template>
 
 <style lang="postcss">
-.n-space {
-  @apply min-h-full;
-}
-.n-menu {
-  height: 680px;
-}
 .n-layout-sider {
-  @apply min-h-full;
-  padding-top: 30px;
+  @apply pt-8;
 }
 </style>

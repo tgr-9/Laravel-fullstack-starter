@@ -32,27 +32,10 @@ onMounted(async () => {
 </template>
 
 <style lang="postcss">
-#app {
+/* #app {
   background-image: url(/app-bg.jpeg);
   background-position: top center;
   background-repeat: no-repeat;
   background-size: cover;
-}
-
-.n-layout {
-  --n-color: rgba(0, 0, 0, 0.7) !important;
-  @apply pt-6 sm:pt-0;
-
-  &, & > &-scroll-container {
-    @apply min-h-screen;
-  }
-
-  & > &-scroll-container {
-    @apply  flex flex-col sm:justify-center items-center;
-
-    > .n-space {
-      @apply w-sm;
-    }
-  }
-}
+} */
 </style>

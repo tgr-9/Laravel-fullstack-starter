@@ -7,6 +7,36 @@
 
 #app {
   @apply min-h-screen w-full;
+
+  .n-layout {
+    /* --n-color: rgba(0, 0, 0, 0.7) !important; */
+    @apply pt-6 sm:pt-0;
+
+    &, & > &-scroll-container {
+      @apply min-h-screen;
+    }
+
+    & > &-scroll-container > &-sider,
+    & > &-scroll-container > &-content {
+      @apply min-h-screen;
+    }
+
+    & > &-scroll-container {
+      @apply  flex flex-col sm:justify-center items-center;
+
+      > .n-space {
+        @apply w-sm;
+      }
+    }
+
+    &-content > &-scroll-container {
+      @apply justify-start;
+
+      > .n-space {
+        @apply w-full p-8;
+      }
+    }
+  }
 }
 
 .auth-bg {
