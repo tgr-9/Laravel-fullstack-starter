@@ -1,26 +1,24 @@
 <script setup lang="ts">
 import { useRegisterSW } from 'virtual:pwa-register/vue'
-import { useNavigation } from '~/composables/navigations'
 
 const { errors: _ } = defineProps<{
   errors: Object
 }>()
 
 const { locale, dateLocale, theme } = useNaiveConfig()
+const { options, updateCollapse, updateActiveKey, updateExpandedKeys } = useNavigation('main')
 
 const { offlineReady } = useRegisterSW({
   immediate: true,
 })
 
-const siderCollapsed = toRef(appPreference.value, 'siderCollapsed', false)
-const logoWidth = computed(() => siderCollapsed.value ? 48 : undefined)
-const { options, expandedKeys } = useNavigation('main')
+const logoWidth = computed(() => menuPreference.value.collapsed ? 48 : undefined)
 
 onMounted(async () => {
   const { registerSW } = await import('virtual:pwa-register')
 
   if (offlineReady.value)
-    console.log('Offline ready', 'Your app is offline ready') // eslint-disable-line no-console
+    logger('Offline ready', 'Your app is offline ready')
 
   registerSW({
     immediate: true,
@@ -36,27 +34,30 @@ onMounted(async () => {
         collapse-mode="width"
         :collapsed-width="64"
         :width="260"
-        :collapsed="siderCollapsed"
-        :on-update:collapsed="(collapsed) => siderCollapsed = collapsed"
+        :collapsed="menuPreference.collapsed"
+        :on-update:collapsed="updateCollapse"
         show-trigger
       >
         <header id="logo-wrapper">
           <transition>
             <main-logo
               :width="logoWidth"
-              :initial="siderCollapsed"
-              :rounded="siderCollapsed"
-              :class="{ siderCollapsed }"
+              :initial="menuPreference.collapsed"
+              :rounded="menuPreference.collapsed"
+              :class="{ collapsed: menuPreference.collapsed }"
             />
           </transition>
         </header>
 
         <main id="main-navigation">
           <n-menu
-            :options="options"
-            :default-expanded-keys="expandedKeys"
-            :collapsed-width="64"
+            v-model:value="menuPreference.activeKey"
+            v-model:expanded-keys="menuPreference.expandedKeys"
             :collapsed-icon-size="22"
+            :collapsed-width="64"
+            :on-update:expanded-keys="updateExpandedKeys"
+            :on-update:value="updateActiveKey"
+            :options="options"
           />
         </main>
       </n-layout-sider>
@@ -78,7 +79,7 @@ onMounted(async () => {
 #logo-wrapper {
   @apply h-14 px-6;
 
-  &:has(.siderCollapsed) {
+  &:has(.collapsed) {
     @apply px-2;
   }
 }

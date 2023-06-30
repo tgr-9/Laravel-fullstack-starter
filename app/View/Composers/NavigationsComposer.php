@@ -31,6 +31,18 @@ class NavigationsComposer
                 'route' => null,
                 'label' => 'Sample Menu',
                 'icon' => 'tabler:box',
+                'children' => [
+                    [
+                        'route' => null,
+                        'label' => 'Sample SubMenu 1',
+                        'icon' => 'tabler:box',
+                    ],
+                    [
+                        'route' => null,
+                        'label' => 'Sample SubMenu 2',
+                        'icon' => 'tabler:box',
+                    ],
+                ],
             ],
         ];
     }
