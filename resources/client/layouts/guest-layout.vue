@@ -5,6 +5,8 @@ const { offlineReady } = useRegisterSW({
   immediate: true,
 })
 
+const { locale, dateLocale, theme } = useNaiveConfig()
+
 onMounted(async () => {
   const { registerSW } = await import('virtual:pwa-register')
 
@@ -18,15 +20,25 @@ onMounted(async () => {
 </script>
 
 <template>
-  <n-space vertical size="large">
+  <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
     <n-layout>
-      <n-layout-content content-style="padding: 12px">
+      <n-space>
         <slot />
-      </n-layout-content>
+      </n-space>
     </n-layout>
-  </n-space>
+  </n-config-provider>
 </template>
 
 <style lang="postcss">
-/*  */
+.n-layout {
+  @apply pt-6 sm:pt-0;
+
+  &, & > &-scroll-container {
+    @apply min-h-screen;
+  }
+
+  & > &-scroll-container {
+    @apply  flex flex-col sm:justify-center items-center;
+  }
+}
 </style>
