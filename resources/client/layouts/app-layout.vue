@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { Icon } from '@iconify/vue'
 import { useRegisterSW } from 'virtual:pwa-register/vue'
 
 const { errors: _ } = defineProps<{
@@ -6,7 +7,17 @@ const { errors: _ } = defineProps<{
 }>()
 
 const { locale, dateLocale, theme } = useNaiveConfig()
-const { options, updateCollapse, updateActiveKey, updateExpandedKeys } = useNavigation('main')
+
+const {
+  options: menuOptions,
+  updateCollapse,
+  updateActiveKey,
+  updateExpandedKeys,
+} = useNavigation('main')
+
+const {
+  options: userOptions,
+} = useNavigation('user')
 
 const { offlineReady } = useRegisterSW({
   immediate: true,
@@ -38,7 +49,7 @@ onMounted(async () => {
         :on-update:collapsed="updateCollapse"
         show-trigger
       >
-        <header id="logo-wrapper">
+        <header id="logo-wrapper" class="n-layout-sider-section">
           <transition>
             <main-logo
               :width="logoWidth"
@@ -49,7 +60,7 @@ onMounted(async () => {
           </transition>
         </header>
 
-        <main id="main-navigation">
+        <main id="main-navigation" class="n-layout-sider-section flex-grow">
           <n-menu
             v-model:value="menuPreference.activeKey"
             v-model:expanded-keys="menuPreference.expandedKeys"
@@ -57,9 +68,26 @@ onMounted(async () => {
             :collapsed-width="64"
             :on-update:expanded-keys="updateExpandedKeys"
             :on-update:value="updateActiveKey"
-            :options="options"
+            :options="menuOptions"
+            :root-indent="24"
           />
         </main>
+
+        <footer class="n-layout-sider-section px-2 flex-grow-0 flex-shrink-0">
+          <n-dropdown trigger="click" :options="userOptions">
+            <n-button block :bordered="false" class="py-1 h-auto">
+              <div class="w-full flex flex-grow gap-4 items-center justify-center">
+                <n-avatar class="flex-none">
+                  <icon icon="tabler:user" />
+                </n-avatar>
+
+                <p class="text-left truncate font-bold">
+                  User Name Goes Here with very long name
+                </p>
+              </div>
+            </n-button>
+          </n-dropdown>
+        </footer>
       </n-layout-sider>
 
       <n-layout-content>
@@ -73,7 +101,13 @@ onMounted(async () => {
 
 <style lang="postcss">
 .n-layout-sider {
-  @apply py-6;
+  & &-scroll-container {
+    @apply flex flex-col min-h-screen py-6;
+  }
+
+  & &-section {
+    @apply w-full relative;
+  }
 }
 
 #logo-wrapper {
