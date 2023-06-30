@@ -11,8 +11,8 @@ const { offlineReady } = useRegisterSW({
   immediate: true,
 })
 
-const initial = ref<boolean>(false)
-const logoWidth = computed(() => initial.value ? 48 : undefined)
+const siderCollapsed = toRef(appPreference.value, 'siderCollapsed', false)
+const logoWidth = computed(() => siderCollapsed.value ? 48 : undefined)
 
 onMounted(async () => {
   const { registerSW } = await import('virtual:pwa-register')
@@ -34,11 +34,12 @@ onMounted(async () => {
         collapse-mode="width"
         :collapsed-width="64"
         :width="260"
-        :on-update:collapsed="(collapsed) => initial = collapsed"
+        :collapsed="siderCollapsed"
+        :on-update:collapsed="(collapsed) => siderCollapsed = collapsed"
         show-trigger
       >
         <transition>
-          <main-logo :width="logoWidth" :initial="initial" :rounded="initial" :class="{ initial }" />
+          <main-logo :width="logoWidth" :initial="siderCollapsed" :rounded="siderCollapsed" :class="{ siderCollapsed }" />
         </transition>
       </n-layout-sider>
 
@@ -55,7 +56,7 @@ onMounted(async () => {
 .n-layout-sider {
   @apply p-6;
 
-  &:has(.initial) {
+  &:has(.siderCollapsed) {
     @apply py-6 px-2;
   }
 }
