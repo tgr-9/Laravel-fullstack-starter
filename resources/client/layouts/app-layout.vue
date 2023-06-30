@@ -11,6 +11,9 @@ const { offlineReady } = useRegisterSW({
   immediate: true,
 })
 
+const initial = ref<boolean>(false)
+const logoWidth = computed(() => initial.value ? 48 : undefined)
+
 onMounted(async () => {
   const { registerSW } = await import('virtual:pwa-register')
 
@@ -31,9 +34,12 @@ onMounted(async () => {
         collapse-mode="width"
         :collapsed-width="64"
         :width="260"
+        :on-update:collapsed="(collapsed) => initial = collapsed"
         show-trigger
       >
-        <main-logo width="150" />
+        <transition>
+          <main-logo :width="logoWidth" :initial="initial" :rounded="initial" :class="{ initial }" />
+        </transition>
       </n-layout-sider>
 
       <n-layout-content>
@@ -47,6 +53,10 @@ onMounted(async () => {
 
 <style lang="postcss">
 .n-layout-sider {
-  @apply pt-8;
+  @apply p-6;
+
+  &:has(.initial) {
+    @apply py-6 px-2;
+  }
 }
 </style>
