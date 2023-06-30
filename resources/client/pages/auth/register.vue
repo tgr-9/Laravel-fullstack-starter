@@ -19,8 +19,8 @@ const values = useForm({
 })
 
 function submit() {
-  values.post(route('login'), {
-    onFinish: () => values.reset('password'),
+  values.post(route('register'), {
+    onFinish: () => values.reset('password', 'confirm_password'),
   })
 }
 </script>

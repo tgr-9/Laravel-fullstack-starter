@@ -17,9 +17,7 @@ const values = useForm({
 })
 
 function submit() {
-  values.post(route('password.email'), {
-    onFinish: () => values.reset('email'),
-  })
+  values.post(route('password.email'))
 }
 </script>
 
