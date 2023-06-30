@@ -11,7 +11,7 @@ export const install: AppModuleInstall = ({ app }): void => {
       if (typeof value !== 'string')
         continue
 
-      if (value.includes('@'))
+      if (value.includes('@') && import.meta.env.DEV)
         value = value.replace(/\@/g, '{\'@\'}')
 
       if (value.includes(':'))
