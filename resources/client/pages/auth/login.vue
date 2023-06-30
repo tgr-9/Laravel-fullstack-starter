@@ -46,6 +46,7 @@ function submit() {
         path="username"
       >
         <n-input
+          id="username"
           v-model:value="model.username"
           :placeholder="$t('auth.username.placeholder')"
           :loading="model.processing"
@@ -61,6 +62,7 @@ function submit() {
         path="password"
       >
         <n-input
+          id="password"
           v-model:value="model.password"
           :placeholder="$t('auth.password.placeholder')"
           :loading="model.processing"

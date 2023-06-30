@@ -47,12 +47,12 @@ function submit() {
         path="email"
       >
         <n-input
+          id="email"
           v-model:value="model.email"
           :placeholder="$t('auth.email.placeholder')"
           :loading="model.processing"
           :disabled="model.processing"
           :autofocus="true"
-          attr-type="email"
         />
       </n-form-item>
 
@@ -63,6 +63,7 @@ function submit() {
         path="password"
       >
         <n-input
+          id="password"
           v-model:value="model.password"
           :placeholder="$t('auth.password.placeholder')"
           :loading="model.processing"
@@ -79,6 +80,7 @@ function submit() {
         path="confirm_password"
       >
         <n-input
+          id="confirm-password"
           v-model:value="model.confirm_password"
           :placeholder="$t('auth.confirm_password.placeholder')"
           :loading="model.processing"

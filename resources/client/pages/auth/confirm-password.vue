@@ -45,6 +45,7 @@ function submit() {
         path="password"
       >
         <n-input
+          id="password"
           v-model:value="model.password"
           :placeholder="$t('auth.password.placeholder')"
           :loading="model.processing"
