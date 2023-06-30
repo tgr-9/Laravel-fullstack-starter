@@ -41,6 +41,34 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: curl, dom, gd, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: |
+          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: composer install --prefer-dist --no-interaction --no-progress
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
@@ -190,7 +218,7 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 3
-          command: composer update --prefer-dist --no-interaction --no-progress
+          command: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Setup BrowserStack env  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master
@@ -276,7 +304,7 @@ jobs:
         with:
           timeout_minutes: 5
           max_attempts: 3
-          command: composer update --prefer-dist --no-interaction --no-progress
+          command: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Download assets
         id: download
