@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRegisterSW } from 'virtual:pwa-register/vue'
+import { useNavigation } from '~/composables/navigations'
 
 const { errors: _ } = defineProps<{
   errors: Object
@@ -13,6 +14,7 @@ const { offlineReady } = useRegisterSW({
 
 const siderCollapsed = toRef(appPreference.value, 'siderCollapsed', false)
 const logoWidth = computed(() => siderCollapsed.value ? 48 : undefined)
+const { options, expandedKeys } = useNavigation('main')
 
 onMounted(async () => {
   const { registerSW } = await import('virtual:pwa-register')
@@ -38,9 +40,25 @@ onMounted(async () => {
         :on-update:collapsed="(collapsed) => siderCollapsed = collapsed"
         show-trigger
       >
-        <transition>
-          <main-logo :width="logoWidth" :initial="siderCollapsed" :rounded="siderCollapsed" :class="{ siderCollapsed }" />
-        </transition>
+        <header id="logo-wrapper">
+          <transition>
+            <main-logo
+              :width="logoWidth"
+              :initial="siderCollapsed"
+              :rounded="siderCollapsed"
+              :class="{ siderCollapsed }"
+            />
+          </transition>
+        </header>
+
+        <main id="main-navigation">
+          <n-menu
+            :options="options"
+            :default-expanded-keys="expandedKeys"
+            :collapsed-width="64"
+            :collapsed-icon-size="22"
+          />
+        </main>
       </n-layout-sider>
 
       <n-layout-content>
@@ -54,10 +72,14 @@ onMounted(async () => {
 
 <style lang="postcss">
 .n-layout-sider {
-  @apply p-6;
+  @apply py-6;
+}
+
+#logo-wrapper {
+  @apply h-14 px-6;
 
   &:has(.siderCollapsed) {
-    @apply py-6 px-2;
+    @apply px-2;
   }
 }
 </style>
