@@ -23,6 +23,9 @@ createInertiaApp({
     const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
     const page = pages[`./pages/${name}.vue`]
 
+    if (!page)
+      throw new Error(`Could not find page component for path '${name}'`)
+
     page.default.layout = page.default.layout || AppLayout
 
     return page
