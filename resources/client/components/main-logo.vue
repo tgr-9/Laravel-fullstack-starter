@@ -53,7 +53,7 @@ const colors: { [k in Theme]: { [k in 'square' | 'base']: Color } } = {
 </script>
 
 <template>
-  <div class="overflow-hidden" :class="{ rounded: props.rounded }">
+  <div class="overflow-hidden w-full flex justify-center" :class="{ rounded: props.rounded }">
     <svg v-if="square" :width="width" :height="height" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect :fill="colors[theme].square.rect" width="512" height="512" />
       <template v-if="initial">

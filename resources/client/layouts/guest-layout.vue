@@ -22,7 +22,9 @@ onMounted(async () => {
 <template>
   <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
     <n-layout>
-      <n-space>
+      <n-space vertical>
+        <main-logo />
+
         <slot />
       </n-space>
     </n-layout>
@@ -39,6 +41,10 @@ onMounted(async () => {
 
   & > &-scroll-container {
     @apply  flex flex-col sm:justify-center items-center;
+
+    > .n-space {
+      @apply w-sm;
+    }
   }
 }
 </style>
