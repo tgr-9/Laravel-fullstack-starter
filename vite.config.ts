@@ -81,7 +81,7 @@ export default defineConfig(({ mode }) => {
           `${rootdir}/store`,
         ],
         imports: [
-          { '@vueuse/core': [] },
+          '@vueuse/core',
           { 'naive-ui': [] },
           'vue-i18n',
           'vue/macros',
