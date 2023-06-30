@@ -60,7 +60,7 @@ export default defineConfig(({ mode }) => {
         input: [
           `${rootdir}/app.ts`,
         ],
-        // valetTls: true,
+        valetTls: env.APP_ENV === 'local' && env.APP_URL.startsWith('https://'),
         // refresh: true,
       }),
 
