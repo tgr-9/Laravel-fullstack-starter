@@ -10,17 +10,26 @@ const { errors: _ } = defineProps<{
   errors: Object
 }>()
 
-// const form = ref<FormInst | null>()
+interface LoginForm extends Record<string, unknown> {
+  username: string
+  password: string
+  remember: boolean
+}
 
-const values = useForm({
+const model = useForm<LoginForm>({
   username: '',
   password: '',
   remember: false,
 })
 
+const validation = reactiveComputed<{ [k in keyof Partial<LoginForm>]: 'error' | undefined }>(() => ({
+  username: model.errors.username !== undefined ? 'error' : undefined,
+  password: model.errors.password !== undefined ? 'error' : undefined,
+}))
+
 function submit() {
-  values.post(route('login'), {
-    onFinish: () => values.reset('password'),
+  model.post(route('login'), {
+    onFinish: () => model.reset('password'),
   })
 }
 </script>
@@ -28,38 +37,47 @@ function submit() {
 <template>
   <i-head :title="$t('auth.routes.login')" />
 
-  <n-card :title="$t('auth.routes.login')" size="medium" style="width: 450px; border-radius: 10px">
-    <n-form :model="values" class="form-login" @submit.prevent="submit">
-      <n-form-item :label="$t('auth.username.label')" path="username">
+  <n-card :title="$t('auth.routes.login')" size="medium">
+    <n-form :model="model" class="form-login" @submit.prevent="submit">
+      <n-form-item
+        :label="$t('auth.username.label')"
+        :feedback="model.errors.username"
+        :validation-status="validation.username"
+        path="username"
+      >
         <n-input
-          v-model:value="values.username"
+          v-model:value="model.username"
           :placeholder="$t('auth.username.placeholder')"
-          :loading="values.processing"
-          :disabled="values.processing"
+          :loading="model.processing"
+          :disabled="model.processing"
           :autofocus="true"
-          style="padding: 3px 10px; border-radius: 5px"
         />
       </n-form-item>
 
-      <n-form-item :label="$t('auth.password.label')" path="password">
+      <n-form-item
+        :label="$t('auth.password.label')"
+        :feedback="model.errors.password"
+        :validation-status="validation.password"
+        path="password"
+      >
         <n-input
-          v-model:value="values.password"
+          v-model:value="model.password"
           :placeholder="$t('auth.password.placeholder')"
-          :loading="values.processing"
-          :disabled="values.processing"
+          :loading="model.processing"
+          :disabled="model.processing"
+          show-password-on="mousedown"
           type="password"
-          style="padding: 3px 10px; border-radius: 5px;"
         />
       </n-form-item>
 
-      <n-checkbox v-model:checked="values.remember" :label="$t('auth.remember.label')" />
+      <n-checkbox v-model:checked="model.remember" :label="$t('auth.remember.label')" />
 
       <n-form-item class="form-button">
         <n-button
           type="primary"
           attr-type="submit"
-          :disabled="values.processing"
-          :loading="values.processing"
+          :disabled="model.processing"
+          :loading="model.processing"
           style="width: 100%;"
           @click="submit"
         >

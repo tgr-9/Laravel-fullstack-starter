@@ -10,17 +10,27 @@ const { errors: _ } = defineProps<{
   errors: Object
 }>()
 
-// const form = ref<FormInst | null>()
+interface RegisterForm extends Record<string, unknown> {
+  email: string
+  password: string
+  confirm_password: string
+}
 
-const values = useForm({
+const model = useForm<RegisterForm>({
   email: '',
   password: '',
   confirm_password: '',
 })
 
+const validation = reactiveComputed<{ [k in keyof Partial<RegisterForm>]: 'error' | undefined }>(() => ({
+  email: model.errors.email !== undefined ? 'error' : undefined,
+  password: model.errors.password !== undefined ? 'error' : undefined,
+  confirm_password: model.errors.confirm_password !== undefined ? 'error' : undefined,
+}))
+
 function submit() {
-  values.post(route('register'), {
-    onFinish: () => values.reset('password', 'confirm_password'),
+  model.post(route('register'), {
+    onFinish: () => model.reset('password', 'confirm_password'),
   })
 }
 </script>
@@ -28,36 +38,53 @@ function submit() {
 <template>
   <i-head :title="$t('auth.routes.register')" />
 
-  <n-card :title="$t('auth.routes.register')" size="medium" style="width: 450px; border-radius: 10px">
-    <n-form :model="values" class="form-login" @submit.prevent="submit">
-      <n-form-item :label="$t('auth.username.label')" path="username">
+  <n-card :title="$t('auth.routes.register')" size="medium">
+    <n-form :model="model" class="form-login" @submit.prevent="submit">
+      <n-form-item
+        :label="$t('auth.email.label')"
+        :feedback="model.errors.email"
+        :validation-status="validation.email"
+        path="email"
+      >
         <n-input
-          v-model:value="values.email"
-          :placeholder="$t('auth.username.placeholder')"
-          :loading="values.processing"
-          :disabled="values.processing"
+          v-model:value="model.email"
+          :placeholder="$t('auth.email.placeholder')"
+          :loading="model.processing"
+          :disabled="model.processing"
           :autofocus="true"
-          style="padding: 3px 10px; border-radius: 5px"
+          attr-type="email"
         />
       </n-form-item>
 
-      <n-form-item :label="$t('auth.password.label')" path="password">
+      <n-form-item
+        :label="$t('auth.password.label')"
+        :feedback="model.errors.password"
+        :validation-status="validation.password"
+        path="password"
+      >
         <n-input
-          v-model:value="values.password"
+          v-model:value="model.password"
           :placeholder="$t('auth.password.placeholder')"
-          :loading="values.processing"
-          :disabled="values.processing"
+          :loading="model.processing"
+          :disabled="model.processing"
+          show-password-on="mousedown"
           type="password"
-          style="padding: 3px 10px; border-radius: 5px;"
         />
+      </n-form-item>
 
+      <n-form-item
+        :label="$t('auth.confirm_password.label')"
+        :feedback="model.errors.confirm_password"
+        :validation-status="validation.confirm_password"
+        path="confirm_password"
+      >
         <n-input
-          v-model:value="values.confirm_password"
+          v-model:value="model.confirm_password"
           :placeholder="$t('auth.confirm_password.placeholder')"
-          :loading="values.processing"
-          :disabled="values.processing"
+          :loading="model.processing"
+          :disabled="model.processing"
+          show-password-on="mousedown"
           type="password"
-          style="padding: 3px 10px; border-radius: 5px;"
         />
       </n-form-item>
 
@@ -65,8 +92,8 @@ function submit() {
         <n-button
           type="primary"
           attr-type="submit"
-          :disabled="values.processing"
-          :loading="values.processing"
+          :disabled="model.processing"
+          :loading="model.processing"
           style="width: 100%;"
           @click="submit"
         >
