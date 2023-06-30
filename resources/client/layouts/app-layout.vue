@@ -5,6 +5,8 @@ const { errors: _ } = defineProps<{
   errors: Object
 }>()
 
+const { locale, dateLocale, theme } = useNaiveConfig()
+
 const { offlineReady } = useRegisterSW({
   immediate: true,
 })
@@ -22,7 +24,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <n-space vertical size="large">
+  <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
     <n-layout has-sider>
       <n-layout-sider
         bordered
@@ -35,10 +37,12 @@ onMounted(async () => {
       </n-layout-sider>
 
       <n-layout-content content-style="padding: 12px">
-        <slot />
+        <n-space vertical size="large">
+          <slot />
+        </n-space>
       </n-layout-content>
     </n-layout>
-  </n-space>
+  </n-config-provider>
 </template>
 
 <style lang="postcss">
