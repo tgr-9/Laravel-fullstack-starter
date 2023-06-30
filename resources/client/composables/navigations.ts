@@ -6,9 +6,11 @@ import type { AppRoutes } from '~/modules/ziggy'
 export type NavigationType = 'main' | 'user'
 
 export interface NavigationItem {
-  route?: keyof AppRoutes
   label: string
+  route?: keyof AppRoutes
   icon: string
+  type?: 'devider' | 'group'
+  disabled?: boolean
   children?: NavigationItem[]
 }
 
@@ -20,7 +22,26 @@ interface NavigationOption {
 }
 
 function transformMenu(parent?: MenuOption) {
-  return (nav: NavigationItem) => {
+  return (nav: NavigationItem, i: number) => {
+    if (nav.type === 'devider') {
+      return {
+        type: nav.type,
+        key: `devider-${i}`,
+      }
+    }
+
+    if (nav.type === 'group') {
+      const group: MenuOption = {
+        type: nav.type,
+        key: nav.label.toLowerCase().replace(/\s/g, '-'),
+        label: nav.label,
+      }
+
+      group.children = nav.children?.map(transformMenu(group))
+
+      return group
+    }
+
     const key = nav.route?.replace(/\./g, '-') || nav.label.toLowerCase().replace(/\s/g, '-')
     const menu: MenuOption = {
       key: [parent?.key, key].filter(k => !!k).join('.'),
@@ -49,8 +70,11 @@ function transformMenu(parent?: MenuOption) {
 }
 
 export function useNavigation(type: NavigationType): NavigationOption {
-  const options: MenuOption[] = __navigations[type].map(transformMenu())
+  const options: MenuOption[] = __navigations[type]
+    .filter(nav => nav.type !== 'devider')
+    .map(transformMenu())
 
+  logger(options)
   function updateCollapse(collapsed: boolean) {
     menuPreference.value.collapsed = collapsed
   }
