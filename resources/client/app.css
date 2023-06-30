@@ -16,7 +16,6 @@
       @apply min-h-screen;
     }
 
-    & > &-scroll-container > &-sider,
     & > &-scroll-container > &-content {
       @apply min-h-screen;
     }

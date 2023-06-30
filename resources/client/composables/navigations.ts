@@ -25,8 +25,11 @@ function transformMenu(parent?: MenuOption) {
   return (nav: NavigationItem, i: number) => {
     if (nav.type === 'devider') {
       return {
-        type: nav.type,
+        type: 'devider',
         key: `devider-${i}`,
+        props: {
+          style: {},
+        },
       }
     }
 
