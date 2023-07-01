@@ -24,6 +24,9 @@ createThemeOverrides({
     borderRadius: '6px',
     avatarColor: '#388370',
   },
+  Layout: {
+    color: 'transparent',
+  },
 })
 
 createInertiaApp({
