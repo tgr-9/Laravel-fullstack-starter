@@ -73,17 +73,19 @@ onMounted(async () => {
           />
         </main>
 
-        <footer class="n-layout-sider-section px-2 flex-grow-0 flex-shrink-0">
+        <footer id="user-navigation" class="n-layout-sider-section px-2 flex-grow-0 flex-shrink-0">
           <n-dropdown trigger="click" :options="userOptions">
-            <n-button block :bordered="false" class="py-1 h-auto">
+            <n-button block :bordered="false" class="py-1 h-auto" :class="{ collapsed: menuPreference.collapsed }">
               <div class="w-full flex flex-grow gap-4 items-center justify-center">
                 <n-avatar class="flex-none">
                   <icon icon="tabler:user" />
                 </n-avatar>
 
-                <p class="text-left truncate font-bold">
-                  User Name Goes Here with very long name
-                </p>
+                <transition>
+                  <p v-if="!menuPreference.collapsed" class="text-left truncate font-bold">
+                    User Name Goes Here with very long name
+                  </p>
+                </transition>
               </div>
             </n-button>
           </n-dropdown>
@@ -119,6 +121,12 @@ onMounted(async () => {
     &-content > &-scroll-container {
       @apply py-6 px-2 sm:px-6;
     }
+  }
+}
+
+#user-navigation {
+  .n-button.collapsed {
+    @apply px-1;
   }
 }
 
