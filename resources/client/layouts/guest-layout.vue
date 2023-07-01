@@ -5,7 +5,7 @@ const { offlineReady } = useRegisterSW({
   immediate: true,
 })
 
-const { locale, dateLocale, theme } = useNaiveConfig()
+const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
 
 onMounted(async () => {
   const { registerSW } = await import('virtual:pwa-register')
@@ -20,8 +20,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
-    <n-layout>
+  <n-config-provider :theme="theme" :theme-overrides="themeOverrides" :locale="locale" :date-locale="dateLocale">
+    <n-layout class="guest-layout">
       <n-space vertical>
         <main-logo />
 
@@ -32,10 +32,20 @@ onMounted(async () => {
 </template>
 
 <style lang="postcss">
-/* #app {
-  background-image: url(/app-bg.jpeg);
+.guest-layout {
+  .n-layout-scroll-container {
+    @apply flex flex-col min-h-screen justify-center items-center;
+
+    > .n-space {
+      @apply w-sm;
+    }
+  }
+}
+
+.auth-bg {
   background-position: top center;
   background-repeat: no-repeat;
   background-size: cover;
-} */
+  background-color: #dfe6f0;
+}
 </style>

@@ -6,7 +6,7 @@ const { errors: _ } = defineProps<{
   errors: Object
 }>()
 
-const { locale, dateLocale, theme } = useNaiveConfig()
+const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
 
 const {
   options: menuOptions,
@@ -38,8 +38,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <n-config-provider :theme="theme" :locale="locale" :date-locale="dateLocale">
-    <n-layout has-sider>
+  <n-config-provider :theme="theme" :theme-overrides="themeOverrides" :locale="locale" :date-locale="dateLocale">
+    <n-layout has-sider class="app-layout">
       <n-layout-sider
         bordered
         collapse-mode="width"
@@ -100,13 +100,25 @@ onMounted(async () => {
 </template>
 
 <style lang="postcss">
-.n-layout-sider {
-  & &-scroll-container {
-    @apply flex flex-col min-h-screen py-6;
-  }
+.app-layout {
+  .n-layout {
+    &-scroll-container {
+      @apply min-h-screen;
+    }
 
-  & &-section {
-    @apply w-full relative;
+    &-sider {
+      & > &-scroll-container {
+        @apply flex flex-col py-6;
+      }
+
+      & > &-section {
+        @apply w-full;
+      }
+    }
+
+    &-content > &-scroll-container {
+      @apply py-6 px-2 sm:px-6;
+    }
   }
 }
 
