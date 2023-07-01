@@ -6,7 +6,7 @@ import { createApp, h } from 'vue'
 import 'virtual:windi.css'
 import '~/app.css'
 
-import { createThemeOverrides } from '~/composables/preference'
+import { createThemeOverrides } from '~/utils/preference'
 import AppLayout from '~/layouts/app-layout.vue'
 import '~/bootstrap'
 

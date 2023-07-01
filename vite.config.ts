@@ -77,8 +77,8 @@ export default defineConfig(({ mode }) => {
       autoImport({
         dts: `${rootdir}/auto-imports.d.ts`,
         dirs: [
-          `${rootdir}/composables`,
-          `${rootdir}/store`,
+          `${rootdir}/utils`,
+          // `${rootdir}/store`,
         ],
         imports: [
           '@vueuse/core',
@@ -97,7 +97,7 @@ export default defineConfig(({ mode }) => {
         dts: `${rootdir}/components.d.ts`,
         dirs: [
           `${rootdir}/components`,
-          `${rootdir}/layouts`,
+          // `${rootdir}/layouts`,
         ],
         directoryAsNamespace: true,
         include: [/\.vue$/, /\.vue\?vue/],
