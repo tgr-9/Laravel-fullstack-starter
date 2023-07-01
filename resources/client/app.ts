@@ -6,8 +6,9 @@ import { createApp, h } from 'vue'
 import 'virtual:windi.css'
 import '~/app.css'
 
-import '~/bootstrap'
+import { createThemeOverrides } from '~/composables/preference'
 import AppLayout from '~/layouts/app-layout.vue'
+import '~/bootstrap'
 
 interface AppModuleContext {
   app: App<Element>
@@ -16,6 +17,14 @@ interface AppModuleContext {
 declare global {
   type AppModuleInstall = (ctx: AppModuleContext) => void
 }
+
+createThemeOverrides({
+  common: {
+    primaryColor: '#388370',
+    borderRadius: '6px',
+    avatarColor: '#388370',
+  },
+})
 
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
