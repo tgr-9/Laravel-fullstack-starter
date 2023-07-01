@@ -5,6 +5,10 @@
 @import '@fontsource/nunito/700.css';
 @import '@fontsource/nunito/700-italic.css';
 
+body {
+  @apply bg-white dark:bg-dark-900;
+}
+
 a {
   @apply text-primary focus:outline-emerald-700 focus-visible:outline-emerald-700 underline;
 }
