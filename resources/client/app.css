@@ -7,6 +7,11 @@
 
 body {
   @apply bg-white dark:bg-dark-900;
+
+  &:has(.guest-layout) {
+    background-image: url(/assets/app-bg.jpeg);
+    @apply bg-cover bg-no-repeat bg-center;
+  }
 }
 
 a {

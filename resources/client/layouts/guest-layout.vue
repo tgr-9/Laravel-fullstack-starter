@@ -40,12 +40,10 @@ onMounted(async () => {
       @apply w-sm;
     }
   }
-}
 
-.auth-bg {
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: #dfe6f0;
+  .n-card {
+    --n-color: rgba(0, 0, 0, 0.7) !important;
+    @apply blur-sm;
+  }
 }
 </style>
