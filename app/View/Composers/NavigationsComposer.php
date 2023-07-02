@@ -28,7 +28,7 @@ class NavigationsComposer
                 'icon' => 'tabler:users',
             ],
             [
-                'type' => 'devider',
+                'type' => 'divider',
             ],
             [
                 'route' => null,
@@ -54,22 +54,22 @@ class NavigationsComposer
     {
         return [
             [
-                'route' => null,
+                'route' => 'account.home',
                 'label' => __('account.profile.menu'),
                 'icon' => 'tabler:user',
             ],
             [
-                'route' => null,
+                'route' => 'account.settings',
                 'label' => __('account.settings.menu'),
                 'icon' => 'tabler:settings',
             ],
             [
-                'route' => null,
+                'route' => 'supports.home',
                 'label' => __('account.supports.menu'),
                 'icon' => 'tabler:help',
             ],
             [
-                'type' => 'devider',
+                'type' => 'divider',
             ],
             [
                 'route' => 'logout',

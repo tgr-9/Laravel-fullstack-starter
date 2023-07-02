@@ -26,6 +26,18 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('dashboard');
     })->name('home');
 
+    Route::controller(Controllers\Account\ProfileController::class)->group(function () {
+        Route::get('account', 'index')->name('account.home');
+        Route::post('account', 'store');
+    });
+
+    Route::controller(Controllers\Account\SettingController::class)->group(function () {
+        Route::get('account/settings', 'index')->name('account.settings');
+        Route::post('account/settings', 'store');
+    });
+
+    Route::get('supports', Controllers\SupportController::class)->name('supports.home');
+
     Route::resource('users', Controllers\UserController::class)
         ->only('index', 'create', 'edit')
         ->names(['index' => 'users.home']);
