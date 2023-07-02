@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+import type { MenuInst } from 'naive-ui'
 import { useRegisterSW } from 'virtual:pwa-register/vue'
 
 const { errors: _ } = defineProps<{
@@ -8,15 +9,19 @@ const { errors: _ } = defineProps<{
 
 const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
 
+const mainMenu = ref<MenuInst | null>(null)
+const userMenu = ref<VNode | null>(null)
+
 const {
   options: menuOptions,
   updateCollapse,
-  updateActiveKey,
-  updateExpandedKeys,
+  updateActiveKey: updateMainActiveKey,
+  updateExpandedKeys: updateMainExpandedKeys,
 } = useNavigation('main')
 
 const {
   options: userOptions,
+  updateActiveKey: updateUserActiveKey,
 } = useNavigation('user')
 
 const { offlineReady } = useRegisterSW({
@@ -38,7 +43,12 @@ onMounted(async () => {
 </script>
 
 <template>
-  <n-config-provider :theme="theme" :theme-overrides="themeOverrides" :locale="locale" :date-locale="dateLocale">
+  <n-config-provider
+    :theme="theme"
+    :theme-overrides="themeOverrides"
+    :locale="locale"
+    :date-locale="dateLocale"
+  >
     <n-layout has-sider class="app-layout">
       <n-layout-sider
         bordered
@@ -62,20 +72,31 @@ onMounted(async () => {
 
         <main id="main-navigation" class="n-layout-sider-section flex-grow">
           <n-menu
+            ref="mainMenu"
             v-model:value="menuPreference.activeKey"
             v-model:expanded-keys="menuPreference.expandedKeys"
             :collapsed-icon-size="22"
             :collapsed-width="64"
-            :on-update:expanded-keys="updateExpandedKeys"
-            :on-update:value="updateActiveKey"
+            :on-update:expanded-keys="updateMainExpandedKeys"
+            :on-update:value="updateMainActiveKey"
             :options="menuOptions"
             :root-indent="24"
           />
         </main>
 
         <footer id="user-navigation" class="n-layout-sider-section px-2 flex-grow-0 flex-shrink-0">
-          <n-dropdown trigger="click" :options="userOptions">
-            <n-button block :bordered="false" class="py-1 h-auto" :class="{ collapsed: menuPreference.collapsed }">
+          <n-dropdown
+            ref="userMenu"
+            trigger="click"
+            :options="userOptions"
+            :on-select="updateUserActiveKey"
+          >
+            <n-button
+              block
+              :bordered="false"
+              class="py-1 h-auto"
+              :class="{ collapsed: menuPreference.collapsed }"
+            >
               <div class="w-full flex flex-grow gap-4 items-center justify-center">
                 <n-avatar class="flex-none">
                   <icon icon="tabler:user" />
