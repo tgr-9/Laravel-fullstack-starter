@@ -12,10 +12,28 @@ export interface NavigationItem {
   children?: NavigationItem[]
 }
 
+/**
+ * Navigation configurations.
+ */
 interface Navigations {
+  /**
+   * Navigation option
+   */
   options: MenuOption[]
+  /**
+   * Update navigation collapse state
+   * @param collapsed Collapse state
+   */
   updateCollapse: (collapsed: boolean) => void
+  /**
+   * Update navigation active state by key
+   * @param key Navigation key
+   */
   updateActiveKey: (key: string) => void
+  /**
+   * Update navigation expanded state by keys
+   * @param keys Navigation keys
+   */
   updateExpandedKeys: (keys: string[]) => void
 }
 
@@ -26,17 +44,28 @@ interface NavigationOptions {
 
 export type NavigationType = keyof NavigationOptions
 
+/**
+ * Transform navigation structure.
+ *
+ * Either `MenuOption` and `DropdownOption` shares similar structure.
+ *
+ * @see https://www.naiveui.com/en-US/os-theme/components/menu
+ * @see https://www.naiveui.com/en-US/os-theme/components/dropdown
+ * @param type Navigation type
+ * @param parent Parent navigation, default `undefined` which is for root item
+ * @returns Navigation options, it could be `MenuOption` or `DropdownOption` depending the `type`
+ */
 function transformMenu(type: NavigationType, parent?: MenuOption) {
   return (nav: NavigationItem, i: number) => {
     if (nav.type === 'divider') {
       return {
-        key: `${type}-devider-${i}`,
+        key: `${type}-divider-${i}`,
         type: 'divider',
       }
     }
 
     if (nav.type === 'group') {
-      const group: MenuOption = {
+      const group: NavigationOptions[typeof type] = {
         type: nav.type,
         key: nav.label.toLowerCase().replace(/\s/g, '-'),
         label: nav.label,
@@ -74,6 +103,12 @@ function transformMenu(type: NavigationType, parent?: MenuOption) {
   }
 }
 
+/**
+ * Use navigation configuration
+ *
+ * @param type Navigation type, which is : `user` and `main`
+ * @returns Navigation configurations
+ */
 export function useNavigation(type: NavigationType): Navigations {
   const options: MenuOption[] = __navigations[type].map(transformMenu(type))
 
