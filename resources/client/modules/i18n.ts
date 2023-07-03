@@ -20,7 +20,7 @@ export const install: AppModuleInstall = ({ app }): void => {
       trans[key] = value
     }
 
-    messages[locale] = Object.assign({}, messages[locale], trans)
+    Object.assign(messages[locale], trans)
   }
 
   const i18n = createI18n({

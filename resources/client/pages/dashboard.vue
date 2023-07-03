@@ -5,7 +5,7 @@ const { props } = usePage()
 </script>
 
 <template>
-  <i-head title="Dashboard" />
+  <i-head :title="$t('dashboard.routes.index')" />
 
   <h3>{{ $t('dashboard.welcome-notice', { user: props.auth.user?.name }) }}</h3>
 

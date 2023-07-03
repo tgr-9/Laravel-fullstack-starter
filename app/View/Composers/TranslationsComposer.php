@@ -2,7 +2,6 @@
 
 namespace App\View\Composers;
 
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\View\View;
 
@@ -13,13 +12,13 @@ class TranslationsComposer
         $locales = [];
 
         foreach (File::directories(\resource_path('lang')) as $dir) {
-            $trans = [];
+            $trans = collect([]);
 
             foreach (File::files($dir) as $file) {
                 $trans[\basename($file, '.php')] = require $file;
             }
 
-            $locales[\basename($dir)] = Arr::dot($trans);
+            $locales[\basename($dir)] = $trans->dot()->toArray();
         }
 
         $view->with('translations', $locales);
