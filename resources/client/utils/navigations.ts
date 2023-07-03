@@ -1,5 +1,5 @@
 import { Icon } from '@iconify/vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, router } from '@inertiajs/vue3'
 import type { DropdownOption, MenuOption } from 'naive-ui'
 import type { AppRoutes } from '~/modules/ziggy'
 
@@ -84,9 +84,23 @@ function transformMenu(type: NavigationType, parent?: MenuOption) {
       label: () => {
         const children = { default: () => nav.label }
 
-        return nav.route
-          ? h(Link, { href: route(nav.route) }, children)
-          : h('a', { href: '#' }, children)
+        if (nav.route) {
+          const href = route(nav.route)
+
+          if (nav.route !== 'logout')
+            h(Link, { href }, children)
+
+          return h('a', {
+            href,
+            onClick: (e: Event) => {
+              router.post(href)
+
+              e.preventDefault()
+            },
+          }, children)
+        }
+
+        return h('a', { href: '#' }, children)
       },
     }
 
