@@ -15,6 +15,9 @@ interface AppModuleContext {
 }
 
 declare global {
+  /**
+   * Application module install function.
+   */
   type AppModuleInstall = (ctx: AppModuleContext) => void
 }
 
