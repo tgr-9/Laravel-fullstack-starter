@@ -6,10 +6,6 @@ defineOptions({
   layout: Layout,
 })
 
-const { errors: _ } = defineProps<{
-  errors: Object
-}>()
-
 interface ForgotPasswordForm extends Record<string, unknown> {
   email: string
 }
@@ -30,44 +26,40 @@ function submit() {
 <template>
   <i-head :title="$t('auth.routes.forgot-password')" />
 
-  <n-card :title="$t('auth.routes.forgot-password')" size="medium">
-    <div class="mb-4 text-sm text-gray-600">
-      {{ $t('auth.notices.forgot-password') }}
-    </div>
+  <n-alert :title="$t('auth.routes.forgot-password')" type="info">
+    {{ $t('auth.notices.forgot-password') }}
+  </n-alert>
 
-    <n-form :model="model" class="form-login" @submit.prevent="submit">
-      <n-form-item
-        :label="$t('auth.email.label')"
-        :feedback="model.errors.email"
-        :validation-status="validation.email"
-        path="email"
-      >
-        <n-input
-          id="email"
-          v-model:value="model.email"
-          :placeholder="$t('auth.email.placeholder')"
-          :loading="model.processing"
-          :disabled="model.processing"
-          :autofocus="true"
-        />
-      </n-form-item>
+  <n-form :model="model" class="form-login" @submit.prevent="submit">
+    <n-form-item
+      :label="$t('auth.email.label')"
+      :feedback="model.errors.email"
+      :validation-status="validation.email"
+      path="email"
+    >
+      <n-input
+        id="email"
+        v-model:value="model.email"
+        :placeholder="$t('auth.email.placeholder')"
+        :loading="model.processing"
+        :disabled="model.processing"
+        :autofocus="true"
+      />
+    </n-form-item>
 
-      <n-form-item class="form-button">
-        <n-button
-          type="primary"
-          attr-type="submit"
-          :disabled="model.processing"
-          :loading="model.processing"
-          style="width: 100%;"
-          @click="submit"
-        >
-          {{ $t('auth.actions.request') }}
-        </n-button>
-      </n-form-item>
+    <n-button
+      type="primary"
+      attr-type="submit"
+      :disabled="model.processing"
+      :loading="model.processing"
+      style="width: 100%;"
+      @click="submit"
+    >
+      {{ $t('auth.actions.request') }}
+    </n-button>
+  </n-form>
 
-      <i-link :href="$route('login')">
-        {{ $t('auth.actions.login') }}
-      </i-link>
-    </n-form>
-  </n-card>
+  <i-link :href="$route('login')">
+    {{ $t('auth.actions.login') }}
+  </i-link>
 </template>

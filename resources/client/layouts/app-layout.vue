@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import type { MenuInst } from 'naive-ui'
-import { useRegisterSW } from 'virtual:pwa-register/vue'
+
+defineOptions({
+  inheritAttrs: false,
+})
 
 const { errors: _ } = defineProps<{
   errors: Object
 }>()
-
-const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
 
 const mainMenu = ref<MenuInst | null>(null)
 const userMenu = ref<VNode | null>(null)
@@ -24,32 +25,12 @@ const {
   updateActiveKey: updateUserActiveKey,
 } = useNavigation('user')
 
-const { offlineReady } = useRegisterSW({
-  immediate: true,
-})
-
 const logoWidth = computed(() => menuPreference.value.collapsed ? 48 : undefined)
-
-onMounted(async () => {
-  const { registerSW } = await import('virtual:pwa-register')
-
-  if (offlineReady.value)
-    logger('Offline ready', 'Your app is offline ready')
-
-  registerSW({
-    immediate: true,
-  })
-})
 </script>
 
 <template>
-  <n-config-provider
-    :theme="theme"
-    :theme-overrides="themeOverrides"
-    :locale="locale"
-    :date-locale="dateLocale"
-  >
-    <n-layout has-sider class="app-layout">
+  <app-wrapper class="app-layout">
+    <n-layout has-sider>
       <n-layout-sider
         bordered
         collapse-mode="width"
@@ -119,16 +100,12 @@ onMounted(async () => {
         </n-space>
       </n-layout-content>
     </n-layout>
-  </n-config-provider>
+  </app-wrapper>
 </template>
 
 <style lang="postcss">
 .app-layout {
   .n-layout {
-    &-scroll-container {
-      @apply min-h-screen;
-    }
-
     &-sider {
       & > &-scroll-container {
         @apply flex flex-col py-6;

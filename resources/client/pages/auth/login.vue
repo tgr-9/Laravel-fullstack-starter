@@ -6,10 +6,6 @@ defineOptions({
   layout: Layout,
 })
 
-const { errors: _ } = defineProps<{
-  errors: Object
-}>()
-
 interface LoginForm extends Record<string, unknown> {
   username: string
   password: string
@@ -37,59 +33,55 @@ function submit() {
 <template>
   <i-head :title="$t('auth.routes.login')" />
 
-  <n-card :title="$t('auth.routes.login')" size="medium">
-    <n-form :model="model" class="form-login" @submit.prevent="submit">
-      <n-form-item
-        :label="$t('auth.username.label')"
-        :feedback="model.errors.username"
-        :validation-status="validation.username"
-        path="username"
-      >
-        <n-input
-          id="username"
-          v-model:value="model.username"
-          :placeholder="$t('auth.username.placeholder')"
-          :loading="model.processing"
-          :disabled="model.processing"
-          :autofocus="true"
-        />
-      </n-form-item>
+  <n-form :model="model" class="form-login" @submit.prevent="submit">
+    <n-form-item
+      :label="$t('auth.username.label')"
+      :feedback="model.errors.username"
+      :validation-status="validation.username"
+      path="username"
+    >
+      <n-input
+        id="username"
+        v-model:value="model.username"
+        :placeholder="$t('auth.username.placeholder')"
+        :loading="model.processing"
+        :disabled="model.processing"
+        :autofocus="true"
+      />
+    </n-form-item>
 
-      <n-form-item
-        :label="$t('auth.password.label')"
-        :feedback="model.errors.password"
-        :validation-status="validation.password"
-        path="password"
-      >
-        <n-input
-          id="password"
-          v-model:value="model.password"
-          :placeholder="$t('auth.password.placeholder')"
-          :loading="model.processing"
-          :disabled="model.processing"
-          show-password-on="mousedown"
-          type="password"
-        />
-      </n-form-item>
+    <n-form-item
+      :label="$t('auth.password.label')"
+      :feedback="model.errors.password"
+      :validation-status="validation.password"
+      path="password"
+    >
+      <n-input
+        id="password"
+        v-model:value="model.password"
+        :placeholder="$t('auth.password.placeholder')"
+        :loading="model.processing"
+        :disabled="model.processing"
+        show-password-on="mousedown"
+        type="password"
+      />
+    </n-form-item>
 
-      <n-checkbox v-model:checked="model.remember" :label="$t('auth.remember.label')" />
+    <n-checkbox v-model:checked="model.remember" :label="$t('auth.remember.label')" />
 
-      <n-form-item class="form-button">
-        <n-button
-          type="primary"
-          attr-type="submit"
-          :disabled="model.processing"
-          :loading="model.processing"
-          style="width: 100%;"
-          @click="submit"
-        >
-          {{ $t('auth.actions.login') }}
-        </n-button>
-      </n-form-item>
+    <n-button
+      type="primary"
+      attr-type="submit"
+      :disabled="model.processing"
+      :loading="model.processing"
+      style="width: 100%;"
+      @click="submit"
+    >
+      {{ $t('auth.actions.login') }}
+    </n-button>
+  </n-form>
 
-      <i-link :href="$route('password.request')">
-        {{ $t('auth.actions.forgot') }}
-      </i-link>
-    </n-form>
-  </n-card>
+  <i-link :href="$route('password.request')">
+    {{ $t('auth.actions.forgot') }}
+  </i-link>
 </template>

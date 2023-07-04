@@ -6,10 +6,6 @@ defineOptions({
   layout: Layout,
 })
 
-const { errors: _ } = defineProps<{
-  errors: Object
-}>()
-
 interface ResetPasswordForm extends Record<string, unknown> {
   email: string
   password: string
@@ -38,74 +34,70 @@ function submit() {
 <template>
   <i-head :title="$t('auth.routes.reset-password')" />
 
-  <n-card :title="$t('auth.routes.reset-password')" size="medium">
-    <div class="mb-4 text-sm text-gray-600">
-      {{ $t('auth.notices.forgot-password') }}
-    </div>
+  <n-alert :title="$t('auth.routes.reset-password')" type="info">
+    {{ $t('auth.notices.forgot-password') }}
+  </n-alert>
 
-    <n-form :model="model" class="form-login" @submit.prevent="submit">
-      <n-form-item
-        :label="$t('auth.email.label')"
-        :feedback="model.errors.email"
-        :validation-status="validation.email"
-        path="email"
-      >
-        <n-input
-          id="email"
-          v-model:value="model.email"
-          :placeholder="$t('auth.email.placeholder')"
-          :loading="model.processing"
-          :disabled="model.processing"
-          :autofocus="true"
-        />
-      </n-form-item>
+  <n-form :model="model" class="form-login" @submit.prevent="submit">
+    <n-form-item
+      :label="$t('auth.email.label')"
+      :feedback="model.errors.email"
+      :validation-status="validation.email"
+      path="email"
+    >
+      <n-input
+        id="email"
+        v-model:value="model.email"
+        :placeholder="$t('auth.email.placeholder')"
+        :loading="model.processing"
+        :disabled="model.processing"
+        :autofocus="true"
+      />
+    </n-form-item>
 
-      <n-form-item
-        :label="$t('auth.password.label')"
-        :feedback="model.errors.password"
-        :validation-status="validation.password"
-        path="password"
-      >
-        <n-input
-          id="password"
-          v-model:value="model.password"
-          :placeholder="$t('auth.password.placeholder')"
-          :loading="model.processing"
-          :disabled="model.processing"
-          show-password-on="mousedown"
-          type="password"
-        />
-      </n-form-item>
+    <n-form-item
+      :label="$t('auth.password.label')"
+      :feedback="model.errors.password"
+      :validation-status="validation.password"
+      path="password"
+    >
+      <n-input
+        id="password"
+        v-model:value="model.password"
+        :placeholder="$t('auth.password.placeholder')"
+        :loading="model.processing"
+        :disabled="model.processing"
+        show-password-on="mousedown"
+        type="password"
+      />
+    </n-form-item>
 
-      <n-form-item
-        :label="$t('auth.confirm_password.label')"
-        :feedback="model.errors.confirm_password"
-        :validation-status="validation.confirm_password"
-        path="confirm_password"
-      >
-        <n-input
-          id="confirm-password"
-          v-model:value="model.confirm_password"
-          :placeholder="$t('auth.confirm_password.placeholder')"
-          :loading="model.processing"
-          :disabled="model.processing"
-          show-password-on="mousedown"
-          type="password"
-        />
-      </n-form-item>
+    <n-form-item
+      :label="$t('auth.confirm_password.label')"
+      :feedback="model.errors.confirm_password"
+      :validation-status="validation.confirm_password"
+      path="confirm_password"
+    >
+      <n-input
+        id="confirm-password"
+        v-model:value="model.confirm_password"
+        :placeholder="$t('auth.confirm_password.placeholder')"
+        :loading="model.processing"
+        :disabled="model.processing"
+        show-password-on="mousedown"
+        type="password"
+      />
+    </n-form-item>
 
-      <n-form-item class="form-button">
-        <n-button
-          type="primary"
-          attr-type="submit"
-          :disabled="model.processing"
-          :loading="model.processing"
-          style="width: 100%;"
-          @click="submit"
-        >
-          {{ $t('auth.actions.reset') }}
-        </n-button>
-      </n-form-item>
-    </n-form>
-  </n-card>
+    <n-button
+      type="primary"
+      attr-type="submit"
+      :disabled="model.processing"
+      :loading="model.processing"
+      style="width: 100%;"
+      @click="submit"
+    >
+      {{ $t('auth.actions.reset') }}
+    </n-button>
+  </n-form>
 </template>
