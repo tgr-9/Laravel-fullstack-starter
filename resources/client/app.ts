@@ -30,6 +30,11 @@ createThemeOverrides({
   Layout: {
     color: 'transparent',
   },
+  Space: {
+    gapLarge: '24px',
+    gapMedium: '16px',
+    gapSmall: '9px',
+  },
 })
 
 createInertiaApp({
