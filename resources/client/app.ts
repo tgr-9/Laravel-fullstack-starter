@@ -12,6 +12,7 @@ import '~/bootstrap'
 
 interface AppModuleContext {
   app: App<Element>
+  isClient: boolean
 }
 
 declare global {
@@ -37,7 +38,9 @@ createThemeOverrides({
   },
 })
 
-if (typeof window !== 'undefined') {
+const isClient = typeof window !== 'undefined'
+
+if (isClient) {
   window.__inertiaNavigatedCount = window.__inertiaNavigatedCount || 0
 
   router.on('navigate', () => {
@@ -63,7 +66,7 @@ createInertiaApp({
       .use(plugin)
 
     Object.values(import.meta.glob<{ install: AppModuleInstall }>('./modules/*.ts', { eager: true })).forEach(i =>
-      i.install?.({ app }),
+      i.install?.({ app, isClient }),
     )
 
     app.mount(el)
