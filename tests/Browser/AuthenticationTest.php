@@ -20,7 +20,7 @@ class AuthenticationTest extends DuskTestCase
             $page->assertFocused('#username input[type="text"]')
                 ->type('@username', 'johndoe')
                 ->type('@password', 'secret')
-                ->pressAndWaitFor('@login', 1);
+                ->pressAndWaitFor('@login');
 
             $page->assertSee(__('auth.failed'));
         });
@@ -42,9 +42,10 @@ class AuthenticationTest extends DuskTestCase
             $page->assertFocused('#username input[type="text"]')
                 ->type('@username', $user->name)
                 ->type('@password', 'secret')
-                ->pressAndWaitFor('@login', 2);
+                ->press('@login')
+                ->waitForInertia();
 
-            $page->assertSee(__('dashboard.welcome-notice', ['user' => $user->name]));
+            $page->assertSee(__('dashboard.routes.index'));
         });
     }
 

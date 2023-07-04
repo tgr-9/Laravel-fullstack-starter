@@ -1,4 +1,4 @@
-import { createInertiaApp } from '@inertiajs/vue3'
+import { createInertiaApp, router } from '@inertiajs/vue3'
 import type { App, DefineComponent } from 'vue'
 import { createApp, h } from 'vue'
 
@@ -36,6 +36,14 @@ createThemeOverrides({
     gapSmall: '9px',
   },
 })
+
+if (typeof window !== 'undefined') {
+  window.__inertiaNavigatedCount = window.__inertiaNavigatedCount || 0
+
+  router.on('navigate', () => {
+    window.__inertiaNavigatedCount++
+  })
+}
 
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
