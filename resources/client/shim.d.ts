@@ -46,11 +46,13 @@ declare global {
   const route: typeof ziggyRoute
 
   const __navigations: Record<NavigationType, NavigationItem[]>
+  const __inertiaNavigatedCount: number
 
   interface Window {
     axios: AxiosStatic
     route: typeof ziggyRoute
     __translations: Record<AppLocale, any>
+    __inertiaNavigatedCount: number
   }
 }
 
