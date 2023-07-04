@@ -6,10 +6,6 @@ defineOptions({
   layout: Layout,
 })
 
-const { errors: _ } = defineProps<{
-  errors: Object
-}>()
-
 function resend() {
   console.log('sending request to', route('verification.send')) // eslint-disable-line no-console
 }
@@ -18,17 +14,15 @@ function resend() {
 <template>
   <i-head :title="$t('auth.routes.verify-email')" />
 
-  <n-card :title="$t('auth.routes.verify-email')" size="medium" style="width: 450px; border-radius: 10px">
-    <div class="mb-4 text-sm text-gray-600">
-      {{ $t('auth.notices.verify-email') }}
-    </div>
+  <n-alert :title="$t('auth.routes.verify-email')" type="info">
+    {{ $t('auth.notices.verify-email') }}
+  </n-alert>
 
-    <n-button
-      type="primary"
-      style="width: 100%;"
-      @click="resend"
-    >
-      {{ $t('auth.actions.resend') }}
-    </n-button>
-  </n-card>
+  <n-button
+    type="primary"
+    style="width: 100%;"
+    @click="resend"
+  >
+    {{ $t('auth.actions.resend') }}
+  </n-button>
 </template>
