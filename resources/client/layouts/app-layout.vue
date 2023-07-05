@@ -107,20 +107,15 @@ function touchEnd(e: TouchEvent) {
             <n-button
               block
               :bordered="false"
-              class="py-1 h-auto"
               :class="{ collapsed: siderCollapsed }"
             >
-              <div class="w-full flex flex-grow gap-4 items-center justify-center">
-                <n-avatar class="flex-none">
-                  <icon icon="tabler:user" />
-                </n-avatar>
+              <n-avatar>
+                <icon icon="tabler:user" />
+              </n-avatar>
 
-                <transition>
-                  <p v-if="!siderCollapsed" class="w-full text-left truncate font-bold">
-                    {{ props.user?.name }}
-                  </p>
-                </transition>
-              </div>
+              <p id="user-menu-label">
+                {{ props.user?.name }}
+              </p>
             </n-button>
           </n-dropdown>
         </footer>
@@ -144,7 +139,7 @@ function touchEnd(e: TouchEvent) {
       @apply z-10 transition-all;
 
       & > &-scroll-container {
-        @apply flex flex-col min-h-screen py-6;
+        @apply flex flex-col min-h-screen py-3;
       }
 
       & > &-section {
@@ -158,23 +153,45 @@ function touchEnd(e: TouchEvent) {
   }
 }
 
-#user-navigation {
-  .n-button {
-    &__content {
-      @apply w-full;
-    }
-
-    &.collapsed {
-      @apply px-1;
-    }
-  }
-}
-
 #logo-wrapper {
-  @apply h-14 px-6;
+  @apply h-14 px-6 flex items-center justify-center;
 
   &:has(.collapsed) {
     @apply px-2;
+  }
+}
+
+#main-navigation {
+  @apply py-2;
+}
+
+#user-navigation {
+  .n-button {
+    @apply py-2 px-3 h-auto transition-all text-base;
+
+    &__content {
+      @apply w-full flex flex-grow gap-4 items-center justify-center;
+    }
+
+    .n-avatar {
+      @apply flex-none;
+    }
+
+    #user-menu-label {
+      @apply w-full text-left truncate font-bold leading-none;
+    }
+
+    &.collapsed {
+      @apply p-0;
+
+      .n-avatar {
+        @apply h-11 w-11;
+      }
+
+      #user-menu-label {
+        @apply hidden;
+      }
+    }
   }
 }
 </style>
