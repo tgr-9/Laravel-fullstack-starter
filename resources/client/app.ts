@@ -69,12 +69,12 @@ createInertiaApp({
     return page
   },
   setup({ el, App, props, plugin }) {
-    const app = createApp({ render: () => h(App, props, () => '<div>Test</div>') })
+    const app = createApp({ render: () => h(App, props) })
       .use(plugin)
 
-    Object.values(import.meta.glob<{ install: AppModuleInstall }>('./modules/*.ts', { eager: true })).forEach(i =>
-      i.install?.({ app, isClient }),
-    )
+    Object.values(import.meta.glob<{ install: AppModuleInstall }>('./modules/*.ts', { eager: true })).forEach((i) => {
+      Promise.resolve(i.install?.({ app, isClient }))
+    })
 
     app.mount(el)
   },
