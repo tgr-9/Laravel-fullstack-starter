@@ -8,10 +8,6 @@ import type { NavigationType, NavigationItem } from '~/utils/navigations'
 export {}
 
 interface AppPageProps extends PageProps {
-  auth: AuthProp
-}
-
-interface AuthProp {
   user?: UserProp
   flash: FlashProp
 }
