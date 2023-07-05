@@ -7,7 +7,6 @@ import 'virtual:windi.css'
 import '~/app.css'
 
 import { createThemeOverrides } from '~/utils/preference'
-import AppLayout from '~/layouts/app-layout.vue'
 import '~/bootstrap'
 
 interface AppModuleContext {
@@ -51,13 +50,20 @@ if (isClient) {
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
   resolve: (name) => {
+    const layouts = import.meta.glob<DefineComponent>('./layouts/*.vue', { eager: true })
     const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
     const page = pages[`./pages/${name}.vue`]
 
     if (!page)
       throw new Error(`Could not find page component for path '${name}'`)
 
-    page.default.layout = page.default.layout || AppLayout
+    const layoutName = page.default.layoutName || 'app-layout'
+    const layout = layouts[`./layouts/${layoutName}.vue`]
+
+    if (!layout)
+      throw new Error(`Could not find page layout '${layoutName}'`)
+
+    page.default.layout = h(layout.default)
 
     return page
   },
