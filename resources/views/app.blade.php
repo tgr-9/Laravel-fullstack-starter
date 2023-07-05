@@ -15,7 +15,7 @@
         </script>
 
         <!-- Scripts -->
-        @vite(['resources/client/app.ts', 'resources/client/app.css'])
+        @vite('resources/client/app.ts')
 
         @inertiaHead
     </head>
