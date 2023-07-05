@@ -90,7 +90,7 @@ function transformMenu(type: NavigationType, parent?: MenuOption) {
         const href = route(nav.route)
 
         if (nav.route !== 'logout')
-          h(Link, { href }, children)
+          return h(Link, { href }, children)
 
         return h('a', {
           href,
