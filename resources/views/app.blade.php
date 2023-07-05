@@ -23,6 +23,6 @@
     <body class="font-sans antialiased min-h-screen w-full">
         @inertia
 
-        <div id="dropdowns-wrapper"></div>
+        <div id="outer-app"></div>
     </body>
 </html>
