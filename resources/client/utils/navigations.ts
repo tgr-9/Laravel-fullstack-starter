@@ -84,37 +84,48 @@ function transformMenu(type: NavigationType, parent?: MenuOption) {
       label: () => {
         const children = { default: () => nav.label }
 
-        if (nav.route) {
-          const href = route(nav.route)
+        if (!nav.route)
+          return h('a', { href: '#' }, children)
 
-          if (nav.route !== 'logout')
-            h(Link, { href }, children)
+        const href = route(nav.route)
 
-          return h('a', {
-            href,
-            onClick: (e: Event) => {
-              router.post(href)
+        if (nav.route !== 'logout')
+          h(Link, { href }, children)
 
-              e.preventDefault()
-            },
-          }, children)
-        }
+        return h('a', {
+          href,
+          onClick: (e: Event) => {
+            router.post(href)
 
-        return h('a', { href: '#' }, children)
+            e.preventDefault()
+          },
+        }, children)
       },
     }
 
     if (!menuPreference.value.activeKey && menu.active)
-      menuPreference.value.activeKey = menu.key as string
+      updateActiveKey(menu.key as string)
 
     if (menuPreference.value.expandedKeys.length === 0 && menu.active && !!parent)
-      menuPreference.value.expandedKeys = [parent.key as string]
+      updateExpandedKeys([parent.key as string])
 
     if (nav.children)
       menu.children = nav.children.map(transformMenu(type, menu))
 
     return menu
   }
+}
+
+function updateCollapse(collapsed: boolean) {
+  menuPreference.value.collapsed = collapsed
+}
+
+function updateActiveKey(key?: string) {
+  menuPreference.value.activeKey = key
+}
+
+function updateExpandedKeys(keys: string[]) {
+  menuPreference.value.expandedKeys = keys
 }
 
 /**
@@ -124,19 +135,12 @@ function transformMenu(type: NavigationType, parent?: MenuOption) {
  * @returns Navigation configurations
  */
 export function useNavigation(type: NavigationType): Navigations {
+  if (menuPreference.value.activeKey === 'logout') {
+    updateActiveKey()
+    updateExpandedKeys([])
+  }
+
   const options: MenuOption[] = __navigations[type].map(transformMenu(type))
-
-  function updateCollapse(collapsed: boolean) {
-    menuPreference.value.collapsed = collapsed
-  }
-
-  function updateActiveKey(key: string) {
-    menuPreference.value.activeKey = key
-  }
-
-  function updateExpandedKeys(keys: string[]) {
-    menuPreference.value.expandedKeys = keys
-  }
 
   return { options, updateCollapse, updateActiveKey, updateExpandedKeys }
 }
