@@ -6,7 +6,7 @@
 @import '@fontsource/nunito/700-italic.css';
 
 body {
-  @apply bg-white dark:bg-dark-900;
+  @apply bg-white dark:bg-dark-900 transition-colors;
 
   &:has(.guest-layout) {
     background-image: url(/assets/app-bg.jpeg);
