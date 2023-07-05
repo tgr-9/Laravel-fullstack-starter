@@ -1,22 +1,5 @@
 <script setup lang="ts">
-import { useRegisterSW } from 'virtual:pwa-register/vue'
-
-const { offlineReady } = useRegisterSW({
-  immediate: true,
-})
-
 const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
-
-onMounted(async () => {
-  const { registerSW } = await import('virtual:pwa-register')
-
-  if (offlineReady.value)
-    logger('Offline ready', 'Your app is offline ready')
-
-  registerSW({
-    immediate: true,
-  })
-})
 </script>
 
 <template>
