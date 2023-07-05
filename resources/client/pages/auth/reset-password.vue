@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { Head as iHead, useForm } from '@inertiajs/vue3'
-import Layout from '~/layouts/guest-layout.vue'
 
 defineOptions({
-  layout: Layout,
+  layoutName: 'guest-layout',
 })
 
 interface ResetPasswordForm extends Record<string, unknown> {

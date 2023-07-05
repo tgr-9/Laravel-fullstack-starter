@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { Head as iHead, useForm } from '@inertiajs/vue3'
-import Layout from '~/layouts/guest-layout.vue'
 
 defineOptions({
-  layout: Layout,
-  inheritAttrs: false,
+  layoutName: 'guest-layout',
 })
 
 interface ConfirmPasswordForm extends Record<string, unknown> {

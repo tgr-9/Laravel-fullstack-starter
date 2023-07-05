@@ -2,10 +2,6 @@
 defineOptions({
   inheritAttrs: false,
 })
-
-const { errors: _ } = defineProps<{
-  errors: Object
-}>()
 </script>
 
 <template>

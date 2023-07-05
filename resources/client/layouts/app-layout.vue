@@ -6,10 +6,6 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const { errors: _ } = defineProps<{
-  errors: Object
-}>()
-
 const mainMenu = ref<MenuInst | null>(null)
 const userMenu = ref<VNode | null>(null)
 
