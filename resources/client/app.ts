@@ -52,7 +52,7 @@ const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: tru
 
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
-  resolve: async (name) => {
+  resolve: (name) => {
     const page = pages[`./pages/${name}.vue`]
 
     if (!page)

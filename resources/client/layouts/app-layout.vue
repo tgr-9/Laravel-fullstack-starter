@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+import type { MaybeElement } from '@vueuse/core'
+import { breakpointsTailwind } from '@vueuse/core'
 import type { MenuInst } from 'naive-ui'
 
 defineOptions({
@@ -8,6 +10,10 @@ defineOptions({
 
 const mainMenu = ref<MenuInst | null>(null)
 const userMenu = ref<VNode | null>(null)
+const sider = ref<MaybeElement | null>(null)
+const breakpoints = useBreakpoints(breakpointsTailwind)
+const onSmallScreen = breakpoints.smallerOrEqual('sm')
+const onMediumScreen = breakpoints.smallerOrEqual('md')
 
 const {
   options: menuOptions,
@@ -21,28 +27,54 @@ const {
   updateActiveKey: updateUserActiveKey,
 } = useNavigation('user')
 
-const logoWidth = computed(() => menuPreference.value.collapsed ? 48 : undefined)
+const siderCollapsed = computed(() => menuPreference.value.collapsed || (onMediumScreen.value && !onSmallScreen.value))
+const siderPosition = computed(() => onSmallScreen.value ? 'absolute' : 'static')
+const siderCollapsedMode = computed(() => onSmallScreen.value ? 'transform' : 'width')
+const logoWidth = computed(() => siderCollapsed.value ? 48 : undefined)
+const siderCollapsedWidth = computed(() => onSmallScreen.value ? 0 : 64)
+const touches = reactive({ x: 0, y: 0 })
+
+onClickOutside(sider, () => {
+  updateCollapse(!siderCollapsed.value)
+})
+
+function touchStart(e: TouchEvent) {
+  touches.x = e.touches[0].clientX
+  touches.y = e.touches[0].clientY
+}
+
+function touchEnd(e: TouchEvent) {
+  const changed = e.changedTouches[0]
+
+  updateCollapse(siderCollapsed
+    ? changed.clientX <= (touches.x - 10)
+    : changed.clientX >= (touches.x + 10))
+
+  touches.x = 0
+  touches.y = 0
+}
 </script>
 
 <template>
   <app-wrapper class="app-layout">
-    <n-layout has-sider>
+    <n-layout has-sider @touchstart="touchStart" @touchend="touchEnd">
       <n-layout-sider
+        ref="sider"
         bordered
-        collapse-mode="width"
-        :collapsed-width="64"
-        :width="260"
-        :collapsed="menuPreference.collapsed"
+        :collapse-mode="siderCollapsedMode"
+        :collapsed-width="siderCollapsedWidth"
+        :collapsed="siderCollapsed"
         :on-update:collapsed="updateCollapse"
-        show-trigger
+        :position="siderPosition"
+        :show-trigger="!onMediumScreen"
       >
         <header id="logo-wrapper" class="n-layout-sider-section">
           <transition>
             <main-logo
               :width="logoWidth"
-              :initial="menuPreference.collapsed"
-              :rounded="menuPreference.collapsed"
-              :class="{ collapsed: menuPreference.collapsed }"
+              :initial="siderCollapsed"
+              :rounded="siderCollapsed"
+              :class="{ collapsed: siderCollapsed }"
             />
           </transition>
         </header>
@@ -72,7 +104,7 @@ const logoWidth = computed(() => menuPreference.value.collapsed ? 48 : undefined
               block
               :bordered="false"
               class="py-1 h-auto"
-              :class="{ collapsed: menuPreference.collapsed }"
+              :class="{ collapsed: siderCollapsed }"
             >
               <div class="w-full flex flex-grow gap-4 items-center justify-center">
                 <n-avatar class="flex-none">
@@ -80,7 +112,7 @@ const logoWidth = computed(() => menuPreference.value.collapsed ? 48 : undefined
                 </n-avatar>
 
                 <transition>
-                  <p v-if="!menuPreference.collapsed" class="text-left truncate font-bold">
+                  <p v-if="!siderCollapsed" class="text-left truncate font-bold">
                     User Name Goes Here with very long name
                   </p>
                 </transition>
@@ -102,9 +134,13 @@ const logoWidth = computed(() => menuPreference.value.collapsed ? 48 : undefined
 <style lang="postcss">
 .app-layout {
   .n-layout {
+    @apply transition-all;
+
     &-sider {
+      @apply z-10 transition-all;
+
       & > &-scroll-container {
-        @apply flex flex-col py-6;
+        @apply flex flex-col min-h-screen py-6;
       }
 
       & > &-section {
