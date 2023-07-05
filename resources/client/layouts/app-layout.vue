@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+import { usePage } from '@inertiajs/vue3'
 import type { MaybeElement } from '@vueuse/core'
 import { breakpointsTailwind } from '@vueuse/core'
 import type { MenuInst } from 'naive-ui'
@@ -11,6 +12,8 @@ defineOptions({
 const mainMenu = ref<MenuInst | null>(null)
 const userMenu = ref<VNode | null>(null)
 const sider = ref<MaybeElement | null>(null)
+
+const { props } = usePage()
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const onSmallScreen = breakpoints.smallerOrEqual('sm')
 const onMediumScreen = breakpoints.smallerOrEqual('md')
@@ -30,12 +33,13 @@ const {
 const siderCollapsed = computed(() => menuPreference.value.collapsed || (onMediumScreen.value && !onSmallScreen.value))
 const siderPosition = computed(() => onSmallScreen.value ? 'absolute' : 'static')
 const siderCollapsedMode = computed(() => onSmallScreen.value ? 'transform' : 'width')
-const logoWidth = computed(() => siderCollapsed.value ? 48 : undefined)
 const siderCollapsedWidth = computed(() => onSmallScreen.value ? 0 : 64)
+const logoWidth = computed(() => siderCollapsed.value ? 48 : undefined)
 const touches = reactive({ x: 0, y: 0 })
 
 onClickOutside(sider, () => {
-  updateCollapse(!siderCollapsed.value)
+  if (onSmallScreen.value)
+    updateCollapse(!siderCollapsed.value)
 })
 
 function touchStart(e: TouchEvent) {
@@ -112,8 +116,8 @@ function touchEnd(e: TouchEvent) {
                 </n-avatar>
 
                 <transition>
-                  <p v-if="!siderCollapsed" class="text-left truncate font-bold">
-                    User Name Goes Here with very long name
+                  <p v-if="!siderCollapsed" class="w-full text-left truncate font-bold">
+                    {{ props.user?.name }}
                   </p>
                 </transition>
               </div>
@@ -155,8 +159,14 @@ function touchEnd(e: TouchEvent) {
 }
 
 #user-navigation {
-  .n-button.collapsed {
-    @apply px-1;
+  .n-button {
+    &__content {
+      @apply w-full;
+    }
+
+    &.collapsed {
+      @apply px-1;
+    }
   }
 }
 
