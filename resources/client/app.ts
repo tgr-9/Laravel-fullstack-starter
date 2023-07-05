@@ -47,11 +47,12 @@ if (isClient) {
   })
 }
 
+const layouts = import.meta.glob<DefineComponent>('./layouts/*.vue', { eager: true })
+const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
+
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
-  resolve: (name) => {
-    const layouts = import.meta.glob<DefineComponent>('./layouts/*.vue', { eager: true })
-    const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
+  resolve: async (name) => {
     const page = pages[`./pages/${name}.vue`]
 
     if (!page)
@@ -68,7 +69,7 @@ createInertiaApp({
     return page
   },
   setup({ el, App, props, plugin }) {
-    const app = createApp({ render: () => h(App, props) })
+    const app = createApp({ render: () => h(App, props, () => '<div>Test</div>') })
       .use(plugin)
 
     Object.values(import.meta.glob<{ install: AppModuleInstall }>('./modules/*.ts', { eager: true })).forEach(i =>
