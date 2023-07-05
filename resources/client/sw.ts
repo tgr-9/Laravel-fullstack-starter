@@ -1,66 +1,24 @@
 /// <reference no-default-lib="true"/>
-/// <reference lib="webworker" />
+/// <reference lib="WebWorker" />
 
-import type { ManifestEntry } from 'workbox-build'
 import { cacheNames, clientsClaim } from 'workbox-core'
-import { registerRoute, setDefaultHandler } from 'workbox-routing'
-import type { Strategy } from 'workbox-strategies'
-import { NetworkFirst, NetworkOnly } from 'workbox-strategies'
+import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
+import { setDefaultHandler } from 'workbox-routing'
+import { CacheFirst } from 'workbox-strategies'
 
-declare let self: ServiceWorkerGlobalScope & any
-const manifest: ManifestEntry[] = '__WB_MANIFEST' in self
-  ? self.__WB_MANIFEST
-  : []
-
+declare let self: ServiceWorkerGlobalScope & Record<string, any>
 const cacheName = cacheNames.runtime
-const cacheEntries: RequestInfo[] = []
 
-const manifestURLs = manifest.map((entry) => {
-  const url = new URL(entry.url, self.location.toString())
+cleanupOutdatedCaches()
 
-  cacheEntries.push(new Request(url.href, {
-    credentials: 'same-origin',
-  }))
+setDefaultHandler(new CacheFirst({ cacheName }))
 
-  return url.href
+precacheAndRoute(self.__WB_MANIFEST)
+
+self.addEventListener('fetch', (e) => {
+  console.log(e.request.url) // eslint-disable-line no-console
 })
-
-function buildStrategy(): Strategy {
-  return new NetworkFirst({ cacheName })
-}
-
-self.addEventListener('install', (e: ExtendableEvent) => {
-  e.waitUntil(caches.open(cacheName).then(async (cache) => {
-    cache.addAll(cacheEntries)
-  }))
-})
-
-self.addEventListener('activate', (e: ExtendableEvent) => {
-  e.waitUntil(caches.open(cacheName).then(async (cache) => {
-    const keys = await cache.keys()
-
-    keys.forEach(async (req) => {
-      console.info('Checking cache:', req.url) // eslint-disable-line no-console
-
-      if (!manifestURLs.includes(req.url)) {
-        const deleted = await cache.delete(req)
-
-        if (deleted)
-          console.info('Precached data removed:', req.url) // eslint-disable-line no-console
-        else
-          console.info('No precached found:', req.url) // eslint-disable-line no-console
-      }
-    })
-  }))
-})
-
-registerRoute(({ url }) => manifestURLs.includes(url.href), buildStrategy())
-
-setDefaultHandler(new NetworkOnly())
-
-// setCatchHandler(({ event }) => {
-//   // switch (event.request.destination)
-// })
 
 self.skipWaiting()
+
 clientsClaim()

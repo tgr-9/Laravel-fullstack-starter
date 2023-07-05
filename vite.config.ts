@@ -127,8 +127,8 @@ export default defineConfig(({ mode }) => {
         registerType: 'autoUpdate',
         strategies: 'injectManifest',
         workbox: {
-          globPatterns: ['**/*.{ts,js,css,html,ico,png,svg}'],
-          navigateFallback: null,
+          mode,
+          globPatterns: ['**/*.{css,ico,js,jpeg,png,svg}'],
         },
         manifest: {
           id: '/',
