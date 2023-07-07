@@ -1,6 +1,11 @@
 {
-  "include": ["*.config.ts", "resources/client/**/*"],
-  "exclude": ["build", "node_modules", "vendor"],
+  "include": [
+    "*.config.ts",
+    "resources/client/components.d.ts",
+    "resources/client/**/*.ts",
+    "resources/client/**/*.vue"
+  ],
+  "exclude": ["build", "node_modules", "vendor", "**/*.js", "**/*.cjs"],
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "public",
@@ -13,21 +18,21 @@
     "sourceMap": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
+    "isolatedModules": true,
     "declaration": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "useDefineForClassFields": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["ESNext", "DOM"],
-    "typeRoots": ["resources/client"],
+    "lib": ["ESNext", "DOM", "WebWorker"],
+    "typeRoots": [
+      "./node_modules/@types/",
+      "./resources/client/"
+    ],
     "types": [
-      // "vitest",
       "vite/client"
-      // "vue/ref-macros",
-      // "vite-plugin-pages/client",
       // "vite-plugin-pwa/client",
-      // "vite-plugin-vue-layouts/client"
     ],
     "paths": {
       "~/*": ["resources/client/*"]

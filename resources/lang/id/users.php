@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'menu' => 'Kelola Pengguna',
+
     'routes' => [
         'index' => 'Semua Pengguna',
     ],
