@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
-use App\View\Composers\MenuComposer;
+use App\View\Composers\NavigationsComposer;
+use App\View\Composers\TranslationsComposer;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Dusk\Browser;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
         if ($this->app->environment('local')) {
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             // $this->app->register(TelescopeServiceProvider::class);
+        }
+
+        if ($this->app->environment('testing') && \class_exists(Browser::class)) {
+            $this->registerBuskMacroForInertia();
         }
     }
 
@@ -38,6 +44,27 @@ class AppServiceProvider extends ServiceProvider
             Mail::alwaysTo($devMail);
         }
 
-        View::composer(['layouts.app'], MenuComposer::class);
+        View::composer('app', NavigationsComposer::class);
+
+        View::composer('app', TranslationsComposer::class);
+    }
+
+    /**
+     * Register inertia.js helper for dusk testing
+     *
+     * @see https://github.com/protonemedia/inertiajs-events-laravel-dusk
+     */
+    private function registerBuskMacroForInertia(): void
+    {
+        Browser::macro('waitForInertia', function (?int $seconds = null): Browser {
+            /** @var Browser $this */
+            $driver = $this->driver;
+
+            $currentCount = $driver->executeScript('return window.__inertiaNavigatedCount;');
+
+            return $this->waitUsing($seconds, 100, fn () => $driver->executeScript(
+                "return window.__inertiaNavigatedCount > {$currentCount};"
+            ), 'Waited %s seconds for Inertia.js to increase the navigate count.');
+        });
     }
 }

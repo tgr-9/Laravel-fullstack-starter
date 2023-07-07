@@ -1,41 +1,19 @@
-@import '@fontsource/nunito/400.css';
-@import '@fontsource/nunito/400-italic.css';
-@import '@fontsource/nunito/600.css';
-@import '@fontsource/nunito/600-italic.css';
-@import '@fontsource/nunito/700.css';
-@import '@fontsource/nunito/700-italic.css';
+@import '@fontsource/nunito/latin-400.css';
+@import '@fontsource/nunito/latin-400-italic.css';
+@import '@fontsource/nunito/latin-600.css';
+@import '@fontsource/nunito/latin-600-italic.css';
+@import '@fontsource/nunito/latin-700.css';
+@import '@fontsource/nunito/latin-700-italic.css';
 
-.auth-bg {
-  background-position: top center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-color: #dfe6f0;
+body {
+  @apply bg-white dark:bg-dark-900 transition-colors;
+
+  &:has(.guest-layout) {
+    background-image: url(/assets/app-bg.jpeg);
+    @apply bg-cover bg-no-repeat bg-center;
+  }
 }
 
 a {
-  @apply text-primary focus:outline-emerald-700 focus-visible:outline-emerald-700;
-}
-
-.table {
-  @apply w-full text-sm;
-
-  th, td {
-    @apply px-3 py-2 select-none;
-
-    &.action {
-      @apply w-1/12 text-center;
-    }
-  }
-
-  thead tr {
-    @apply bg-gray-100 uppercase text-gray-500;
-  }
-
-  tbody tr {
-    @apply border-t-1 border-t-gray-200 hover:bg-gray-50 cursor-pointer;
-
-    &.no-content {
-      @apply leading-10;
-    }
-  }
+  @apply text-primary focus:outline-emerald-700 focus-visible:outline-emerald-700 underline;
 }

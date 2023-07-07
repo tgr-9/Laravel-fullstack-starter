@@ -1,62 +1,81 @@
-import alpine from 'alpinejs'
-import type { Alpine } from 'alpinejs'
-import { format } from 'date-fns'
-import { enUS as en, id } from 'date-fns/locale'
+import { createInertiaApp, router } from '@inertiajs/vue3'
+import type { App, DefineComponent } from 'vue'
+import { createApp, h } from 'vue'
 
 // import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
 
-import '~/libs/sentry'
-import '~/libs/axios'
+import { createThemeOverrides } from '~/utils/preference'
+import '~/bootstrap'
+
+interface AppModuleContext {
+  app: App<Element>
+  isClient: boolean
+}
 
 declare global {
-  interface Window {
-    Alpine: Alpine
-    dateFormat: (date: Date, fmt: string) => string
-    numberFormat: (num: number) => string
-  }
+  /**
+   * Application module install function.
+   */
+  type AppModuleInstall = (ctx: AppModuleContext) => void
 }
 
-window.Alpine = alpine
+createThemeOverrides({
+  common: {
+    primaryColor: '#388370',
+    borderRadius: '6px',
+    avatarColor: '#388370',
+  },
+  Layout: {
+    color: 'transparent',
+  },
+  Space: {
+    gapLarge: '24px',
+    gapMedium: '16px',
+    gapSmall: '9px',
+  },
+})
 
-const locales: { [key in string]: Locale } = { id, en }
-const locale = locales[document.documentElement.lang]
+const isClient = typeof window !== 'undefined'
 
-window.dateFormat = (date: Date, fmt: string) => {
-  return format(date, fmt, { locale })
+if (isClient) {
+  window.__inertiaNavigatedCount = window.__inertiaNavigatedCount || 0
+
+  router.on('navigate', () => {
+    window.__inertiaNavigatedCount++
+  })
 }
 
-window.numberFormat = (num: number) => {
-  return new Intl.NumberFormat(document.documentElement.lang).format(num)
-}
+const layouts = import.meta.glob<DefineComponent>('./layouts/*.vue', { eager: true })
+const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
 
-/**
- * Echo exposes an expressive API for subscribing to channels and listening
- * for events that are broadcast by Laravel. Echo and event broadcasting
- * allows your team to easily build robust real-time web applications.
- */
+createInertiaApp({
+  title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
+  resolve: (name) => {
+    const page = pages[`./pages/${name}.vue`]
 
-// import Echo from 'laravel-echo';
+    if (!page)
+      throw new Error(`Could not find page component for path '${name}'`)
 
-// import Pusher from 'pusher-js';
-// window.Pusher = Pusher;
+    const layoutName = page.default.layoutName || 'app-layout'
+    const layout = layouts[`./layouts/${layoutName}.vue`]
 
-// window.Echo = new Echo({
-//   broadcaster: 'pusher',
-//   key: import.meta.env.VITE_PUSHER_APP_KEY,
-//   cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-//   forceTLS: true
-// });
+    if (!layout)
+      throw new Error(`Could not find page layout '${layoutName}'`)
 
-// Alpine.plugin(TimeAgo.configure({ locale }))
+    page.default.layout = h(layout.default)
 
-// const dataLayer = window.dataLayer || []
-// const gtag = window.gtag = (...args) => dataLayer.push(args)
+    return page
+  },
+  setup({ el, App, props, plugin }) {
+    const app = createApp({ render: () => h(App, props) })
+      .use(plugin)
 
-window.addEventListener('DOMContentLoaded', () => {
-  // gtag('js', new Date())
-  // gtag('config', 'G-1KQP24LR0L')
+    Object.values(import.meta.glob<{ install: AppModuleInstall }>('./modules/*.ts', { eager: true })).forEach((i) => {
+      Promise.resolve(i.install?.({ app, isClient }))
+    })
 
-  alpine.start()
+    app.mount(el)
+  },
 })

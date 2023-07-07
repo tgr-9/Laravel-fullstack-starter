@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Inertia\Inertia;
 
 class UserController extends Controller
 {
@@ -16,7 +17,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return view('users.index');
+        return Inertia::render('users/index');
     }
 
     /**
@@ -24,7 +25,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('users.form');
+        return Inertia::render('users/forms');
     }
 
     /**
@@ -32,6 +33,6 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.form');
+        return Inertia::render('users/forms');
     }
 }
