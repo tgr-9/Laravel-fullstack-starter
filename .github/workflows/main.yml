@@ -5,11 +5,11 @@ on:
     - cron: '0 23 * * 6'
   push:
     branches: [main]
-    paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
+    # paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
-    paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
+    # paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
 
 env:
   APP_NAME: Creasi Skeleton
@@ -19,6 +19,8 @@ env:
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+  CC_TEST_REPORTER_URL: ${{ vars.CC_TEST_REPORTER_URL }}
   DB_DATABASE: creasico
   DB_USERNAME: creasico
   DB_PASSWORD: secret
@@ -160,6 +162,22 @@ jobs:
       - name: Run unit tests
         run: php artisan test --coverage
 
+      - name: Generate reports for CodeClimate
+        env:
+          COVERAGE_FILE: tests/reports/clover.xml
+          CODECLIMATE_REPORT: ${{ github.workspace }}/tests/reports/codeclimate.${{ matrix.php }}.json
+        run: |
+          curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
+          ./cc-test-reporter format-coverage -t clover -o $CODECLIMATE_REPORT $COVERAGE_FILE
+
+      - name: Upload tests reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-reports
+          path: |
+            tests/coverage
+            tests/reports
+
   e2e:
     runs-on: ubuntu-latest
     name: Integration Test on BrowserStack
@@ -252,6 +270,23 @@ jobs:
         uses: browserstack/github-actions/setup-local@master
         with:
           local-testing: stop
+
+  reports:
+    name: Report Test Coverages
+    needs: units
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download test reports
+        uses: actions/download-artifact@v3
+        with:
+          name: test-reports
+          path: tests
+
+      - name: Report to CodeClimate
+        run: |
+          curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
+          ./cc-test-reporter sum-coverage -o - tests/reports/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
 
   deploy:
     runs-on: ubuntu-latest
