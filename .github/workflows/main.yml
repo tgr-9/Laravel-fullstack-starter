@@ -285,7 +285,7 @@ jobs:
           ./cc-test-reporter sum-coverage -o - tests/reports/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
 
   deploy:
-    name: Trigger Deploy
+    name: Deployment
     needs: e2e
-    uses: ./.github/workflows/deploy.yml
+    uses: creasico/laravel-project/.github/workflows/deploy.yml@main
     # if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
