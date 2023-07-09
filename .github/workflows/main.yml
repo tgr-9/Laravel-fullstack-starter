@@ -12,10 +12,11 @@ on:
     # paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
 
 env:
-  APP_NAME: Creasi Skeleton
+  APP_NAME: ${{ vars.APP_NAME }}
   APP_ENV: testing
   APP_URL: http://127.0.0.1:8000
   APP_KEY: ${{ secrets.APP_KEY }}
+  APP_LOCALE: id
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
@@ -26,10 +27,6 @@ env:
   DB_PASSWORD: secret
   MAIL_FROM_ADDRESS: devtest@creasi.dev
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   build:
@@ -54,7 +51,6 @@ jobs:
       - name: Get Composer cache directory
         id: composer-cache
         run: |
-          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
@@ -144,7 +140,6 @@ jobs:
       - name: Get Composer cache directory
         id: composer-cache
         run: |
-          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
@@ -223,7 +218,6 @@ jobs:
       - name: Get Composer cache directory
         id: composer-cache
         run: |
-          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
