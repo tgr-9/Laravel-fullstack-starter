@@ -2,18 +2,17 @@ name: Deploy
 
 on:
   workflow_call:
-  push:
-    tags: ['[0-9].[0-9].[0-9]']
   release:
     types: [created]
 
 env:
-  APP_NAME: Creasi Skeleton
+  APP_NAME: ${{ vars.APP_NAME }}
   APP_ENV: staging
-  APP_LOCALE: id
-  APP_URL: https://skeleton.creasi.dev
   APP_KEY: ${{ secrets.APP_KEY }}
+  APP_LOCALE: id
   VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  # GIT_COMMIT_SHA: ${{ github.sha }}
+  # GIT_BRANCH: ${{ github.ref }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -26,7 +25,10 @@ jobs:
 
     environment:
       name: staging
-      url: ${{ env.APP_URL }}
+      url: ${{ vars.APP_URL }}
+
+    env:
+      APP_URL: ${{ vars.APP_URL }}
 
     strategy:
       fail-fast: false
@@ -38,6 +40,15 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Prepare Environments
+        run: |
+          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
+          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
+          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
+          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
+          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
+          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -66,14 +77,6 @@ jobs:
           command: |
             composer config -g github-oauth.github.com ${{ secrets.PAT }}
             composer install --prefer-dist --no-interaction --no-progress
-
-      - name: Prepare
-        run: |
-          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
-          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
-          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
-          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
