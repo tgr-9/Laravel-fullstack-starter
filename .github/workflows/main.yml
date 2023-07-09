@@ -82,7 +82,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: pnpm
-          node-version: 16.x
+          node-version: 18.x
           registry-url: https://registry.npmjs.org
 
       - name: Install dependencies
@@ -291,70 +291,7 @@ jobs:
           ./cc-test-reporter sum-coverage -o - tests/reports/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
 
   deploy:
-    runs-on: ubuntu-latest
-    name: Deploy
+    name: Trigger Deploy
     needs: e2e
-    if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
-
-    environment:
-      name: staging
-      url: https://skeleton.creasi.dev
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
-          ini-values: error_reporting=E_ALL
-          tools: composer:v2
-          coverage: none
-
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: |
-          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Prepare
-        run: |
-          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
-          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
-          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
-          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-
-      - name: Install dependencies
-        uses: nick-invision/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          command: composer install --prefer-dist --no-interaction --no-progress
-
-      - name: Download assets
-        id: download
-        uses: actions/download-artifact@v3
-        with:
-          name: public
-          path: public/build
-
-      - name: Deploy repo
-        uses: nick-invision/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          command: |
-            composer dep deploy:unlock
-            composer dep deploy
+    uses: ./.github/workflows/deploy.yml
+    # if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}

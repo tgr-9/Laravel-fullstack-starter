@@ -1,6 +1,7 @@
-name: Release
+name: Deploy
 
 on:
+  workflow_call:
   push:
     tags: ['[0-9].[0-9].[0-9]']
   release:
@@ -8,22 +9,11 @@ on:
 
 env:
   APP_NAME: Creasi Skeleton
-  APP_ENV: testing
-  APP_URL: http://127.0.0.1:8000
+  APP_ENV: staging
+  APP_LOCALE: id
+  APP_URL: https://skeleton.creasi.dev
   APP_KEY: ${{ secrets.APP_KEY }}
-  # AWS_ENDPOINT: 'https://is3.cloudhost.id'
-  # AWS_DEFAULT_REGION: 'ap-southeast-3'
-  # AWS_BUCKET: creasi-staging
-  DB_DATABASE: creasico
-  DB_USERNAME: creasico
-  DB_PASSWORD: secret
-  MAIL_FROM_ADDRESS: devtest@creasi.dev
-  SENTRY_LARAVEL_DSN: ${{ secrets.SENTRY_DSN }}
-  SENTRY_TRACE_QUEUE_ENABLED: true
-  SENTRY_TRACES_SAMPLE_RATE: 1.0
   VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-  VITE_SENTRY_TRACE_QUEUE_ENABLED: true
-  VITE_SENTRY_TRACES_SAMPLE_RATE: 1.0
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -36,13 +26,46 @@ jobs:
 
     environment:
       name: staging
-      url: https://skeleton.creasi.dev
+      url: ${{ env.APP_URL }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1']
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ matrix.php }}-composer-
+          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
+
+      - name: Install PHP dependencies
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: |
+            composer config -g github-oauth.github.com ${{ secrets.PAT }}
+            composer install --prefer-dist --no-interaction --no-progress
 
       - name: Prepare
         run: |
@@ -61,30 +84,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           cache: pnpm
-          node-version: 16.x
+          node-version: 18.x
 
       - name: Install Node.JS dependencies
         run: pnpm install
 
       - name: Build frontend assets
         run: pnpm build
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
-          tools: composer:v2
-          coverage: none
-
-      - name: Install PHP dependencies
-        uses: nick-invision/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          command: |
-            composer config -g github-oauth.github.com ${{ secrets.PAT }}
-            composer update --prefer-dist --no-interaction --no-progress
 
       - name: Deploy repo
         uses: nick-invision/retry@v2
