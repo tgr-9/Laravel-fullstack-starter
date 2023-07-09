@@ -7,7 +7,6 @@ on:
 
 env:
   APP_NAME: ${{ vars.APP_NAME }}
-  APP_ENV: staging
   APP_KEY: ${{ secrets.APP_KEY }}
   APP_LOCALE: id
   VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
@@ -19,7 +18,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-deploy:
+  deploy:
     runs-on: ubuntu-latest
     name: Build and Deploy
 
@@ -29,6 +28,7 @@ jobs:
 
     env:
       APP_URL: ${{ vars.APP_URL }}
+      APP_ENV: ${{ vars.APP_ENV }}
 
     strategy:
       fail-fast: false
@@ -44,19 +44,26 @@ jobs:
       - name: Prepare Environments
         run: |
           echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
-          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
-          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
-          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
-          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: 8.1
           extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
           tools: composer:v2
           coverage: none
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup node.js
+        uses: actions/setup-node@v3
+        with:
+          cache: pnpm
+          node-version: 18.x
 
       - name: Get Composer cache directory
         id: composer-cache
@@ -66,8 +73,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-${{ matrix.php }}-composer-
-          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
         uses: nick-invision/retry@v2
@@ -79,29 +86,17 @@ jobs:
             composer install --prefer-dist --no-interaction --no-progress
             composer ziggy:generate
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Setup Node.JS
-        uses: actions/setup-node@v3
-        with:
-          cache: pnpm
-          node-version: 18.x
-
-      - name: Install Node.JS dependencies
+      - name: Install node.js dependencies
         run: pnpm install
 
-      - name: Build frontend assets
-        run: pnpm build
+      - name: Build frontend
+        run: pnpm build --mode ${{ vars.APP_ENV }}
 
-      - name: Deploy repo
-        uses: nick-invision/retry@v2
-        with:
-          timeout_minutes: 2
-          max_attempts: 3
-          command: |
-            composer dep deploy:unlock
-            composer dep deploy
-
+      - name: Deploy
+        run: |
+          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
+          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
+          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
+          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
+          composer dep deploy:unlock
+          composer dep deploy
