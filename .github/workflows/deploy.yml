@@ -1,0 +1,107 @@
+name: Deploy
+
+on:
+  workflow_call:
+  release:
+    types: [created]
+
+env:
+  APP_NAME: ${{ vars.APP_NAME }}
+  APP_ENV: staging
+  APP_KEY: ${{ secrets.APP_KEY }}
+  APP_LOCALE: id
+  VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  # GIT_COMMIT_SHA: ${{ github.sha }}
+  # GIT_BRANCH: ${{ github.ref }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    name: Build and Deploy
+
+    environment:
+      name: staging
+      url: ${{ vars.APP_URL }}
+
+    env:
+      APP_URL: ${{ vars.APP_URL }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Prepare Environments
+        run: |
+          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
+          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
+          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
+          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
+          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
+          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
+          tools: composer:v2
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-${{ matrix.php }}-composer-
+          restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
+
+      - name: Install PHP dependencies
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: |
+            composer config -g github-oauth.github.com ${{ secrets.PAT }}
+            composer install --prefer-dist --no-interaction --no-progress
+            composer ziggy:generate
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Setup Node.JS
+        uses: actions/setup-node@v3
+        with:
+          cache: pnpm
+          node-version: 18.x
+
+      - name: Install Node.JS dependencies
+        run: pnpm install
+
+      - name: Build frontend assets
+        run: pnpm build
+
+      - name: Deploy repo
+        uses: nick-invision/retry@v2
+        with:
+          timeout_minutes: 2
+          max_attempts: 3
+          command: |
+            composer dep deploy:unlock
+            composer dep deploy
+
