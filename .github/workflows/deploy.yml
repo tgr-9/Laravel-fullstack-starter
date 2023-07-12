@@ -92,4 +92,5 @@ jobs:
         with:
           private-key: ${{ secrets.STAGING_SERVER_RSAKEY }}
           ssh-config: ${{ secrets.STAGING_SERVER_SSH_CONFIG }}
+          verbosity: ''
           dep: deploy -f scripts/deploy.php
