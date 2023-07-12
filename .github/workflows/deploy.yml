@@ -30,11 +30,6 @@ jobs:
       APP_URL: ${{ vars.APP_URL }}
       APP_ENV: ${{ vars.APP_ENV }}
 
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ['8.1']
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -93,10 +88,13 @@ jobs:
         run: pnpm build --mode ${{ vars.APP_ENV }}
 
       - name: Deploy
+        env:
+          STAGING_SERVER_RSAKEY: ${{ secrets.STAGING_SERVER_RSAKEY }}
+          STAGING_SERVER_SSH_CONFIG: ${{ secrets.STAGING_SERVER_SSH_CONFIG }}
         run: |
           [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
-          echo "${{ secrets.STAGING_SERVER_RSAKEY }}" >> $HOME/.ssh/id_rsa
-          echo "${{ secrets.STAGING_SERVER_SSH_CONFIG }}" >> $HOME/.ssh/config
+          echo "$STAGING_SERVER_RSAKEY" >> $HOME/.ssh/id_rsa
+          echo "$STAGING_SERVER_SSH_CONFIG" >> $HOME/.ssh/config
           chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh/
           composer dep deploy:unlock
           composer dep deploy
