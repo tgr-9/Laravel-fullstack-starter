@@ -15,15 +15,16 @@ add('writable_dirs', ['storage']);
 // Hosts
 
 host('creasi.dev')
-    ->set('remote_user', 'creasi')
+    ->set('remote_user', 'deployer')
     ->set('deploy_path', '/var/www/skeleton');
 
 // Tasks
 
-desc('Deploy static assets');
 task('deploy:assets', function () {
-    runLocally('rsync -zrtv ../public/build/* creasi.dev:{{release_or_current_path}}/public/build');
-});
+    $host = currentHost();
+
+    runLocally("rsync -zrtv ../public/build/* {$host->connectionString()}:{{release_or_current_path}}/public/build");
+})->desc('Deploy static assets');
 
 // Hooks
 
