@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "796f99bc2841a4c90e5caa326721dbad",
+    "content-hash": "2df6e947dfcd27cd94d26f883c535388",
     "packages": [
         {
             "name": "brick/math",
@@ -128,32 +128,110 @@
             "time": "2022-02-21T13:15:14+00:00"
         },
         {
-            "name": "creasi/laravel-nusa",
-            "version": "v0.0.5",
+            "name": "creasi/laravel-base",
+            "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "https://github.com/creasico/laravel-nusa.git",
-                "reference": "dc0c560441c4bd0e5e4d904472d320fb81c0a4b9"
+                "url": "https://github.com/creasico/laravel-base.git",
+                "reference": "c66f05835d8d27b63c5fc1075142cf3f73037baf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-nusa/zipball/dc0c560441c4bd0e5e4d904472d320fb81c0a4b9",
-                "reference": "dc0c560441c4bd0e5e4d904472d320fb81c0a4b9",
+                "url": "https://api.github.com/repos/creasico/laravel-base/zipball/c66f05835d8d27b63c5fc1075142cf3f73037baf",
+                "reference": "c66f05835d8d27b63c5fc1075142cf3f73037baf",
                 "shasum": ""
             },
             "require": {
-                "ext-sqlite3": "*",
-                "illuminate/contracts": "^10.0",
-                "illuminate/database": "^10.0",
-                "illuminate/support": "^10.0",
+                "creasi/laravel-nusa": "^0.1.1",
+                "laravel/framework": "^9.0|^10.0",
                 "php": "^8.1"
             },
             "require-dev": {
                 "composer-runtime-api": "*",
                 "laravel/pint": "^1.1",
-                "mockery/mockery": "^1.5",
-                "orchestra/testbench": "^8.5",
-                "phpunit/phpunit": "^10.1"
+                "laravel/sanctum": "^3.2",
+                "nunomaduro/collision": "^7.4",
+                "orchestra/testbench": "^8.5"
+            },
+            "default-branch": true,
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Creasi\\Base\\ServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Creasi\\Base\\": "src"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Creasi\\Tests\\": "tests",
+                    "Database\\Factories\\": "database/factories/"
+                }
+            },
+            "scripts": {
+                "fix": [
+                    "pint --preset laravel"
+                ],
+                "test": [
+                    "testbench package:test --ansi"
+                ],
+                "testbench": [
+                    "testbench"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Creasi Developers",
+                    "email": "developers@creasi.co"
+                }
+            ],
+            "description": "Laravel Package that aims to provide basic organization directory structures.",
+            "keywords": [
+                "accountability",
+                "base",
+                "directory",
+                "laravel",
+                "organization",
+                "package"
+            ],
+            "support": {
+                "source": "https://github.com/creasico/laravel-base",
+                "issues": "https://github.com/creasico/laravel-base/issues"
+            },
+            "time": "2023-09-15T06:08:08+00:00"
+        },
+        {
+            "name": "creasi/laravel-nusa",
+            "version": "v0.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/creasico/laravel-nusa.git",
+                "reference": "f30f649c022ea8acca4fbc61ec67c512de6f0048"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/creasico/laravel-nusa/zipball/f30f649c022ea8acca4fbc61ec67c512de6f0048",
+                "reference": "f30f649c022ea8acca4fbc61ec67c512de6f0048",
+                "shasum": ""
+            },
+            "require": {
+                "ext-sqlite3": "*",
+                "laravel/framework": "^9.0|^10.0",
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "composer-runtime-api": "*",
+                "laravel/pint": "^1.1",
+                "nunomaduro/collision": "^7.4",
+                "orchestra/testbench": "^8.5"
             },
             "type": "library",
             "extra": {
@@ -194,7 +272,7 @@
                 "issues": "https://github.com/creasico/laravel-nusa/issues",
                 "source": "https://github.com/creasico/laravel-nusa"
             },
-            "time": "2023-07-07T06:00:45+00:00"
+            "time": "2023-08-30T15:55:39+00:00"
         },
         {
             "name": "dflydev/dot-access-data",
@@ -10920,7 +10998,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "creasi/laravel-base": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '~/': `${resolve(__dirname, rootdir)}/`,
-        'ziggy/': `${resolve('vendor/tightenco/ziggy/src/js')}/`,
+        // 'ziggy/': `${resolve('vendor/tightenco/ziggy/src/js')}/`,
       },
     },
 
@@ -147,22 +147,22 @@ export default defineConfig(({ mode }) => {
               sizes: '48x48',
             },
             {
-              src: '/assets/favicon.svg',
+              src: '/vendor/creasico/favicon.svg',
               sizes: '512x512',
               type: 'image/svg+xml',
             },
             {
-              src: '/assets/icon-192x192.png',
+              src: '/vendor/creasico/icon-192x192.png',
               sizes: '192x192',
               type: 'image/png',
             },
             {
-              src: '/assets/icon-512x512.png',
+              src: '/vendor/creasico/icon-512x512.png',
               sizes: '512x512',
               type: 'image/png',
             },
             {
-              src: '/assets/icon-512x512.png',
+              src: '/vendor/creasico/icon-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'maskable',
