@@ -9,7 +9,7 @@ body {
   @apply bg-white dark:bg-dark-900 transition-colors;
 
   &:has(.guest-layout) {
-    background-image: url(/assets/app-bg.jpeg);
+    background-image: url(/vendor/creasico/app-bg.jpeg);
     @apply bg-cover bg-no-repeat bg-center;
   }
 }

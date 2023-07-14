@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use App\View\Composers\NavigationsComposer;
 use App\View\Composers\TranslationsComposer;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
+use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
             // $this->app->register(TelescopeServiceProvider::class);
         }
+
+        // .
     }
 
     /**
@@ -30,17 +32,22 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        /**
-         * While not in production, send all email tho the following address instead.
-         *
-         * @see https://laravel.com/docs/9.x/mail#using-a-global-to-address
-         */
-        if (! $this->app->environment('production') && $devMail = env('MAIL_DEVELOPMENT')) {
-            Mail::alwaysTo($devMail);
-        }
+        $this->bootViewComposers();
 
-        View::composer('app', NavigationsComposer::class);
+        Inertia::setRootView('creasico::app');
 
-        View::composer('app', TranslationsComposer::class);
+        // .
+    }
+
+    /**
+     * Register inertia.js helper for dusk testing
+     *
+     * @see https://github.com/protonemedia/inertiajs-events-laravel-dusk
+     */
+    private function bootViewComposers(): void
+    {
+        View::composer('*', NavigationsComposer::class);
+
+        View::composer('*', TranslationsComposer::class);
     }
 }

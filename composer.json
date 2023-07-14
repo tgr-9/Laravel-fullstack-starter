@@ -13,9 +13,16 @@
   "support": {
     "source": "https://github.com/creasico/laravel-project"
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:creasico/laravel-base.git"
+    }
+  ],
   "require": {
     "php": ">=8.1",
-    "creasi/laravel-nusa": "^0.0.5",
+    "creasi/laravel-base": "dev-main",
+    "creasi/laravel-nusa": "^0.1.0",
     "fakerphp/faker": "^1.9.1",
     "guzzlehttp/guzzle": "^7.2",
     "inertiajs/inertia-laravel": "^0.6.9",
@@ -52,8 +59,10 @@
   "scripts": {
     "post-autoload-dump": [
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-      "@php artisan package:discover --ansi",
-      "@php artisan vendor:publish --tag creasi-config --ansi"
+      "@php artisan package:discover --ansi"
+    ],
+    "post-update-cmd": [
+      "@php artisan vendor:publish --tag=creasi-assets --ansi --force"
     ],
     "post-root-package-install": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
