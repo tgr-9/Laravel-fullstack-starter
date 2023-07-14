@@ -31,7 +31,6 @@ defineOptions({
   }
 
   .n-card {
-    --n-color: rgba(0, 0, 0, 0.7) !important;
     @apply blur-sm;
 
     & > &__content {
