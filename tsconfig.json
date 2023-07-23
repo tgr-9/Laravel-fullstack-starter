@@ -5,7 +5,7 @@
     "resources/client/**/*.ts",
     "resources/client/**/*.vue"
   ],
-  "exclude": ["build", "node_modules", "vendor", "**/*.js", "**/*.cjs"],
+  "exclude": [".github", "build", "node_modules", "vendor", "**/*.js", "**/*.cjs"],
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "public",
