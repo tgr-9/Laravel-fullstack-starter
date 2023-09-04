@@ -73,7 +73,7 @@ createInertiaApp({
       .use(plugin)
 
     Object.values(import.meta.glob<{ install: AppModuleInstall }>('./modules/*.ts', { eager: true })).forEach((i) => {
-      Promise.resolve(i.install?.({ app, isClient }))
+      Promise.resolve(i.install({ app, isClient }))
     })
 
     app.mount(el)
