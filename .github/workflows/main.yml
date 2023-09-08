@@ -152,7 +152,7 @@ jobs:
           composer ziggy:generate
 
       - name: Run unit tests
-        run: php artisan test --coverage
+        run: php artisan test --ansi --coverage
 
       - name: Generate reports for CodeClimate
         env:

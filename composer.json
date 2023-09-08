@@ -65,10 +65,10 @@
       "vendor/bin/dep -f scripts/deploy.php"
     ],
     "fix": [
-      "pint --preset laravel"
+      "pint --preset laravel --ansi"
     ],
     "test:unit": [
-      "@php artisan test --env=testing --coverage"
+      "@php artisan test --env=testing --ansi"
     ],
     "test:e2e": [
       "@php artisan dusk --env=testing"
@@ -78,7 +78,7 @@
       "@test:e2e"
     ],
     "ziggy:generate": [
-      "@php artisan ziggy:generate ./resources/client/ziggy.cjs"
+      "@php artisan ziggy:generate ./resources/client/ziggy.cjs --ansi"
     ]
   },
   "extra": {
