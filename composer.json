@@ -22,7 +22,7 @@
   "require": {
     "php": ">=8.1",
     "creasi/laravel-base": "dev-main",
-    "creasi/laravel-nusa": "^0.1.0",
+    "creasi/laravel-nusa": "^0.1.2",
     "fakerphp/faker": "^1.9.1",
     "guzzlehttp/guzzle": "^7.2",
     "inertiajs/inertia-laravel": "^0.6.9",
