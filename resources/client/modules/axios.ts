@@ -1,6 +1,18 @@
 import { captureException } from '@sentry/vue'
 import axios from 'axios'
-import type { AxiosError } from 'axios'
+import type { AxiosError, AxiosStatic } from 'axios'
+
+declare global {
+  interface Window {
+    axios: AxiosStatic
+  }
+}
+
+declare module 'vue' {
+  interface ComponentCustomProperties {
+    $axios: AxiosStatic
+  }
+}
 
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.withCredentials = true

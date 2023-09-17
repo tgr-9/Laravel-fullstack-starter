@@ -5,12 +5,13 @@
 /// <reference types="@intlify/unplugin-vue-i18n/messages" />
 
 interface ImportMetaEnv {
+  APP_ENV?: 'local' | 'testing' | 'staging' | 'production';
   APP_NAME?: string;
-  APP_LOCALE?: 'id' | 'en';
+  APP_LOCALE?: AppLocale;
   APP_URL?: string;
   VITE_API_URL?: string;
   VITE_GTM_ID?: string;
-  VITE_SENTRY_DSN?: string;
+  SENTRY_DSN?: string;
 }
 
 declare module '*.vue' {

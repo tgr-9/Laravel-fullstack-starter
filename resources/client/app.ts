@@ -7,18 +7,27 @@ import 'virtual:windi.css'
 import '~/app.css'
 
 import { createThemeOverrides } from '~/utils/preference'
+import type { NavigationItem, NavigationType } from '~/utils/navigations'
 import '~/bootstrap'
 
-interface AppModuleContext {
-  app: App<Element>
-  isClient: boolean
-}
-
 declare global {
+  type AppLocale = 'id' | 'en'
+
   /**
    * Application module install function.
    */
   type AppModuleInstall = (ctx: AppModuleContext) => void
+
+  interface AppModuleContext {
+    app: App<Element>
+    isClient: boolean
+  }
+
+  interface Window {
+    __inertiaNavigatedCount: number
+    __navigations: Record<NavigationType, NavigationItem[]>
+    __translations: Record<AppLocale, any>
+  }
 }
 
 createThemeOverrides({
