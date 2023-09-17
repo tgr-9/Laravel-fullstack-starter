@@ -10,15 +10,13 @@ import { VitePWA as pwa } from 'vite-plugin-pwa'
 import { defineConfig, loadEnv } from 'vite'
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', ['APP', 'VITE'])
-
+  const env = loadEnv(mode, '.', ['APP', 'SENTRY', 'VITE'])
   const rootdir = 'resources/client'
 
   return {
     resolve: {
       alias: {
         '~/': `${resolve(__dirname, rootdir)}/`,
-        // 'ziggy/': `${resolve('vendor/tightenco/ziggy/src/js')}/`,
       },
     },
 

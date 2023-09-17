@@ -1,6 +1,12 @@
 import { createI18n } from 'vue-i18n'
 import messages from '@intlify/unplugin-vue-i18n/messages'
 
+declare global {
+  interface Window {
+    __translations: Record<AppLocale, any>
+  }
+}
+
 export const install: AppModuleInstall = ({ app, isClient }): void => {
   type Value = string | string[] | null
 

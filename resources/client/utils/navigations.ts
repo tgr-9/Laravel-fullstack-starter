@@ -140,7 +140,7 @@ export function useNavigation(type: NavigationType): Navigations {
     updateExpandedKeys([])
   }
 
-  const options: MenuOption[] = __navigations[type].map(transformMenu(type))
+  const options: MenuOption[] = window.__navigations[type].map(transformMenu(type))
 
   return { options, updateCollapse, updateActiveKey, updateExpandedKeys }
 }
