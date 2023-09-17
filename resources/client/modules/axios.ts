@@ -19,14 +19,13 @@ declare module 'vue' {
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.withCredentials = true
 axios.interceptors.response.use(response => response, (error: AxiosError) => {
-  // whatever you want to do with the error
-  captureException(error)
-  logger(error)
-
   if (error.response?.status === 401) {
     window.location.replace('/login')
     return
   }
+
+  // Capture error response data to sentry
+  captureException(error.response?.data)
 
   throw error
 })
