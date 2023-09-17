@@ -1,6 +1,3 @@
-/// <reference no-default-lib="true"/>
-/// <reference lib="WebWorker" />
-
 import { cacheNames, clientsClaim } from 'workbox-core'
 import { cleanupOutdatedCaches, precacheAndRoute } from 'workbox-precaching'
 import { setDefaultHandler } from 'workbox-routing'
