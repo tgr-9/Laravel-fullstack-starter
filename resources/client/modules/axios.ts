@@ -3,6 +3,8 @@ import axios from 'axios'
 import type { AxiosError, AxiosStatic } from 'axios'
 
 declare global {
+  const axios: AxiosStatic
+
   interface Window {
     axios: AxiosStatic
   }
@@ -17,21 +19,24 @@ declare module 'vue' {
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.withCredentials = true
 axios.interceptors.response.use(response => response, (error: AxiosError) => {
-  // if (error.response?.status === 401)
-  //   window.location.replace('/login')
-
-  if (error.response?.status === 422)
-    return error.response
-
   // whatever you want to do with the error
   captureException(error)
+  logger(error)
+
+  if (error.response?.status === 401) {
+    window.location.replace('/login')
+    return
+  }
+
+  throw error
 })
 
 if (import.meta.env.VITE_API_URL)
   axios.defaults.baseURL = import.meta.env.VITE_API_URL
 
-window.axios = axios
+export const install: AppModuleInstall = ({ app, isClient }): void => {
+  if (!isClient)
+    return
 
-export const install: AppModuleInstall = ({ app }): void => {
-  app.config.globalProperties.$axios = axios
+  app.config.globalProperties.$axios = window.axios = axios
 }
