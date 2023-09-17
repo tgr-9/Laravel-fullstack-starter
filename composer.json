@@ -61,9 +61,6 @@
       "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
       "@php artisan package:discover --ansi"
     ],
-    "post-update-cmd": [
-      "@php artisan vendor:publish --tag=creasi-assets --ansi --force"
-    ],
     "post-root-package-install": [
       "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
     ],
@@ -71,7 +68,7 @@
       "@php artisan key:generate --ansi"
     ],
     "dep": [
-      "vendor/bin/dep -f scripts/deploy.php"
+      "vendor/bin/dep --ansi -f scripts/deploy.php"
     ],
     "fix": [
       "pint --preset laravel --ansi"
