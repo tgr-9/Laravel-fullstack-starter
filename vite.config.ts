@@ -134,7 +134,6 @@ export default defineConfig(({ mode }) => {
           name: env.APP_NAME,
           short_name: env.APP_NAME,
           start_url: '/',
-          display: 'fullscreen',
           background_color: '#ffffff',
           lang: env.APP_LOCALE || 'id',
           scope: '/',
