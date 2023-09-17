@@ -60,9 +60,11 @@ jobs:
           cache: pnpm
           node-version: 18.x
 
-      - name: Get Composer cache directory
+      - name: Prepare composer
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          composer config -g github-oauth.github.com ${{ secrets.PAT }}
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
         uses: actions/cache@v3
@@ -72,20 +74,15 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
-        uses: nick-invision/retry@v2
-        with:
-          timeout_minutes: 5
-          max_attempts: 3
-          command: |
-            composer config -g github-oauth.github.com ${{ secrets.PAT }}
-            composer install --prefer-dist --no-interaction --no-progress
-            composer ziggy:generate
+        run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Install node.js dependencies
         run: pnpm install
 
       - name: Build frontend
-        run: pnpm build --mode ${{ vars.APP_ENV }}
+        run: |
+          composer ziggy:generate
+          pnpm build --mode ${{ vars.APP_ENV }}
 
       - name: Deploy
         uses: deployphp/action@v1
