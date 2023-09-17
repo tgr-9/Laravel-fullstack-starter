@@ -50,6 +50,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.APP_LOCALE': JSON.stringify(env.APP_LOCALE),
       'import.meta.env.APP_URL': JSON.stringify(env.APP_URL),
       'import.meta.env.APP_ENV': JSON.stringify(env.APP_ENV),
+      'import.meta.env.SENTRY_DSN': JSON.stringify(env.SENTRY_DSN),
     },
 
     plugins: [
