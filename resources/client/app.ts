@@ -1,34 +1,12 @@
-import { createInertiaApp, router } from '@inertiajs/vue3'
-import type { App, DefineComponent } from 'vue'
+import { createInertiaApp } from '@inertiajs/vue3'
+import type { DefineComponent } from 'vue'
 import { createApp, h } from 'vue'
+
+import { createThemeOverrides } from '~/utils/preference'
 
 // import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
-
-import { createThemeOverrides } from '~/utils/preference'
-import type { NavigationItem, NavigationType } from '~/utils/navigations'
-import '~/bootstrap'
-
-declare global {
-  type AppLocale = 'id' | 'en'
-
-  /**
-   * Application module install function.
-   */
-  type AppModuleInstall = (ctx: AppModuleContext) => void
-
-  interface AppModuleContext {
-    app: App<Element>
-    isClient: boolean
-  }
-
-  interface Window {
-    __inertiaNavigatedCount: number
-    __navigations: Record<NavigationType, NavigationItem[]>
-    __translations: Record<AppLocale, any>
-  }
-}
 
 createThemeOverrides({
   common: {
@@ -46,18 +24,8 @@ createThemeOverrides({
   },
 })
 
-const isClient = typeof window !== 'undefined'
-
-if (isClient) {
-  window.__inertiaNavigatedCount = window.__inertiaNavigatedCount || 0
-
-  router.on('navigate', () => {
-    window.__inertiaNavigatedCount++
-  })
-}
-
-const layouts = import.meta.glob<DefineComponent>('./layouts/*.vue', { eager: true })
-const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
+const layouts = import.meta.glob<{ default: DefineComponent }>('./layouts/*.vue', { eager: true })
+const pages = import.meta.glob<{ default: DefineComponent }>('./pages/**/*.vue', { eager: true })
 
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
@@ -78,6 +46,7 @@ createInertiaApp({
     return page
   },
   setup({ el, App, props, plugin }) {
+    const isClient = typeof window !== 'undefined'
     const app = createApp({ render: () => h(App, props) })
       .use(plugin)
 

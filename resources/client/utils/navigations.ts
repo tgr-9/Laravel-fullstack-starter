@@ -1,7 +1,8 @@
 import { Icon } from '@iconify/vue'
 import { Link, router } from '@inertiajs/vue3'
+import type { RemovableRef } from '@vueuse/core'
 import type { DropdownOption, MenuOption } from 'naive-ui'
-import type { AppRoutes } from '~/modules/ziggy'
+import type { AppRoutes } from '~/modules/inertia'
 
 export interface NavigationItem {
   label: string
@@ -10,6 +11,15 @@ export interface NavigationItem {
   type?: 'divider' | 'group'
   disabled?: boolean
   children?: NavigationItem[]
+}
+
+/**
+ * Global menu preference.
+ */
+export interface MenuPreference {
+  collapsed: boolean
+  activeKey?: string
+  expandedKeys: string[]
 }
 
 /**
@@ -43,6 +53,14 @@ interface NavigationOptions {
 }
 
 export type NavigationType = keyof NavigationOptions
+
+/**
+ * State of global menu preference.
+ */
+export const menuPreference: RemovableRef<MenuPreference> = useSessionStorage<MenuPreference>('menu-preference', {
+  collapsed: false,
+  expandedKeys: [],
+})
 
 /**
  * Transform navigation structure.
@@ -143,4 +161,10 @@ export function useNavigation(type: NavigationType): Navigations {
   const options: MenuOption[] = window.__navigations[type].map(transformMenu(type))
 
   return { options, updateCollapse, updateActiveKey, updateExpandedKeys }
+}
+
+declare global {
+  interface Window {
+    __navigations: Record<NavigationType, NavigationItem[]>
+  }
 }

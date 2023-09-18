@@ -1,4 +1,3 @@
-import { useSessionStorage } from '@vueuse/core'
 import type { BasicColorSchema, RemovableRef } from '@vueuse/core'
 import type { ComputedRef } from 'vue'
 import { darkTheme, dateEnUS, dateIdID, enUS, idID } from 'naive-ui'
@@ -8,17 +7,8 @@ import type { GlobalTheme, GlobalThemeOverrides, NDateLocale, NLocale } from 'na
  * Global application preference.
  */
 export interface AppPreference {
-  locale: string
+  locale: AppLocale | string
   theme: BasicColorSchema
-}
-
-/**
- * Global menu preference.
- */
-export interface MenuPreference {
-  collapsed: boolean
-  activeKey?: string
-  expandedKeys: string[]
 }
 
 /**
@@ -39,14 +29,6 @@ interface NaiveConfig {
 export const appPreference: RemovableRef<AppPreference> = useSessionStorage<AppPreference>('app-preference', {
   locale: document.documentElement.lang,
   theme: 'auto',
-})
-
-/**
- * State of global menu preference.
- */
-export const menuPreference: RemovableRef<MenuPreference> = useSessionStorage<MenuPreference>('menu-preference', {
-  collapsed: false,
-  expandedKeys: [],
 })
 
 const themeOverrides: GlobalThemeOverrides = {}
