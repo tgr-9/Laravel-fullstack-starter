@@ -11,10 +11,10 @@ export const install: AppModuleInstall = ({ app, isClient }): void => {
     { configProviderProps },
   )
 
-  app.provide('$message', message)
-  app.provide('$dialog', dialog)
-  app.provide('$notification', notification)
-  app.provide('$loading', loadingBar)
+  app.provide('$message', readonly(message))
+  app.provide('$dialog', readonly(dialog))
+  app.provide('$notification', readonly(notification))
+  app.provide('$loading', readonly(loadingBar))
 
   app.config.globalProperties.$message = message
   app.config.globalProperties.$dialog = dialog
