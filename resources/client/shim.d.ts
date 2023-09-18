@@ -1,5 +1,6 @@
 import type { PageProps, Page } from '@inertiajs/core'
 import type { App } from 'vue'
+import { DefineLocaleMessage, VueI18nResolveLocaleMessageTranslation } from 'vue-i18n'
 
 export {}
 
@@ -29,6 +30,23 @@ declare global {
   interface AppModuleContext {
     app: App<Element>
     isClient: boolean
+  }
+}
+
+declare module '@vue/runtime-core' {
+  /**
+   * Component Custom Options for page components
+   */
+  export interface ComponentCustomOptions {
+    /**
+     * Define layout title
+     */
+    layoutName?: string
+
+    /**
+     * Define page name
+     */
+    pageName?: string
   }
 }
 
