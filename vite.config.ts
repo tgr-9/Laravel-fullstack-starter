@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin'
@@ -12,6 +13,21 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', ['APP', 'SENTRY', 'VITE'])
   const rootdir = 'resources/client'
+
+  function httpsCert() {
+    if (!env.APP_URL.startsWith('https://'))
+      return false
+
+    try {
+      return {
+        cert: readFileSync(resolve(__dirname, 'storage/local-cert.pem')),
+        key: readFileSync(resolve(__dirname, 'storage/local-key.pem')),
+      }
+    }
+    catch {
+      return false
+    }
+  }
 
   return {
     resolve: {
@@ -49,6 +65,10 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.APP_URL': JSON.stringify(env.APP_URL),
       'import.meta.env.APP_ENV': JSON.stringify(env.APP_ENV),
       'import.meta.env.SENTRY_DSN': JSON.stringify(env.SENTRY_DSN),
+    },
+
+    server: {
+      https: httpsCert(),
     },
 
     plugins: [
