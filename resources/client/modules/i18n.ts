@@ -6,7 +6,7 @@ export const install: AppModuleInstall = ({ app, isClient }): void => {
 
   const i18n = createI18n({
     legacy: false,
-    locale: document.documentElement.lang,
+    locale: appPreference.value.locale,
     messages,
   })
 

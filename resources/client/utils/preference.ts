@@ -1,7 +1,6 @@
 import type { BasicColorSchema, RemovableRef } from '@vueuse/core'
-import type { ComputedRef } from 'vue'
 import { darkTheme, dateEnUS, dateIdID, enUS, idID, lightTheme } from 'naive-ui'
-import type { GlobalTheme, GlobalThemeOverrides, NDateLocale, NLocale } from 'naive-ui'
+import type { ConfigProviderProps, DialogApi, GlobalThemeOverrides, LoadingBarApi, MessageApi, NDateLocale, NLocale, NotificationApi } from 'naive-ui'
 
 /**
  * Global application preference.
@@ -9,18 +8,6 @@ import type { GlobalTheme, GlobalThemeOverrides, NDateLocale, NLocale } from 'na
 export interface AppPreference {
   locale: AppLocale | string
   theme: BasicColorSchema
-}
-
-/**
- * Naive-ui config-provider values.
- *
- * @see https://www.naiveui.com/en-US/os-theme/components/config-provider
- */
-interface NaiveConfig {
-  theme: ComputedRef<GlobalTheme | null>
-  themeOverrides: GlobalThemeOverrides
-  locale: NLocale
-  dateLocale: NDateLocale
 }
 
 /**
@@ -55,10 +42,21 @@ export function createThemeOverrides(overrides: GlobalThemeOverrides): void {
 }
 
 /**
+ * Use naive-ui Discrete API
+ */
+export function useNaiveDiscreteApi() {
+  return {
+    message: inject('$message') as MessageApi,
+    notification: inject('$notification') as NotificationApi,
+    dialog: inject('$dialog') as DialogApi,
+    loading: inject('$loading') as LoadingBarApi,
+  }
+}
+
+/**
  * Use naive-ui configuration
  */
-export function useNaiveConfig(): NaiveConfig {
-  const i18n = useI18n()
+export function useNaiveConfig(): ConfigProviderProps {
   const theme = computed(() => appPreference.value.theme === 'dark' ? darkTheme : lightTheme)
 
   const locales: { [k in string]: NLocale } = {
@@ -72,9 +70,9 @@ export function useNaiveConfig(): NaiveConfig {
   }
 
   return {
-    theme,
+    theme: theme.value,
     themeOverrides,
-    locale: locales[i18n.locale.value],
-    dateLocale: dateLocales[i18n.locale.value],
+    locale: locales[appPreference.value.locale],
+    dateLocale: dateLocales[appPreference.value.locale],
   }
 }
