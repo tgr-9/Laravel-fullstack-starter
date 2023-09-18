@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Head as iHead } from '@inertiajs/vue3'
+defineOptions({
+  pageName: 'account.profile.page',
+})
 </script>
 
 <template>
-  <i-head :title="$t('account.profile.page')" />
-
   <h3>Your Profile Goes Here</h3>
 </template>

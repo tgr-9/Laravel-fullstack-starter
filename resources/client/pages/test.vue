@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import { Head as iHead } from '@inertiajs/vue3'
 import type { NotificationType } from 'naive-ui'
+
+defineOptions({
+  pageName: 'account.settings.page',
+})
 
 const { notification } = useNaiveDiscreteApi()
 
@@ -12,8 +15,6 @@ function notify(type: NotificationType) {
 </script>
 
 <template>
-  <i-head :title="$t('account.profile.page')" />
-
   <h3>Helps and Supports Goes Here</h3>
 
   <n-button @click="$message.info('test')">

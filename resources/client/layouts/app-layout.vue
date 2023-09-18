@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { usePage } from '@inertiajs/vue3'
+import { Head as iHead, usePage } from '@inertiajs/vue3'
 import type { MaybeElement } from '@vueuse/core'
 import { breakpointsTailwind } from '@vueuse/core'
 import type { MenuInst } from 'naive-ui'
@@ -8,6 +8,10 @@ import type { MenuInst } from 'naive-ui'
 defineOptions({
   inheritAttrs: false,
 })
+
+const { title } = defineProps<{
+  title?: string
+}>()
 
 const mainMenu = ref<MenuInst | null>(null)
 const userMenu = ref<VNode | null>(null)
@@ -60,6 +64,8 @@ function touchEnd(e: TouchEvent) {
 </script>
 
 <template>
+  <i-head v-if="title" :title="$t(title)" />
+
   <app-wrapper class="app-layout">
     <n-layout has-sider @touchstart="touchStart" @touchend="touchEnd">
       <n-layout-sider
@@ -145,10 +151,6 @@ function touchEnd(e: TouchEvent) {
       & > &-section {
         @apply w-full;
       }
-    }
-
-    &-content > &-scroll-container {
-      @apply py-6 px-2 sm:px-6;
     }
   }
 }

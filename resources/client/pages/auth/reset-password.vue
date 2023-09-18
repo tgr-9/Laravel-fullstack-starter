@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Head as iHead, useForm } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 
 defineOptions({
+  pageName: 'auth.routes.reset-password',
   layoutName: 'guest-layout',
 })
 
@@ -31,8 +32,6 @@ function submit() {
 </script>
 
 <template>
-  <i-head :title="$t('auth.routes.reset-password')" />
-
   <n-alert :title="$t('auth.routes.reset-password')" type="info">
     {{ $t('auth.notices.forgot-password') }}
   </n-alert>

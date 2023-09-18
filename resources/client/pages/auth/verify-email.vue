@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { Head as iHead } from '@inertiajs/vue3'
-
 defineOptions({
+  pageName: 'auth.routes.verify-email',
   layoutName: 'guest-layout',
 })
 
@@ -11,8 +10,6 @@ function resend() {
 </script>
 
 <template>
-  <i-head :title="$t('auth.routes.verify-email')" />
-
   <n-alert :title="$t('auth.routes.verify-email')" type="info">
     {{ $t('auth.notices.verify-email') }}
   </n-alert>

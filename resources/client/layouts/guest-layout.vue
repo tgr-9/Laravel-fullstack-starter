@@ -1,10 +1,18 @@
 <script setup lang="ts">
+import { Head as iHead } from '@inertiajs/vue3'
+
 defineOptions({
   inheritAttrs: false,
 })
+
+const { title } = defineProps<{
+  title?: string
+}>()
 </script>
 
 <template>
+  <i-head v-if="title" :title="$t(title)" />
+
   <app-wrapper class="guest-layout">
     <n-layout>
       <n-space vertical>
