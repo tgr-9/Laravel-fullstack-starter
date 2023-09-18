@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { NDialogProvider, NMessageProvider, NNotificationProvider } from 'naive-ui'
-
 const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
 </script>
 
@@ -12,13 +10,7 @@ const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
     :date-locale="dateLocale"
     class="app-wrapper"
   >
-    <n-message-provider :theme="theme?.Message" :theme-overrides="themeOverrides.Message">
-      <n-notification-provider :theme="theme?.Notification" :theme-overrides="themeOverrides.Notification">
-        <n-dialog-provider :theme="theme?.Dialog" :theme-overrides="themeOverrides.Dialog">
-          <slot />
-        </n-dialog-provider>
-      </n-notification-provider>
-    </n-message-provider>
+    <slot />
   </n-config-provider>
 </template>
 
@@ -26,7 +18,7 @@ const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
 .app-wrapper {
   .n-layout {
     > & > &-scroll-container {
-      @apply min-h-screen flex;
+      @apply min-h-screen;
     }
   }
 }
