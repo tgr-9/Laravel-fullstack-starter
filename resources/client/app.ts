@@ -41,6 +41,7 @@ createInertiaApp({
     if (!layout)
       throw new Error(`Could not find page layout '${layoutName}'`)
 
+    page.default.name = name.replace('/', '-')
     page.default.layout = h(layout.default, { title: page.default.pageName })
 
     return page
