@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Head as iHead, useForm } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 
 defineOptions({
+  pageName: 'auth.routes.confirm-password',
   layoutName: 'guest-layout',
 })
 
@@ -25,8 +26,6 @@ function submit() {
 </script>
 
 <template>
-  <i-head :title="$t('auth.routes.confirm-password')" />
-
   <div class="mb-4 text-sm text-gray-600">
     {{ $t('auth.notices.confirm-password') }}
   </div>

@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Head as iHead, Link as iLink, useForm } from '@inertiajs/vue3'
+import { Link as iLink, useForm } from '@inertiajs/vue3'
 
 defineOptions({
+  pageName: 'auth.routes.register',
   layoutName: 'guest-layout',
 })
 
@@ -31,8 +32,6 @@ function submit() {
 </script>
 
 <template>
-  <i-head :title="$t('auth.routes.register')" />
-
   <n-form :model="model" class="form-login" @submit.prevent="submit">
     <n-form-item
       :label="$t('auth.email.label')"
