@@ -5,6 +5,7 @@ import ziggyRoute from 'ziggy-js'
 import { Ziggy } from '~/ziggy.cjs'
 
 export type AppRoutes = typeof Ziggy.routes
+export type RouteFunction = typeof ziggyRoute
 
 export const install: AppModuleInstall = ({ app, isClient }): void => {
   if (!isClient)
@@ -16,25 +17,25 @@ export const install: AppModuleInstall = ({ app, isClient }): void => {
     window.__inertiaNavigatedCount++
   })
 
-  const route = (name: keyof AppRoutes, params: any, absolute: boolean) => {
+  const route = (name: keyof AppRoutes, params?: any, absolute?: boolean) => {
     return ziggyRoute(name, params, absolute, Ziggy as Config)
   }
 
-  app.config.globalProperties.$route = window.route = route as typeof ziggyRoute
+  app.config.globalProperties.$route = window.route = route as RouteFunction
 }
 
 declare global {
-  const route: typeof ziggyRoute
+  const route: RouteFunction
 
   interface Window {
     __inertiaNavigatedCount: number
-    route: typeof ziggyRoute
+    route: RouteFunction
   }
 }
 
 declare module 'vue' {
   interface ComponentCustomProperties {
-    $route: typeof ziggyRoute
+    $route: RouteFunction
   }
 }
 
@@ -43,6 +44,5 @@ declare module 'ziggy-js' {
     name: keyof AppRoutes,
     params?: RouteParamsWithQueryOverload | RouteParam,
     absolute?: boolean,
-    config?: Config
   ): string
 }
