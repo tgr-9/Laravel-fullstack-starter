@@ -1,6 +1,5 @@
 import type { PageProps, Page } from '@inertiajs/core'
 import type { App } from 'vue'
-import { DefineLocaleMessage, VueI18nResolveLocaleMessageTranslation } from 'vue-i18n'
 
 export {}
 
