@@ -31,17 +31,17 @@ class NavigationsComposer
                 'type' => 'divider',
             ],
             [
-                'route' => null,
+                'route' => 'parent.home',
                 'label' => 'Sample Menu',
                 'icon' => 'tabler:box',
                 'children' => [
                     [
-                        'route' => null,
+                        'route' => 'parent.child-1.home',
                         'label' => 'Sample SubMenu 1',
                         'icon' => 'tabler:box',
                     ],
                     [
-                        'route' => null,
+                        'route' => 'parent.child-2.home',
                         'label' => 'Sample SubMenu 2',
                         'icon' => 'tabler:box',
                     ],

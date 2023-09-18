@@ -1,6 +1,6 @@
 import type { BasicColorSchema, RemovableRef } from '@vueuse/core'
 import type { ComputedRef } from 'vue'
-import { darkTheme, dateEnUS, dateIdID, enUS, idID } from 'naive-ui'
+import { darkTheme, dateEnUS, dateIdID, enUS, idID, lightTheme } from 'naive-ui'
 import type { GlobalTheme, GlobalThemeOverrides, NDateLocale, NLocale } from 'naive-ui'
 
 /**
@@ -59,7 +59,7 @@ export function createThemeOverrides(overrides: GlobalThemeOverrides): void {
  */
 export function useNaiveConfig(): NaiveConfig {
   const i18n = useI18n()
-  const theme = computed(() => appPreference.value.theme === 'dark' ? darkTheme : null)
+  const theme = computed(() => appPreference.value.theme === 'dark' ? darkTheme : lightTheme)
 
   const locales: { [k in string]: NLocale } = {
     id: idID,
