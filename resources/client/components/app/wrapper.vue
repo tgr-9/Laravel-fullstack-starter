@@ -15,10 +15,10 @@ const { locale, dateLocale, theme, themeOverrides } = useNaiveConfig()
 </template>
 
 <style lang="postcss">
-.app-wrapper {
-  .n-layout {
-    > & > &-scroll-container {
-      @apply min-h-screen;
+.n-layout {
+  &, &-sider {
+    & > &-scroll-container {
+      @apply min-h-screen flex flex-col;
     }
   }
 }
