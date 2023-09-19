@@ -6,7 +6,7 @@ defineOptions({
 })
 
 const { title } = defineProps<{
-  title?: string
+  title: string
 }>()
 </script>
 

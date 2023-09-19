@@ -22,6 +22,9 @@ createThemeOverrides({
     gapMedium: '16px',
     gapSmall: '9px',
   },
+  Breadcrumb: {
+    itemLineHeight: 1,
+  },
 })
 
 const layouts = import.meta.glob<{ default: DefineComponent }>('./layouts/*.vue', { eager: true })

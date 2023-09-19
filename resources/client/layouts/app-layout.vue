@@ -10,7 +10,7 @@ defineOptions({
 })
 
 const { title } = defineProps<{
-  title?: string
+  title: string
 }>()
 
 const mainMenu = ref<MenuInst | null>(null)
@@ -67,7 +67,7 @@ function touchEnd(e: TouchEvent) {
   <i-head v-if="title" :title="$t(title)" />
 
   <app-wrapper class="app-layout">
-    <n-layout has-sider @touchstart="touchStart" @touchend="touchEnd">
+    <n-layout has-sider class="transition-all" @touchstart="touchStart" @touchend="touchEnd">
       <n-layout-sider
         ref="sider"
         bordered
@@ -77,8 +77,9 @@ function touchEnd(e: TouchEvent) {
         :on-update:collapsed="updateCollapse"
         :position="siderPosition"
         :show-trigger="!onMediumScreen"
+        class="z-10 transition-all"
       >
-        <header id="logo-wrapper" class="n-layout-sider-section">
+        <header id="logo-wrapper" class="n-layout-sider-section w-full py-3">
           <transition>
             <main-logo
               :width="logoWidth"
@@ -89,7 +90,7 @@ function touchEnd(e: TouchEvent) {
           </transition>
         </header>
 
-        <main id="main-navigation" class="n-layout-sider-section flex-grow">
+        <main id="main-navigation" class="n-layout-sider-section w-full flex-grow py-2">
           <n-menu
             ref="mainMenu"
             v-model:value="menuPreference.activeKey"
@@ -103,7 +104,7 @@ function touchEnd(e: TouchEvent) {
           />
         </main>
 
-        <footer id="user-navigation" class="n-layout-sider-section px-2 flex-grow-0 flex-shrink-0">
+        <footer id="user-navigation" class="n-layout-sider-section w-full p-3 flex-grow-0 flex-shrink-0">
           <n-dropdown
             ref="userMenu"
             trigger="click"
@@ -128,43 +129,31 @@ function touchEnd(e: TouchEvent) {
       </n-layout-sider>
 
       <n-layout-content>
-        <n-space vertical size="large">
+        <page-header :paths="['Accounts']" class="page-content-section">
+          <h1 class="text-xl font-bold" v-html="$t(title)" />
+        </page-header>
+
+        <page-main class="page-content-section">
           <slot />
-        </n-space>
+        </page-main>
+
+        <page-footer class="page-content-section" />
       </n-layout-content>
     </n-layout>
   </app-wrapper>
 </template>
 
 <style lang="postcss">
-.app-layout {
-  .n-layout {
-    @apply transition-all;
-
-    &-sider {
-      @apply z-10 transition-all;
-
-      & > &-scroll-container {
-        @apply flex flex-col min-h-screen py-3;
-      }
-
-      & > &-section {
-        @apply w-full;
-      }
-    }
-  }
+.page-content-section {
+  @apply px-4;
 }
 
 #logo-wrapper {
-  @apply h-14 px-6 flex items-center justify-center;
+  @apply px-6 flex items-center justify-center;
 
   &:has(.collapsed) {
     @apply px-2;
   }
-}
-
-#main-navigation {
-  @apply py-2;
 }
 
 #user-navigation {
