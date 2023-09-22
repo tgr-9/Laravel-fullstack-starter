@@ -1,25 +1,11 @@
-import type { BasicColorSchema, RemovableRef } from '@vueuse/core'
 import { darkTheme, dateEnUS, dateIdID, enUS, idID, lightTheme } from 'naive-ui'
 import type { ConfigProviderProps, DialogApi, GlobalThemeOverrides, LoadingBarApi, MessageApi, NDateLocale, NLocale, NotificationApi } from 'naive-ui'
 
-/**
- * Global application preference.
- */
-export interface AppPreference {
-  locale: AppLocale | string
-  theme: BasicColorSchema
-}
-
-/**
- * State of global application preference.
- */
-export const appPreference: RemovableRef<AppPreference> = useSessionStorage<AppPreference>('app-preference', {
-  locale: document.documentElement.lang,
-  theme: 'auto',
-})
-
 const themeOverrides: GlobalThemeOverrides = {}
 
+/**
+ * @see https://vueuse.org/core/useDark
+ */
 const isDark = useDark({
   initialValue: appPreference.value.theme,
   onChanged(isDark, handler, mode) {
@@ -29,6 +15,9 @@ const isDark = useDark({
   },
 })
 
+/**
+ * @see https://vueuse.org/shared/useToggle
+ */
 export const toggleTheme = useToggle(isDark)
 
 /**
