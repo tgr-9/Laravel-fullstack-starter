@@ -18,7 +18,12 @@ export const install: AppModuleInstall = ({ app, isClient }): void => {
   })
 
   const route = (name: keyof AppRoutes, params?: any, absolute?: boolean) => {
-    return ziggyRoute(name, params, absolute, Ziggy as Config)
+    const config = {
+      ...Ziggy,
+      url: import.meta.env.APP_URL as string,
+    } as Config
+
+    return ziggyRoute(name, params, absolute, config)
   }
 
   app.config.globalProperties.$route = window.route = route as RouteFunction
