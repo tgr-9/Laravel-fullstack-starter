@@ -2,8 +2,6 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import type { DefineComponent } from 'vue'
 import { createApp, h } from 'vue'
 
-import { createThemeOverrides } from '~/utils/preference'
-
 // import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
