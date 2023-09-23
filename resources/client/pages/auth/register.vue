@@ -2,7 +2,6 @@
 import { Link as iLink, useForm } from '@inertiajs/vue3'
 
 defineOptions({
-  pageName: 'auth.routes.register',
   layoutName: 'guest-layout',
 })
 
