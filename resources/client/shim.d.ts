@@ -32,23 +32,33 @@ declare global {
   }
 }
 
+declare module '@inertiajs/vue3' {
+  export function usePage<T extends AppPageProps>(): Page<T>
+}
+
 declare module '@vue/runtime-core' {
   /**
    * Component Custom Options for page components
    */
   export interface ComponentCustomOptions {
     /**
-     * Define layout title
+     * Name of layout component to use in current page
      */
     layoutName?: string
 
     /**
-     * Define page name
+     * Define current page name based on existing translation key
      */
     pageName?: string
-  }
-}
 
-declare module '@inertiajs/vue3' {
-  export function usePage<T extends AppPageProps>(): Page<T>
+    /**
+     * Define current page title
+     */
+    pageTitle?: string
+
+    /**
+     * Define paths of current page
+     */
+    breadcrumb?: string[]
+  }
 }

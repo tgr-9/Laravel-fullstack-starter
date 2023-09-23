@@ -5,20 +5,25 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const { title } = defineProps<{
-  title: string
+const prop = defineProps<{
+  page: string
+  paths: string[]
+  title?: string
 }>()
+
+const { t } = useI18n()
+const pageTitle = computed(() => prop.title || t(prop.page))
 </script>
 
 <template>
-  <i-head v-if="title" :title="$t(title)" />
+  <i-head :title="pageTitle" />
 
   <app-wrapper class="guest-layout">
     <n-layout>
       <n-space vertical>
         <main-logo />
 
-        <n-card>
+        <n-card :title="pageTitle">
           <slot />
         </n-card>
       </n-space>

@@ -2,7 +2,6 @@
 import { useForm } from '@inertiajs/vue3'
 
 defineOptions({
-  pageName: 'auth.routes.confirm-password',
   layoutName: 'guest-layout',
 })
 

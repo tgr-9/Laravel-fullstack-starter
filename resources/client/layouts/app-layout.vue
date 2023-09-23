@@ -1,23 +1,27 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { Head as iHead, usePage } from '@inertiajs/vue3'
-import type { MaybeElement } from '@vueuse/core'
 import { breakpointsTailwind } from '@vueuse/core'
+import { NDropdown, NLayoutSider, NMenu } from 'naive-ui'
 import type { MenuInst } from 'naive-ui'
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const { title } = defineProps<{
-  title: string
+const prop = defineProps<{
+  page: string
+  paths: string[]
+  title?: string
 }>()
 
-const mainMenu = ref<MenuInst | null>(null)
-const userMenu = ref<VNode | null>(null)
-const sider = ref<MaybeElement | null>(null)
-
+const { t } = useI18n()
 const { props } = usePage()
+
+const mainMenu = ref<InstanceType<typeof NMenu> | MenuInst | null>(null)
+const userMenu = ref<InstanceType<typeof NDropdown> | null>(null)
+const sider = ref<InstanceType<typeof NLayoutSider> | null>(null)
+
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const onSmallScreen = breakpoints.smallerOrEqual('sm')
 const onMediumScreen = breakpoints.smallerOrEqual('md')
@@ -34,6 +38,7 @@ const {
   updateActiveKey: updateUserActiveKey,
 } = useNavigation('user')
 
+const pageTitle = computed(() => prop.title || t(prop.page))
 const siderCollapsed = computed(() => menuPreference.value.collapsed || (onMediumScreen.value && !onSmallScreen.value))
 const siderPosition = computed(() => onSmallScreen.value ? 'absolute' : 'static')
 const siderCollapsedMode = computed(() => onSmallScreen.value ? 'transform' : 'width')
@@ -64,7 +69,7 @@ function touchEnd(e: TouchEvent) {
 </script>
 
 <template>
-  <i-head v-if="title" :title="$t(title)" />
+  <i-head :title="pageTitle" />
 
   <app-wrapper class="app-layout">
     <n-layout has-sider class="transition-all" @touchstart="touchStart" @touchend="touchEnd">
@@ -129,8 +134,8 @@ function touchEnd(e: TouchEvent) {
       </n-layout-sider>
 
       <n-layout-content>
-        <page-header :paths="['Accounts']" class="page-content-section">
-          <h1 class="text-xl font-bold" v-html="$t(title)" />
+        <page-header :paths="paths" class="page-content-section">
+          <h1 class="text-xl font-bold" v-html="pageTitle" />
         </page-header>
 
         <page-main class="page-content-section">

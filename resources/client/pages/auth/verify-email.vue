@@ -1,11 +1,10 @@
 <script setup lang="ts">
 defineOptions({
-  pageName: 'auth.routes.verify-email',
   layoutName: 'guest-layout',
 })
 
 function resend() {
-  console.log('sending request to', route('verification.send')) // eslint-disable-line no-console
+  logger('sending request to', route('verification.send'))
 }
 </script>
 

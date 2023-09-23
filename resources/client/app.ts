@@ -28,6 +28,16 @@ createThemeOverrides({
 const layouts = import.meta.glob<{ default: DefineComponent }>('./layouts/*.vue', { eager: true })
 const pages = import.meta.glob<{ default: DefineComponent }>('./pages/**/*.vue', { eager: true })
 
+function getPageKey(name: string, defined?: string): string {
+  if (defined)
+    return defined
+
+  const segment = name.split('/')
+  segment.splice(1, 0, 'routes')
+
+  return segment.join('.')
+}
+
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
   resolve: (name) => {
@@ -43,7 +53,11 @@ createInertiaApp({
       throw new Error(`Could not find page layout '${layoutName}'`)
 
     page.default.name = name.replace('/', '-')
-    page.default.layout = h(layout.default, { title: page.default.pageName })
+    page.default.layout = h(layout.default, {
+      page: getPageKey(name, page.default.pageName),
+      title: page.default.pageTitle,
+      paths: page.default.breadcrumb || [],
+    })
 
     return page
   },
