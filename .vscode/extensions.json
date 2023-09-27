@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "adrianwilczynski.alpine-js-intellisense",
     "amiralizadeh9480.laravel-extra-intellisense",
     "bmewburn.vscode-intelephense-client",
     "cpylua.language-postcss",
@@ -15,6 +14,7 @@
     "onecentlin.laravel-blade",
     "rangav.vscode-thunder-client",
     "voorjaar.windicss-intellisense",
-    "vue.volar"
+    "vue.volar",
+    "xdebug.php-debug"
   ]
 }
