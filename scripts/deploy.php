@@ -2,11 +2,15 @@
 
 namespace Deployer;
 
+$rootDir = \realpath(__DIR__.'/..');
+
 require 'recipe/laravel.php';
+require $rootDir.'/vendor/autoload.php';
 
 // Config
 
 set('repository', 'git@github.com:creasico/laravel-project.git');
+set('keep_releases', 5);
 
 add('shared_files', []);
 add('shared_dirs', ['public/vendor']);
@@ -14,26 +18,28 @@ add('writable_dirs', ['storage']);
 
 // Hosts
 
-host('creasi.dev')
-    ->set('remote_user', 'deployer')
-    ->set('deploy_path', '/var/www/skeleton');
+host('skeleton.creasi.dev')
+    ->setHostname('creasi.dev')
+    ->setRemoteUser('deployer')
+    ->setDeployPath('/var/www/skeleton')
+    ->setLabels(['env' => 'staging']);
 
 // Tasks
 
 task('deploy:assets', function () {
-    $host = currentHost();
+    $conn = currentHost()->connectionString();
 
-    runLocally("rsync -zrtv ../public/build/* {$host->connectionString()}:{{release_or_current_path}}/public/build");
+    runLocally("rsync -zrtv ../public/build/* {$conn}:{{release_or_current_path}}/public/build");
 })->desc('Deploy static assets');
 
 // Hooks
 
-after('deploy:vendors', 'deploy:assets');
 after('deploy:failed', 'deploy:unlock');
 
 task('deploy', [
     'deploy:prepare',
     'deploy:vendors',
+    'deploy:assets',
     'artisan:storage:link',
     'artisan:optimize:clear',
     'artisan:down',
