@@ -22,15 +22,16 @@ const validation = reactiveComputed<{ [k in keyof Partial<LoginForm>]: 'error' |
   password: model.errors.password !== undefined ? 'error' : undefined,
 }))
 
-function submit() {
-  model.post(route('login'), {
+function submit(e: Event) {
+  const target = e.target as HTMLFormElement
+  model.post(target.action, {
     onFinish: () => model.reset('password'),
   })
 }
 </script>
 
 <template>
-  <n-form :model="model" class="form-login" @submit.prevent="submit">
+  <n-form :action="$route('login')" :model="model" class="form-login" @submit.prevent="submit">
     <n-form-item
       :label="$t('auth.username.label')"
       :feedback="model.errors.username"
