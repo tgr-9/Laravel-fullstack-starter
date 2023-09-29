@@ -35,9 +35,9 @@ class Register extends Page
     public function elements()
     {
         return [
-            '@email' => '#email input[type="text"]',
-            '@password' => '#password input[type="password"]',
-            '@confirmPassword' => '#confirm-password input[type="password"]',
+            '@email' => 'input#email',
+            '@password' => 'input#password',
+            '@confirmPassword' => 'input#confirm_password',
             '@register' => 'button[type=submit]',
         ];
     }

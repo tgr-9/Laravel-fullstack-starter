@@ -17,10 +17,12 @@ class AuthenticationTest extends DuskTestCase
         $this->browse(function (Browser $browser) {
             $page = $browser->visit(new Login);
 
-            $page->assertFocused('#username input[type="text"]')
-                ->type('@username', 'johndoe')
+            $page->assertFocused('@username');
+
+            $page->type('@username', 'johndoe')
                 ->type('@password', 'secret')
-                ->pressAndWaitFor('@login');
+                ->press('@login')
+                ->waitFor('.n-form-item-feedback-wrapper');
 
             $page->assertSee(__('auth.failed'));
         });
@@ -39,8 +41,9 @@ class AuthenticationTest extends DuskTestCase
         $this->browse(function (Browser $browser) use ($user) {
             $page = $browser->visit(new Login);
 
-            $page->assertFocused('#username input[type="text"]')
-                ->type('@username', $user->name)
+            $page->assertFocused('@username');
+
+            $page->type('@username', $user->name)
                 ->type('@password', 'secret')
                 ->press('@login')
                 ->waitForInertia();
