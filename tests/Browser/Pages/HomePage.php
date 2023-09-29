@@ -2,6 +2,7 @@
 
 namespace Tests\Browser\Pages;
 
+use App\Providers\RouteServiceProvider;
 use Laravel\Dusk\Browser;
 
 class HomePage extends Page
@@ -13,7 +14,7 @@ class HomePage extends Page
      */
     public function url()
     {
-        return '/';
+        return RouteServiceProvider::HOME;
     }
 
     /**

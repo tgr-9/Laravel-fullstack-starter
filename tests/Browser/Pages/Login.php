@@ -35,8 +35,8 @@ class Login extends Page
     public function elements()
     {
         return [
-            '@username' => '#username input[type="text"]',
-            '@password' => '#password input[type="password"]',
+            '@username' => 'input#username',
+            '@password' => 'input#password',
             '@remember' => '.n-checkbox',
             '@login' => 'button[type=submit]',
         ];
