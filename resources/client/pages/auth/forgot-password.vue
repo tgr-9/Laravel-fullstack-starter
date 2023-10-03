@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head as iHead, Link as iLink, useForm } from '@inertiajs/vue3'
+import { Link as iLink, useForm } from '@inertiajs/vue3'
 
 defineOptions({
   layoutName: 'guest-layout',
@@ -17,28 +17,30 @@ const validation = reactiveComputed<{ [k in keyof Partial<ForgotPasswordForm>]: 
   email: model.errors.email !== undefined ? 'error' : undefined,
 }))
 
-function submit() {
-  model.post(route('password.email'))
+function submit(e: Event) {
+  const target = e.target as HTMLFormElement
+  model.post(target.action, {
+    onFinish: () => model.reset('email'),
+  })
 }
 </script>
 
 <template>
-  <i-head :title="$t('auth.routes.forgot-password')" />
-
   <n-alert :title="$t('auth.routes.forgot-password')" type="info">
     {{ $t('auth.notices.forgot-password') }}
   </n-alert>
 
-  <n-form :model="model" class="form-login" @submit.prevent="submit">
+  <n-form :action="$route('password.email')" :model="model" class="form-login" @submit.prevent="submit">
     <n-form-item
       :label="$t('auth.email.label')"
       :feedback="model.errors.email"
       :validation-status="validation.email"
+      :label-props="{ for: 'email' }"
       path="email"
     >
       <n-input
-        id="email"
         v-model:value="model.email"
+        :input-props="{ id: 'email', name: 'email', type: 'email' }"
         :placeholder="$t('auth.email.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"

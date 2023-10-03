@@ -1,16 +1,29 @@
 <script setup lang="ts">
+import { Head as iHead } from '@inertiajs/vue3'
+
 defineOptions({
   inheritAttrs: false,
 })
+
+const prop = defineProps<{
+  page: string
+  paths: string[]
+  title?: string
+}>()
+
+const { t } = useI18n()
+const pageTitle = computed(() => prop.title || t(prop.page))
 </script>
 
 <template>
+  <i-head :title="pageTitle" />
+
   <app-wrapper class="guest-layout">
     <n-layout>
       <n-space vertical>
         <main-logo />
 
-        <n-card>
+        <n-card :title="pageTitle">
           <slot />
         </n-card>
       </n-space>
@@ -31,7 +44,6 @@ defineOptions({
   }
 
   .n-card {
-    --n-color: rgba(0, 0, 0, 0.7) !important;
     @apply blur-sm;
 
     & > &__content {

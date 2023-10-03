@@ -36,7 +36,7 @@ class ForgotPassword extends Page
     public function elements()
     {
         return [
-            '@email' => '#email input[type="text"]',
+            '@email' => 'input#email',
         ];
     }
 }

@@ -1,25 +1,10 @@
-import { createInertiaApp, router } from '@inertiajs/vue3'
-import type { App, DefineComponent } from 'vue'
+import { createInertiaApp } from '@inertiajs/vue3'
+import type { DefineComponent } from 'vue'
 import { createApp, h } from 'vue'
 
 // import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
-
-import { createThemeOverrides } from '~/utils/preference'
-import '~/bootstrap'
-
-interface AppModuleContext {
-  app: App<Element>
-  isClient: boolean
-}
-
-declare global {
-  /**
-   * Application module install function.
-   */
-  type AppModuleInstall = (ctx: AppModuleContext) => void
-}
 
 createThemeOverrides({
   common: {
@@ -35,20 +20,23 @@ createThemeOverrides({
     gapMedium: '16px',
     gapSmall: '9px',
   },
+  Breadcrumb: {
+    itemLineHeight: 1,
+  },
 })
 
-const isClient = typeof window !== 'undefined'
+const layouts = import.meta.glob<{ default: DefineComponent }>('./layouts/*.vue', { eager: true })
+const pages = import.meta.glob<{ default: DefineComponent }>('./pages/**/*.vue', { eager: true })
 
-if (isClient) {
-  window.__inertiaNavigatedCount = window.__inertiaNavigatedCount || 0
+function getPageKey(name: string, defined?: string): string {
+  if (defined)
+    return defined
 
-  router.on('navigate', () => {
-    window.__inertiaNavigatedCount++
-  })
+  const segment = name.split('/')
+  segment.splice(1, 0, 'routes')
+
+  return segment.join('.')
 }
-
-const layouts = import.meta.glob<DefineComponent>('./layouts/*.vue', { eager: true })
-const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
 
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
@@ -64,11 +52,17 @@ createInertiaApp({
     if (!layout)
       throw new Error(`Could not find page layout '${layoutName}'`)
 
-    page.default.layout = h(layout.default)
+    page.default.name = name.replace('/', '-')
+    page.default.layout = h(layout.default, {
+      page: getPageKey(name, page.default.pageName),
+      title: page.default.pageTitle,
+      paths: page.default.breadcrumb || [],
+    })
 
     return page
   },
   setup({ el, App, props, plugin }) {
+    const isClient = typeof window !== 'undefined'
     const app = createApp({ render: () => h(App, props) })
       .use(plugin)
 
