@@ -1,9 +1,5 @@
-import type { AxiosStatic } from 'axios'
-import ziggyRoute from 'ziggy-js'
 import type { PageProps, Page } from '@inertiajs/core'
-import type { RouteParam, RouteParamsWithQueryOverload, Config } from 'ziggy-js'
-import type { AppRoutes } from '~/modules/ziggy'
-import type { NavigationType, NavigationItem } from '~/utils/navigations'
+import type { App } from 'vue'
 
 export {}
 
@@ -22,39 +18,47 @@ interface UserProp {
   email: string
 }
 
+declare global {
+  type AppLocale = 'id' | 'en'
+
+  /**
+   * Application module install function.
+   */
+  type AppModuleInstall = (ctx: AppModuleContext) => void
+
+  interface AppModuleContext {
+    app: App<Element>
+    isClient: boolean
+  }
+}
+
 declare module '@inertiajs/vue3' {
   export function usePage<T extends AppPageProps>(): Page<T>
 }
 
-declare module 'ziggy-js' {
-  export default function route(
-    name: keyof AppRoutes,
-    params?: RouteParamsWithQueryOverload | RouteParam,
-    absolute?: boolean,
-    config?: Config
-  ): string
-}
+declare module '@vue/runtime-core' {
+  /**
+   * Component Custom Options for page components
+   */
+  export interface ComponentCustomOptions {
+    /**
+     * Name of layout component to use in current page
+     */
+    layoutName?: string
 
-declare global {
-  type AppLocale = 'id' | 'en'
+    /**
+     * Define current page name based on existing translation key
+     */
+    pageName?: string
 
-  const axios: AxiosStatic
-  const route: typeof ziggyRoute
+    /**
+     * Define current page title
+     */
+    pageTitle?: string
 
-  const __navigations: Record<NavigationType, NavigationItem[]>
-  const __inertiaNavigatedCount: number
-
-  interface Window {
-    axios: AxiosStatic
-    route: typeof ziggyRoute
-    __translations: Record<AppLocale, any>
-    __inertiaNavigatedCount: number
-  }
-}
-
-declare module 'vue' {
-  interface ComponentCustomProperties {
-    $axios: AxiosStatic
-    $route: typeof ziggyRoute
+    /**
+     * Define paths of current page
+     */
+    breadcrumb?: string[]
   }
 }

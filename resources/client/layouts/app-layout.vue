@@ -1,19 +1,27 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { usePage } from '@inertiajs/vue3'
-import type { MaybeElement } from '@vueuse/core'
+import { Head as iHead, usePage } from '@inertiajs/vue3'
 import { breakpointsTailwind } from '@vueuse/core'
+import { NDropdown, NLayoutSider, NMenu } from 'naive-ui'
 import type { MenuInst } from 'naive-ui'
 
 defineOptions({
   inheritAttrs: false,
 })
 
-const mainMenu = ref<MenuInst | null>(null)
-const userMenu = ref<VNode | null>(null)
-const sider = ref<MaybeElement | null>(null)
+const prop = defineProps<{
+  page: string
+  paths: string[]
+  title?: string
+}>()
 
+const { t } = useI18n()
 const { props } = usePage()
+
+const mainMenu = ref<InstanceType<typeof NMenu> | MenuInst | null>(null)
+const userMenu = ref<InstanceType<typeof NDropdown> | null>(null)
+const sider = ref<InstanceType<typeof NLayoutSider> | null>(null)
+
 const breakpoints = useBreakpoints(breakpointsTailwind)
 const onSmallScreen = breakpoints.smallerOrEqual('sm')
 const onMediumScreen = breakpoints.smallerOrEqual('md')
@@ -30,6 +38,7 @@ const {
   updateActiveKey: updateUserActiveKey,
 } = useNavigation('user')
 
+const pageTitle = computed(() => prop.title || t(prop.page))
 const siderCollapsed = computed(() => menuPreference.value.collapsed || (onMediumScreen.value && !onSmallScreen.value))
 const siderPosition = computed(() => onSmallScreen.value ? 'absolute' : 'static')
 const siderCollapsedMode = computed(() => onSmallScreen.value ? 'transform' : 'width')
@@ -60,8 +69,10 @@ function touchEnd(e: TouchEvent) {
 </script>
 
 <template>
+  <i-head :title="pageTitle" />
+
   <app-wrapper class="app-layout">
-    <n-layout has-sider @touchstart="touchStart" @touchend="touchEnd">
+    <n-layout has-sider class="transition-all" @touchstart="touchStart" @touchend="touchEnd">
       <n-layout-sider
         ref="sider"
         bordered
@@ -71,8 +82,9 @@ function touchEnd(e: TouchEvent) {
         :on-update:collapsed="updateCollapse"
         :position="siderPosition"
         :show-trigger="!onMediumScreen"
+        class="z-10 transition-all"
       >
-        <header id="logo-wrapper" class="n-layout-sider-section">
+        <header id="logo-wrapper" class="n-layout-sider-section w-full py-3">
           <transition>
             <main-logo
               :width="logoWidth"
@@ -83,7 +95,7 @@ function touchEnd(e: TouchEvent) {
           </transition>
         </header>
 
-        <main id="main-navigation" class="n-layout-sider-section flex-grow">
+        <main id="main-navigation" class="n-layout-sider-section w-full flex-grow py-2">
           <n-menu
             ref="mainMenu"
             v-model:value="menuPreference.activeKey"
@@ -97,7 +109,7 @@ function touchEnd(e: TouchEvent) {
           />
         </main>
 
-        <footer id="user-navigation" class="n-layout-sider-section px-2 flex-grow-0 flex-shrink-0">
+        <footer id="user-navigation" class="n-layout-sider-section w-full p-3 flex-grow-0 flex-shrink-0">
           <n-dropdown
             ref="userMenu"
             trigger="click"
@@ -122,47 +134,31 @@ function touchEnd(e: TouchEvent) {
       </n-layout-sider>
 
       <n-layout-content>
-        <n-space vertical size="large">
+        <page-header :paths="paths" class="page-content-section">
+          <h1 class="text-xl font-bold" v-html="pageTitle" />
+        </page-header>
+
+        <page-main class="page-content-section">
           <slot />
-        </n-space>
+        </page-main>
+
+        <page-footer class="page-content-section" />
       </n-layout-content>
     </n-layout>
   </app-wrapper>
 </template>
 
 <style lang="postcss">
-.app-layout {
-  .n-layout {
-    @apply transition-all;
-
-    &-sider {
-      @apply z-10 transition-all;
-
-      & > &-scroll-container {
-        @apply flex flex-col min-h-screen py-3;
-      }
-
-      & > &-section {
-        @apply w-full;
-      }
-    }
-
-    &-content > &-scroll-container {
-      @apply py-6 px-2 sm:px-6;
-    }
-  }
+.page-content-section {
+  @apply px-4;
 }
 
 #logo-wrapper {
-  @apply h-14 px-6 flex items-center justify-center;
+  @apply px-6 flex items-center justify-center;
 
   &:has(.collapsed) {
     @apply px-2;
   }
-}
-
-#main-navigation {
-  @apply py-2;
 }
 
 #user-navigation {

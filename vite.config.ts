@@ -1,4 +1,5 @@
 import { resolve } from 'node:path'
+import { readFileSync } from 'node:fs'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin'
@@ -10,15 +11,28 @@ import { VitePWA as pwa } from 'vite-plugin-pwa'
 import { defineConfig, loadEnv } from 'vite'
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', ['APP', 'VITE'])
-
+  const env = loadEnv(mode, '.', ['APP', 'SENTRY', 'VITE'])
   const rootdir = 'resources/client'
+
+  function httpsCert() {
+    if (!env.APP_URL.startsWith('https://'))
+      return false
+
+    try {
+      return {
+        cert: readFileSync(resolve(__dirname, 'storage/local-cert.pem')),
+        key: readFileSync(resolve(__dirname, 'storage/local-key.pem')),
+      }
+    }
+    catch {
+      return false
+    }
+  }
 
   return {
     resolve: {
       alias: {
         '~/': `${resolve(__dirname, rootdir)}/`,
-        'ziggy/': `${resolve('vendor/tightenco/ziggy/src/js')}/`,
       },
     },
 
@@ -50,6 +64,12 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.APP_LOCALE': JSON.stringify(env.APP_LOCALE),
       'import.meta.env.APP_URL': JSON.stringify(env.APP_URL),
       'import.meta.env.APP_ENV': JSON.stringify(env.APP_ENV),
+      'import.meta.env.SENTRY_DSN': JSON.stringify(env.SENTRY_DSN),
+    },
+
+    server: {
+      host: '127.0.0.1',
+      https: httpsCert(),
     },
 
     plugins: [
@@ -60,7 +80,7 @@ export default defineConfig(({ mode }) => {
         input: [
           `${rootdir}/app.ts`,
         ],
-        valetTls: env.APP_ENV === 'local' && env.APP_URL.startsWith('https://'),
+        // valetTls: env.APP_ENV === 'local' && env.APP_URL.startsWith('https://'),
         // refresh: true,
       }),
 
@@ -135,7 +155,6 @@ export default defineConfig(({ mode }) => {
           name: env.APP_NAME,
           short_name: env.APP_NAME,
           start_url: '/',
-          display: 'fullscreen',
           background_color: '#ffffff',
           lang: env.APP_LOCALE || 'id',
           scope: '/',
@@ -147,22 +166,22 @@ export default defineConfig(({ mode }) => {
               sizes: '48x48',
             },
             {
-              src: '/assets/favicon.svg',
+              src: '/vendor/creasico/favicon.svg',
               sizes: '512x512',
               type: 'image/svg+xml',
             },
             {
-              src: '/assets/icon-192x192.png',
+              src: '/vendor/creasico/icon-192x192.png',
               sizes: '192x192',
               type: 'image/png',
             },
             {
-              src: '/assets/icon-512x512.png',
+              src: '/vendor/creasico/icon-512x512.png',
               sizes: '512x512',
               type: 'image/png',
             },
             {
-              src: '/assets/icon-512x512.png',
+              src: '/vendor/creasico/icon-512x512.png',
               sizes: '512x512',
               type: 'image/png',
               purpose: 'maskable',

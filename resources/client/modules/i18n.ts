@@ -6,7 +6,8 @@ export const install: AppModuleInstall = ({ app, isClient }): void => {
 
   const i18n = createI18n({
     legacy: false,
-    locale: document.documentElement.lang,
+    locale: appPreference.value.locale,
+    fallbackLocale: 'en',
     messages,
   })
 
@@ -32,4 +33,10 @@ export const install: AppModuleInstall = ({ app, isClient }): void => {
   }
 
   app.use(i18n)
+}
+
+declare global {
+  interface Window {
+    __translations: Record<AppLocale, any>
+  }
 }

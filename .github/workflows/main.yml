@@ -33,14 +33,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Build
 
-    env:
-      VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -134,9 +129,11 @@ jobs:
           name: public
           path: public/build
 
-      - name: Get Composer cache directory
+      - name: Prepare composer
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          composer config -g github-oauth.github.com ${{ secrets.PAT }}
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
         uses: actions/cache@v3
@@ -146,10 +143,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install PHP dependencies
-        run: |
-          composer config -g github-oauth.github.com ${{ secrets.PAT }}
-          composer update --prefer-dist --no-interaction --no-progress
-          composer ziggy:generate
+        run: composer update --prefer-dist --no-interaction --no-progress
 
       - name: Run unit tests
         run: php artisan test --ansi --coverage
@@ -210,9 +204,11 @@ jobs:
           name: public
           path: public/build
 
-      - name: Get Composer cache directory
+      - name: Prepare composer
         id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+        run: |
+          composer config -g github-oauth.github.com ${{ secrets.PAT }}
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
         uses: actions/cache@v3
@@ -223,9 +219,7 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          composer config -g github-oauth.github.com ${{ secrets.PAT }}
           composer install --prefer-dist --no-interaction --no-progress
-          composer ziggy:generate
 
       - name: Setup BrowserStack env  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master

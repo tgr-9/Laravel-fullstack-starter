@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head as iHead, useForm } from '@inertiajs/vue3'
+import { useForm } from '@inertiajs/vue3'
 
 defineOptions({
   layoutName: 'guest-layout',
@@ -17,30 +17,30 @@ const validation = reactiveComputed<{ [k in keyof Partial<ConfirmPasswordForm>]:
   password: model.errors.password !== undefined ? 'error' : undefined,
 }))
 
-function submit() {
-  model.post(route('password.confirm'), {
-    onFinish: () => model.reset('password'),
+function submit(e: Event) {
+  const target = e.target as HTMLFormElement
+  model.post(target.action, {
+    onFinish: () => model.reset('email'),
   })
 }
 </script>
 
 <template>
-  <i-head :title="$t('auth.routes.confirm-password')" />
-
-  <div class="mb-4 text-sm text-gray-600">
+  <n-alert type="info">
     {{ $t('auth.notices.confirm-password') }}
-  </div>
+  </n-alert>
 
-  <n-form :model="model" class="form-login" @submit.prevent="submit">
+  <n-form :action="$route('password.confirm')" :model="model" class="form-login" @submit.prevent="submit">
     <n-form-item
       :label="$t('auth.password.label')"
       :feedback="model.errors.password"
       :validation-status="validation.password"
+      :label-props="{ for: 'password' }"
       path="password"
     >
       <n-input
-        id="password"
         v-model:value="model.password"
+        :input-props="{ id: 'password', name: 'password' }"
         :placeholder="$t('auth.password.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"

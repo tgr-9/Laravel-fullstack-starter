@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Head as iHead, Link as iLink, useForm } from '@inertiajs/vue3'
+import { Link as iLink, useForm } from '@inertiajs/vue3'
 
 defineOptions({
   layoutName: 'guest-layout',
@@ -22,26 +22,26 @@ const validation = reactiveComputed<{ [k in keyof Partial<LoginForm>]: 'error' |
   password: model.errors.password !== undefined ? 'error' : undefined,
 }))
 
-function submit() {
-  model.post(route('login'), {
+function submit(e: Event) {
+  const target = e.target as HTMLFormElement
+  model.post(target.action, {
     onFinish: () => model.reset('password'),
   })
 }
 </script>
 
 <template>
-  <i-head :title="$t('auth.routes.login')" />
-
-  <n-form :model="model" class="form-login" @submit.prevent="submit">
+  <n-form :action="$route('login')" :model="model" class="form-login" @submit.prevent="submit">
     <n-form-item
       :label="$t('auth.username.label')"
       :feedback="model.errors.username"
       :validation-status="validation.username"
+      :label-props="{ for: 'username' }"
       path="username"
     >
       <n-input
-        id="username"
         v-model:value="model.username"
+        :input-props="{ id: 'username', name: 'username' }"
         :placeholder="$t('auth.username.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"
@@ -53,11 +53,12 @@ function submit() {
       :label="$t('auth.password.label')"
       :feedback="model.errors.password"
       :validation-status="validation.password"
+      :label-props="{ for: 'password' }"
       path="password"
     >
       <n-input
-        id="password"
         v-model:value="model.password"
+        :input-props="{ id: 'password', name: 'password' }"
         :placeholder="$t('auth.password.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"

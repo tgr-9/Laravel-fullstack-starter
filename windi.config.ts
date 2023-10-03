@@ -10,8 +10,9 @@ import lineClamp from 'windicss/plugin/line-clamp'
 export default defineConfig({
   extract: {
     include: [
-      'resources/client/**/*.{vue,js,ts}',
+      'resources/client/**/*.{vue,ts}',
       'resources/views/**/*.blade.php',
+      'vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
     ],
     exclude: ['node_modules', '.git'],
   },
