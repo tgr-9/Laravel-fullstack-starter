@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin'
@@ -85,6 +86,15 @@ export default defineConfig(({ mode }) => {
       }),
 
       vue(),
+
+      /**
+       * @see https://www.npmjs.com/package/@sentry/vite-plugin
+       */
+      sentryVitePlugin({
+        org: env.SENTRY_ORG,
+        project: env.SENTRY_PROJECT,
+        authToken: env.SENTRY_AUTH_TOKEN,
+      }),
 
       /**
        * @see https://windicss.org/integrations/vite.html
