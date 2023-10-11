@@ -12,6 +12,7 @@ interface ImportMetaEnv {
   VITE_API_URL?: string;
   VITE_GTM_ID?: string;
   SENTRY_DSN?: string;
+  SENTRY_PROFILING_ENABLE?: boolean;
 }
 
 declare module '*.vue' {
