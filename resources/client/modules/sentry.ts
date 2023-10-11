@@ -11,13 +11,15 @@ export const install: AppModuleInstall = ({ app }): void => {
     integrations(integrations) {
       integrations.push(
         new BrowserTracing(),
-        new Replay(),
+        new Replay({
+          maskAllInputs: true,
+          maskAllText: false,
+          networkDetailAllowUrls: [location.origin],
+        }),
       )
 
-      if (import.meta.env.SENTRY_PROFILING_ENABLE) {
-        logger(typeof import.meta.env.SENTRY_PROFILING_ENABLE)
+      if (import.meta.env.SENTRY_PROFILING_ENABLE)
         integrations.push(new BrowserProfilingIntegration())
-      }
 
       return integrations
     },

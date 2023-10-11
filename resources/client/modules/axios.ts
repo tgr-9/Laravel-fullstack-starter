@@ -22,8 +22,6 @@ axios.interceptors.response.use(response => response, (error: AxiosError) => {
     return
   }
 
-  // if (error.config?.headers.has('X-Inertia'))
-
   // Capture error response data to sentry
   setExtras({
     payload: JSON.parse(error.config?.data ?? '{}'),
