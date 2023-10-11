@@ -67,6 +67,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.APP_URL': JSON.stringify(env.APP_URL),
       'import.meta.env.APP_ENV': JSON.stringify(env.APP_ENV),
       'import.meta.env.SENTRY_DSN': JSON.stringify(env.SENTRY_DSN),
+      'import.meta.env.SENTRY_PROFILING_ENABLE': Boolean(env.SENTRY_PROFILING_ENABLE),
     },
 
     server: {
