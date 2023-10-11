@@ -13,7 +13,7 @@ set('repository', 'git@github.com:creasico/laravel-project.git');
 set('keep_releases', 5);
 
 add('shared_files', []);
-add('shared_dirs', ['public/vendor']);
+add('shared_dirs', ['public/build', 'public/vendor']);
 add('writable_dirs', ['storage']);
 
 // Hosts
