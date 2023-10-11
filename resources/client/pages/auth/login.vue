@@ -22,26 +22,25 @@ const validation = reactiveComputed<{ [k in keyof Partial<LoginForm>]: 'error' |
   password: model.errors.password !== undefined ? 'error' : undefined,
 }))
 
-function submit(e: Event) {
-  const target = e.target as HTMLFormElement
-  model.post(target.action, {
+function submit() {
+  model.post(route('login'), {
     onFinish: () => model.reset('password'),
   })
 }
 </script>
 
 <template>
-  <n-form :action="$route('login')" :model="model" class="form-login" @submit.prevent="submit">
+  <n-form :model="model" class="form-login" @submit.prevent="submit">
     <n-form-item
+      path="username"
       :label="$t('auth.username.label')"
       :feedback="model.errors.username"
       :validation-status="validation.username"
       :label-props="{ for: 'username' }"
-      path="username"
     >
       <n-input
         v-model:value="model.username"
-        :input-props="{ id: 'username', name: 'username' }"
+        :input-props="{ id: 'username', name: 'username', autocomplete: 'username' }"
         :placeholder="$t('auth.username.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"
@@ -50,32 +49,31 @@ function submit(e: Event) {
     </n-form-item>
 
     <n-form-item
+      path="password"
       :label="$t('auth.password.label')"
       :feedback="model.errors.password"
       :validation-status="validation.password"
       :label-props="{ for: 'password' }"
-      path="password"
     >
       <n-input
         v-model:value="model.password"
+        show-password-on="mousedown"
+        type="password"
         :input-props="{ id: 'password', name: 'password' }"
         :placeholder="$t('auth.password.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"
-        show-password-on="mousedown"
-        type="password"
       />
     </n-form-item>
 
     <n-checkbox v-model:checked="model.remember" :label="$t('auth.remember.label')" />
 
     <n-button
-      type="primary"
       attr-type="submit"
+      class="w-full"
+      type="primary"
       :disabled="model.processing"
       :loading="model.processing"
-      style="width: 100%;"
-      @click="submit"
     >
       {{ $t('auth.actions.login') }}
     </n-button>
