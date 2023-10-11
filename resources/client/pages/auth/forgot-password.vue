@@ -17,9 +17,8 @@ const validation = reactiveComputed<{ [k in keyof Partial<ForgotPasswordForm>]: 
   email: model.errors.email !== undefined ? 'error' : undefined,
 }))
 
-function submit(e: Event) {
-  const target = e.target as HTMLFormElement
-  model.post(target.action, {
+function submit() {
+  model.post(route('password.email'), {
     onFinish: () => model.reset('email'),
   })
 }
@@ -30,17 +29,17 @@ function submit(e: Event) {
     {{ $t('auth.notices.forgot-password') }}
   </n-alert>
 
-  <n-form :action="$route('password.email')" :model="model" class="form-login" @submit.prevent="submit">
+  <n-form :model="model" class="form-login" @submit.prevent="submit">
     <n-form-item
+      path="email"
       :label="$t('auth.email.label')"
       :feedback="model.errors.email"
       :validation-status="validation.email"
       :label-props="{ for: 'email' }"
-      path="email"
     >
       <n-input
         v-model:value="model.email"
-        :input-props="{ id: 'email', name: 'email', type: 'email' }"
+        :input-props="{ id: 'email', name: 'email', type: 'email', autocomplete: 'email' }"
         :placeholder="$t('auth.email.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"
@@ -49,12 +48,11 @@ function submit(e: Event) {
     </n-form-item>
 
     <n-button
-      type="primary"
       attr-type="submit"
+      class="w-full"
+      type="primary"
       :disabled="model.processing"
       :loading="model.processing"
-      style="width: 100%;"
-      @click="submit"
     >
       {{ $t('auth.actions.request') }}
     </n-button>
