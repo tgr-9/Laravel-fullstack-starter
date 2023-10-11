@@ -13,21 +13,25 @@
 ## Setup
 
 1. Clone the repository & `cd` into it
-   ```sh
+
+   ```shell
    $ git clone git@github.com:creasico/laravel-project.git <dir-name>
    $ cd <dir-name>
    ```
 2. Install dependencies
-   ```sh
+
+   ```shell
    $ composer install
    $ pnpm install
    ```
 3. Copy `.env.example` file to `.env` file & generate new app key
-   ```sh
+
+   ```shell
    $ php artisan key:generate
    ```
 4. Create new database & make sure to update `.env` file accordingly
-   ```sh
+
+   ```shell
    # for MySQL (presumably you've already have mysql client)
    $ mysql -e 'create database <db-name>'
 
@@ -35,6 +39,7 @@
    $ createdb <db-bame>
    ```
 5. All things set? then run
+
    ```shell
    $ php artisan migrate --seed  # run database migration
    $ pnpm build                  # compile front-end assets
@@ -47,7 +52,7 @@
 
 This project is using `windi.css` and `alpine.js` as default front-end library, which mean any changes you've made, won't appears immadiately unless you run the following command
 
-```sh
+```shell
 $ pnpm dev
 ```
 
@@ -63,7 +68,7 @@ All we need to do is spare another database for testing. The reason behind it is
 
 Once you've create new database, you can copy your `.env` file to `.env.testing` and update the database configuration with the newly created database.
 
-```sh
+```shell
 $ composer test:unit       # to run unit test
 ```
 
@@ -71,13 +76,13 @@ $ composer test:unit       # to run unit test
 
 Before you begin tests using laravel dusk, please make sure you've already install the webdriver with the following command
 
-```sh
+```shell
 $ php artisan dusk:chrome-driver --detect
 ```
 
 By default that command will install the latest ChromeDriver meaning you'll have to make sure that the installed version of ChromeDriver matches with version of your locally installed Google Chrome, then run
 
-```sh
+```shell
 $ composer test:e2e        # to run end-to-end test using larvel-dusk
 ```
 
