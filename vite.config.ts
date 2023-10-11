@@ -45,6 +45,7 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
+      sourcemap: mode === 'development',
       reportCompressedSize: false,
       chunkSizeWarningLimit: 2000,
       rollupOptions: {
