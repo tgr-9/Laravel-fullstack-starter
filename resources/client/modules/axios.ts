@@ -1,4 +1,3 @@
-import { router } from '@inertiajs/core'
 import { captureException, setExtras } from '@sentry/vue'
 import axios from 'axios'
 import type { AxiosError, AxiosResponse, AxiosStatic } from 'axios'
@@ -9,16 +8,12 @@ axios.interceptors.response.use(response => response, (error: AxiosError) => {
   const response = error.response as AxiosResponse
 
   if (response.status === 401) {
-    router.visit(route('login'))
+    location.replace(route('login'))
     return
   }
 
   if (response.status === 419) {
-    useNaiveDiscreteApi().notification.error({
-      title: 'Page expired',
-    })
-
-    router.reload()
+    location.reload()
     return
   }
 
