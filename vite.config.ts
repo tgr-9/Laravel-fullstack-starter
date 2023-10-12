@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
-      sourcemap: mode === 'development',
+      sourcemap: mode === 'development' || 'SENTRY_AUTH_TOKEN' in env,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 2000,
       rollupOptions: {
