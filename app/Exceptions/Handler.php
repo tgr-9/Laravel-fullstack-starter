@@ -3,7 +3,6 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Illuminate\Session\TokenMismatchException;
 use Symfony\Component\Console\Exception\CommandNotFoundException;
 use Throwable;
 
@@ -52,15 +51,17 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $e)
     {
-        if ($e instanceof TokenMismatchException) {
-            return back()->with([
+        $response = parent::render($request, $e);
+
+        return match ($response->getStatusCode()) {
+            419 => back()->with([
                 'message' => [
                     'type' => 'error',
                     'title' => $e->getMessage(),
                 ],
-            ]);
-        }
+            ]),
 
-        return parent::render($request, $e);
+            default => $response,
+        };
     }
 }
