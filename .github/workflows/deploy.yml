@@ -16,11 +16,6 @@ on:
     types: [completed]
     branches: [main]
 
-env:
-  APP_NAME: ${{ vars.APP_NAME }}
-  APP_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
-  APP_LOCALE: id
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -36,7 +31,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to ${{ github.env.APP_ENV }}
+    name: Deploy to ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
     needs: build
 
     environment:
@@ -44,6 +39,7 @@ jobs:
       url: ${{ vars.APP_URL }}
 
     env:
+      APP_ENV: ${{ vars.APP_ENV }}
       APP_URL: ${{ vars.APP_URL }}
 
     steps:
@@ -76,7 +72,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v3
         with:
-          name: public
+          name: build-${{ env.APP_ENV }}
           path: public
 
       - name: Install dependencies

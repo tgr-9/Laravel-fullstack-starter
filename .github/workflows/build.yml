@@ -67,17 +67,21 @@ jobs:
 
       - name: Build frontend
         env:
+          APP_NAME: ${{ vars.APP_NAME }}
+          APP_LOCALE: id
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_ORG: creasico
           SENTRY_PROJECT: creasi-skeleton
+          VITE_API_URL: ${{ env.APP_URL }}/api
+          VITE_GTM_ID: 'G-1KQP24LR0L'
         run: |
-          pnpm build --mode ${{ inputs.target }}
+          pnpm build --mode ${{ env.APP_ENV }}
 
       - name: Store assets
         uses: actions/upload-artifact@v3
         with:
-          name: public
+          name: build-${{ env.APP_ENV }}
           path: |
             public/build
             public/vendor
