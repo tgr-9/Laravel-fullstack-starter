@@ -1,5 +1,5 @@
 name: Deploy
-run-name: 'deploy(${{ github.ref_name }}): ${{ github.ref_name }} with ${{ github.event_name }}'
+run-name: 'deploy(${{ vars.APP_ENV }}): ${{ github.ref_name }} with ${{ github.event_name }}'
 
 on:
   release:
