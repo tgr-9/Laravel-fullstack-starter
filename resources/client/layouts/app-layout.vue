@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { Head as iHead, usePage } from '@inertiajs/vue3'
+import { Head as iHead } from '@inertiajs/vue3'
 import { breakpointsTailwind } from '@vueuse/core'
 import { NDropdown, NLayoutSider, NMenu } from 'naive-ui'
 import type { MenuInst } from 'naive-ui'
@@ -9,14 +9,13 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const prop = defineProps<{
+const props = defineProps<{
   page: string
   paths: string[]
   title?: string
 }>()
 
 const { t } = useI18n()
-const { props } = usePage()
 
 const mainMenu = ref<InstanceType<typeof NMenu> | MenuInst | null>(null)
 const userMenu = ref<InstanceType<typeof NDropdown> | null>(null)
@@ -38,7 +37,7 @@ const {
   updateActiveKey: updateUserActiveKey,
 } = useNavigation('user')
 
-const pageTitle = computed(() => prop.title || t(prop.page))
+const pageTitle = computed(() => props.title || t(props.page))
 const siderCollapsed = computed(() => menuPreference.value.collapsed || (onMediumScreen.value && !onSmallScreen.value))
 const siderPosition = computed(() => onSmallScreen.value ? 'absolute' : 'static')
 const siderCollapsedMode = computed(() => onSmallScreen.value ? 'transform' : 'width')
@@ -126,7 +125,7 @@ function touchEnd(e: TouchEvent) {
               </n-avatar>
 
               <p id="user-menu-label">
-                {{ props.user?.name }}
+                {{ $page.props.user?.name }}
               </p>
             </n-button>
           </n-dropdown>
@@ -139,6 +138,12 @@ function touchEnd(e: TouchEvent) {
         </page-header>
 
         <page-main class="page-content-section">
+          <n-alert
+            v-if="$page.props.message"
+            :title="$page.props.message.title"
+            :type="$page.props.message.type"
+          />
+
           <slot />
         </page-main>
 

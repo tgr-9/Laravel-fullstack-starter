@@ -5,14 +5,14 @@ defineOptions({
   inheritAttrs: false,
 })
 
-const prop = defineProps<{
+const props = defineProps<{
   page: string
   paths: string[]
   title?: string
 }>()
 
 const { t } = useI18n()
-const pageTitle = computed(() => prop.title || t(prop.page))
+const pageTitle = computed(() => props.title || t(props.page))
 </script>
 
 <template>
@@ -24,6 +24,12 @@ const pageTitle = computed(() => prop.title || t(prop.page))
         <main-logo />
 
         <n-card :title="pageTitle">
+          <n-alert
+            v-if="$page.props.message"
+            :title="$page.props.message.title"
+            :type="$page.props.message.type"
+          />
+
           <slot />
         </n-card>
       </n-space>

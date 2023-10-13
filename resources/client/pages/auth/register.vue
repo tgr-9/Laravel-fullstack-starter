@@ -23,22 +23,21 @@ const validation = reactiveComputed<{ [k in keyof Partial<RegisterForm>]: 'error
   confirm_password: model.errors.confirm_password !== undefined ? 'error' : undefined,
 }))
 
-function submit(e: Event) {
-  const target = e.target as HTMLFormElement
-  model.post(target.action, {
+function submit() {
+  model.post(route('register'), {
     onFinish: () => model.reset('password', 'confirm_password'),
   })
 }
 </script>
 
 <template>
-  <n-form :action="$route('register')" :model="model" class="form-login" @submit.prevent="submit">
+  <n-form :model="model" class="form-login" @submit.prevent="submit">
     <n-form-item
+      path="email"
       :label="$t('auth.email.label')"
       :feedback="model.errors.email"
       :validation-status="validation.email"
       :label-props="{ for: 'username' }"
-      path="email"
     >
       <n-input
         v-model:value="model.email"
@@ -51,50 +50,47 @@ function submit(e: Event) {
     </n-form-item>
 
     <n-form-item
+      path="password"
       :label="$t('auth.password.label')"
       :feedback="model.errors.password"
       :validation-status="validation.password"
       :label-props="{ for: 'password' }"
-      path="password"
     >
       <n-input
         v-model:value="model.password"
+        show-password-on="mousedown"
+        type="password"
         :input-props="{ id: 'password', name: 'password' }"
         :placeholder="$t('auth.password.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"
-        show-password-on="mousedown"
-        type="password"
-        autocomplete="password"
       />
     </n-form-item>
 
     <n-form-item
+      path="confirm_password"
       :label="$t('auth.confirm_password.label')"
       :feedback="model.errors.confirm_password"
       :validation-status="validation.confirm_password"
       :label-props="{ for: 'confirm_password' }"
-      path="confirm_password"
     >
       <n-input
         v-model:value="model.confirm_password"
+        show-password-on="mousedown"
+        type="password"
         :input-props="{ id: 'confirm_password', name: 'confirm_password' }"
         :placeholder="$t('auth.confirm_password.placeholder')"
         :loading="model.processing"
         :disabled="model.processing"
-        show-password-on="mousedown"
-        type="password"
-        autocomplete="confirm-password"
       />
     </n-form-item>
 
     <n-button
-      type="primary"
       attr-type="submit"
+      class="w-full"
+      type="primary"
       :disabled="model.processing"
       :loading="model.processing"
-      style="width: 100%;"
-      @click="submit"
     >
       {{ $t('auth.actions.register') }}
     </n-button>

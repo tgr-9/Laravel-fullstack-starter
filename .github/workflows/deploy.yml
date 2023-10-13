@@ -9,7 +9,6 @@ env:
   APP_NAME: ${{ vars.APP_NAME }}
   APP_KEY: ${{ secrets.APP_KEY }}
   APP_LOCALE: id
-  VITE_SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
   # GIT_COMMIT_SHA: ${{ github.sha }}
   # GIT_BRANCH: ${{ github.ref }}
 
@@ -78,6 +77,11 @@ jobs:
         run: pnpm install
 
       - name: Build frontend
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SENTRY_ORG: creasico
+          SENTRY_PROJECT: creasi-skeleton
         run: |
           composer ziggy:generate
           pnpm build --mode ${{ vars.APP_ENV }}
