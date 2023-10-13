@@ -180,7 +180,7 @@ jobs:
         run: php artisan serve > /dev/null 2>&1 &
 
       - name: Run e2e tests
-        run: php artisan dusk --ansi
+        run: php artisan dusk --colors=always
 
       - name: Upload e2e tests logs
         if: failure()
