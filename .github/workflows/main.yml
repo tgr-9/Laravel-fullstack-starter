@@ -1,20 +1,19 @@
 name: Code Quality
 
 on:
-  schedule: # scheduled to run at 23.00 on Saturday (UTC), means 6.00 on Monday (WIB)
-    - cron: '0 23 * * 6'
+  # schedule: # scheduled to run at 23.00 on Saturday (UTC), means 6.00 on Monday (WIB)
+  #   - cron: '0 23 * * 6'
   push:
     branches: [main]
     # paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
   pull_request:
     branches: [main]
-    types: [opened, synchronize, reopened]
     # paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
 
 env:
   APP_NAME: ${{ vars.APP_NAME }}
-  APP_ENV: testing
-  APP_URL: http://127.0.0.1:8000
+  APP_ENV: ${{ vars.APP_ENV }}
+  APP_URL: ${{ vars.APP_URL }}
   APP_KEY: ${{ secrets.APP_KEY }}
   APP_LOCALE: id
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
@@ -22,82 +21,25 @@ env:
   # AWS_BUCKET: creasi-staging
   CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
   CC_TEST_REPORTER_URL: ${{ vars.CC_TEST_REPORTER_URL }}
+  COMPOSER_CACHE_DIR:
   DB_DATABASE: creasico
   DB_USERNAME: creasico
   DB_PASSWORD: secret
   MAIL_FROM_ADDRESS: devtest@creasi.dev
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+  TELESCOPE_ENABLED: false
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     name: Build
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.1
-          extensions: curl, dom, gd, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
-          tools: composer:v2
-          coverage: none
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Setup node.js
-        uses: actions/setup-node@v3
-        with:
-          cache: pnpm
-          node-version: 18.x
-
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install PHP dependencies
-        run: |
-          composer config -g github-oauth.github.com ${{ secrets.PAT }}
-          composer install --prefer-dist --no-interaction --no-progress
-          composer ziggy:generate
-
-      - name: Install node.js dependencies
-        run: pnpm install
-
-      - name: Build frontend
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: creasico
-          SENTRY_PROJECT: creasi-skeleton
-        run: |
-          composer ziggy:generate
-          pnpm build --mode ${{ env.APP_ENV }}
-
-      - name: Store assets
-        uses: actions/upload-artifact@v3
-        with:
-          name: public
-          path: public/build
+    # uses: creasico/laravel-project/.github/workflows/build.yml@main
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
 
   units:
     runs-on: ubuntu-latest
     name: Unit Test with PHP ${{ matrix.php }}
     needs: build
-
-    env:
-      TELESCOPE_ENABLED: false
 
     services:
       postgresql:
@@ -128,23 +70,15 @@ jobs:
           tools: composer:v2
           coverage: xdebug
 
-      - name: Download assets
-        id: download
-        uses: actions/download-artifact@v3
-        with:
-          name: public
-          path: public/build
-
-      - name: Prepare composer
-        id: composer-cache
+      - name: Prepare Environments
         run: |
-          composer config -g github-oauth.github.com ${{ secrets.PAT }}
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo "COMPOSER_CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
+          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
-      - name: Cache Composer dependencies
+      - name: Prepare Composer Cache
         uses: actions/cache@v3
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
+          path: ${{ env.COMPOSER_CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
@@ -176,9 +110,8 @@ jobs:
     needs: units
 
     env:
-      DEBUGBAR_ENABLED: true
+      DEBUGBAR_ENABLED: false
       DUSK_HEADLESS_DISABLED: true
-      TELESCOPE_ENABLED: false
 
     services:
       postgresql:
@@ -209,18 +142,17 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: public
-          path: public/build
+          path: public
 
-      - name: Prepare composer
-        id: composer-cache
+      - name: Prepare Environments
         run: |
-          composer config -g github-oauth.github.com ${{ secrets.PAT }}
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo "COMPOSER_CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
+          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
-      - name: Cache Composer dependencies
+      - name: Prepare Composer Cache
         uses: actions/cache@v3
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
+          path: ${{ env.COMPOSER_CACHE_DIR }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
@@ -276,11 +208,3 @@ jobs:
         run: |
           curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
           ./cc-test-reporter sum-coverage -o - reports/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
-
-  deploy:
-    name: Deployment
-    needs: e2e
-    if: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
-    # uses: creasico/laravel-project/.github/workflows/deploy.yml@main
-    uses: ./.github/workflows/deploy.yml
-    secrets: inherit

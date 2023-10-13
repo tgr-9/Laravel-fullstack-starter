@@ -1,22 +1,32 @@
 name: Deploy
 
 on:
-  workflow_call:
   release:
     types: [created]
+  workflow_call:
+  workflow_run:
+    workflows: [Code Quality]
+    types: [completed]
+    branches: [main]
 
 env:
   APP_NAME: ${{ vars.APP_NAME }}
   APP_KEY: ${{ secrets.APP_KEY }}
+  APP_ENV: ${{ vars.APP_ENV }}
   APP_LOCALE: id
-  # GIT_COMMIT_SHA: ${{ github.sha }}
-  # GIT_BRANCH: ${{ github.ref }}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
+  build:
+    # uses: creasico/laravel-project/.github/workflows/build.yml@main
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    with:
+      mode: staging
+
   deploy:
     runs-on: ubuntu-latest
     name: Build and Deploy
@@ -27,16 +37,10 @@ jobs:
 
     env:
       APP_URL: ${{ vars.APP_URL }}
-      APP_ENV: ${{ vars.APP_ENV }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Prepare Environments
-        run: |
-          echo "GIT_BRANCH=$(echo ${GIT_BRANCH##*/} | tr / -)" >> $GITHUB_ENV
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -45,17 +49,6 @@ jobs:
           extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
           tools: composer:v2
           coverage: none
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Setup node.js
-        uses: actions/setup-node@v3
-        with:
-          cache: pnpm
-          node-version: 18.x
 
       - name: Prepare composer
         id: composer-cache
@@ -70,22 +63,16 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
+      - name: Download assets
+        id: download
+        uses: actions/download-artifact@v3
+        with:
+          name: public
+          path: public
+
       - name: Install PHP dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
-
-      - name: Install node.js dependencies
-        run: pnpm install
-
-      - name: Build frontend
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          SENTRY_ORG: creasico
-          SENTRY_PROJECT: creasi-skeleton
         run: |
-          composer ziggy:generate
-          php artisan vendor:publish --tag creasi-assets
-          pnpm build --mode ${{ vars.APP_ENV }}
+          composer install --prefer-dist --no-interaction --no-progress
 
       - name: Deploy
         uses: deployphp/action@v1
