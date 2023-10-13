@@ -15,7 +15,6 @@ env:
   APP_ENV: ${{ vars.APP_ENV }}
   APP_URL: ${{ vars.APP_URL }}
   APP_KEY: ${{ secrets.APP_KEY }}
-  APP_LOCALE: id
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
@@ -24,9 +23,8 @@ env:
   DB_DATABASE: creasico
   DB_USERNAME: creasico
   DB_PASSWORD: secret
-  MAIL_FROM_ADDRESS: devtest@creasi.dev
+  MAIL_FROM_ADDRESS: ${{ vars.MAIL_FROM_ADDRESS }}
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-  TELESCOPE_ENABLED: false
 
 jobs:
   build:
@@ -142,7 +140,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v3
         with:
-          name: public
+          name: build-${{ env.APP_ENV }}
           path: public
 
       - name: Prepare environment
