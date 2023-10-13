@@ -88,7 +88,8 @@ $ composer test:e2e        # to run end-to-end test using larvel-dusk
 
 By default laravel dusk will runs headlessly, if you willing to disable headless mode, just uncomment `DUSK_HEADLESS_DISABLED` in your `.env.testing` file. For more info please consult to the [official documentation](https://laravel.com/docs/dusk)
 
-The `.env.example` also preconfigured with `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` which is necessary to run integration testing on [BrowserStack](https://automate.browserstack.com/), feel free to comment out those variables if you don't want to run it locally. Please consult to their official [documentation](https://www.browserstack.com/docs/local-testing) for local testing.
+> **Note**
+> The `.env.example` also preconfigured with `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY` which is necessary to run integration testing on [BrowserStack](https://automate.browserstack.com/), feel free to comment out those variables if you don't want to run it locally. Please consult to their official [documentation](https://www.browserstack.com/docs/local-testing) for local testing.
 
 ## Contributing
 - **Commit Convention**: This project follows [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) using [@commitlint/config-conventional](https://github.com/conventional-changelog/commitlint/tree/master/@commitlint/config-conventional) as standart, so make sure you follow the rules.
