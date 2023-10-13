@@ -3,11 +3,16 @@ name: Deploy
 on:
   release:
     types: [created]
-  workflow_call:
+  workflow_dispatch:
+    inputs:
+      env:
+        description: Environment to deploy
+        required: true
+        type: environment
   workflow_run:
     workflows: [Code Quality]
     types: [completed]
-    # branches: [main]
+    branches: [main]
 
 env:
   APP_NAME: ${{ vars.APP_NAME }}
@@ -21,6 +26,7 @@ concurrency:
 
 jobs:
   build:
+    name: Build
     # uses: creasico/laravel-project/.github/workflows/build.yml@main
     uses: ./.github/workflows/build.yml
     secrets: inherit
@@ -29,7 +35,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    name: Build and Deploy
+    name: Deploy
+    needs: build
 
     environment:
       name: staging
