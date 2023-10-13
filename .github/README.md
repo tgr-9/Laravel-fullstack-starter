@@ -10,26 +10,22 @@
 - Node.js `>= v16.0` and PNPM `v8.x`
 - Database Server (MySQL, MariaDB or PostgreSQL)
 
+### Stacks
+- [Laravel v10](https://laravel.com/docs/10.x)
+- [Vue.js v3](https://vuejs.org)
+- [Inertia.js](https://inertiajs.com)
+- [Windi.css](https://windicss.org)
+
 ## Setup
 
-1. Clone the repository & `cd` into it
+1. Clone the repository and `cd` into it
 
    ```shell
-   $ git clone git@github.com:creasico/laravel-project.git <dir-name>
-   $ cd <dir-name>
+   git clone git@github.com:creasico/laravel-project.git my-project && cd $_
    ```
-2. Install dependencies
-
-   ```shell
-   $ composer install
-   $ pnpm install
-   ```
+2. Install `composer` and `pnpm` dependencies
 3. Copy `.env.example` file to `.env` file & generate new app key
-
-   ```shell
-   $ php artisan key:generate
-   ```
-4. Create new database & make sure to update `.env` file accordingly
+4. Create new database and update your `.env` file accordingly
 
    ```shell
    # for MySQL (presumably you've already have mysql client)
@@ -50,13 +46,11 @@
 
 ### Front-end
 
-This project is using `windi.css` and `alpine.js` as default front-end library, which mean any changes you've made, won't appears immadiately unless you run the following command
+This project is using [`windi.css`](https://windicss.org/) and [`vue.js`](https://vuejs.org/) with [`inertia.js`](https://inertiajs.com/) as default front-end library, which mean any changes you've made, won't appears immadiately unless you run the following command
 
 ```shell
 $ pnpm dev
 ```
-
-So, please make sure you've already install the dependencies as stated in the [Setup](#setup) section above.
 
 ## Testing
 
