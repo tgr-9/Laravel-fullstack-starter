@@ -3,8 +3,8 @@ name: Build
 on:
   workflow_call:
     inputs:
-      mode:
-        description: 'Build environment mode'
+      target:
+        description: 'Build target'
         default: testing
         required: false
         type: string
@@ -12,10 +12,10 @@ on:
 jobs:
   frontend:
     runs-on: ubuntu-latest
-    name: Frontend for ${{ inputs.mode }}
+    name: Target ${{ inputs.target }}
 
     environment:
-      name: ${{ inputs.mode }}
+      name: ${{ inputs.target }}
 
     env:
       APP_ENV: ${{ vars.APP_ENV }}
@@ -73,7 +73,7 @@ jobs:
           SENTRY_ORG: creasico
           SENTRY_PROJECT: creasi-skeleton
         run: |
-          pnpm build --mode ${{ inputs.mode }}
+          pnpm build --mode ${{ inputs.target }}
 
       - name: Store assets
         uses: actions/upload-artifact@v3

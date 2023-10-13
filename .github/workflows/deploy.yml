@@ -1,5 +1,5 @@
 name: Deploy
-run-name: 'deploy(${{ vars.APP_ENV }}): ${{ github.ref_name }} with ${{ github.event_name }}'
+run-name: 'deploy: ${{ github.ref_name }} with ${{ github.event_name }}'
 
 on:
   release:
@@ -31,11 +31,11 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
-      mode: ${{ github.env.APP_ENV }}
+      target: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
 
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to ${{ github.env.APP_ENV }}
+    name: Deploy to ${{ vars.APP_ENV }}
     needs: build
 
     environment:
@@ -87,4 +87,4 @@ jobs:
           private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
           ssh-config: ${{ secrets.DEPLOY_STAGING_CONFIG }}
           verbosity: ''
-          dep: deploy -f scripts/deploy.php
+          dep: deploy -f scripts/deploy.php env=${{ env.APP_ENV }}
