@@ -1,12 +1,13 @@
 name: Deploy
+run-name: 'deploy(${{ github.env.APP_ENV }}): ${{ github.ref_name }} with ${{ github.event_name }}'
 
 on:
   release:
     types: [created]
   workflow_dispatch:
     inputs:
-      env:
-        description: Environment to deploy
+      target:
+        description: Deployment target
         required: true
         type: environment
   workflow_run:
@@ -16,8 +17,7 @@ on:
 
 env:
   APP_NAME: ${{ vars.APP_NAME }}
-  APP_KEY: ${{ secrets.APP_KEY }}
-  APP_ENV: ${{ vars.APP_ENV }}
+  APP_ENV: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
   APP_LOCALE: id
 
 concurrency:
@@ -39,7 +39,7 @@ jobs:
     needs: build
 
     environment:
-      name: staging
+      name: ${{ github.env.APP_ENV }}
       url: ${{ vars.APP_URL }}
 
     env:
