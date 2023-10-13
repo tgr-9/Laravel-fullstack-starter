@@ -62,9 +62,9 @@ jobs:
 
       - name: Install PHP dependencies
         run: |
-          composer install --prefer-dist --no-interaction --no-progress
+          composer install --prefer-dist --no-interaction --no-progress --ansi
           composer ziggy:generate
-          php artisan vendor:publish --tag creasi-assets
+          php artisan vendor:publish --tag creasi-assets --ansi
 
       - name: Build frontend
         env:

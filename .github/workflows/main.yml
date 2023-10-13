@@ -85,7 +85,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
 
       - name: Install PHP dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress
+        run: composer install --prefer-dist --no-interaction --no-progress --ansi
 
       - name: Run unit tests
         run: php artisan test --ansi --coverage
@@ -161,8 +161,7 @@ jobs:
           restore-keys: ${{ runner.os }}-8.1-composer-
 
       - name: Install PHP dependencies
-        run: |
-          composer install --prefer-dist --no-interaction --no-progress
+        run: composer install --prefer-dist --no-interaction --no-progress --ansi
 
       - name: Setup BrowserStack env  # Invokes the setup-env action
         uses: browserstack/github-actions/setup-env@master
@@ -181,7 +180,7 @@ jobs:
         run: php artisan serve > /dev/null 2>&1 &
 
       - name: Run e2e tests
-        run: php artisan dusk
+        run: php artisan dusk --ansi
 
       - name: Upload e2e tests logs
         if: failure()

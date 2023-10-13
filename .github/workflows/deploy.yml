@@ -72,8 +72,7 @@ jobs:
           path: public
 
       - name: Install PHP dependencies
-        run: |
-          composer install --prefer-dist --no-interaction --no-progress
+        run: composer install --prefer-dist --no-interaction --no-progress --ansi
 
       - name: Deploy
         uses: deployphp/action@v1
