@@ -7,7 +7,7 @@ on:
   workflow_run:
     workflows: [Code Quality]
     types: [completed]
-    branches: [main, feat-ci-config]
+    # branches: [main]
 
 env:
   APP_NAME: ${{ vars.APP_NAME }}

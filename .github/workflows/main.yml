@@ -107,7 +107,7 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     name: Integration Test on BrowserStack
-    needs: units
+    needs: build
 
     env:
       DEBUGBAR_ENABLED: false
@@ -192,19 +192,3 @@ jobs:
         uses: browserstack/github-actions/setup-local@master
         with:
           local-testing: stop
-
-  reports:
-    name: Report Test Coverages
-    needs: units
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download test reports
-        uses: actions/download-artifact@v3
-        with:
-          name: test-reports
-
-      - name: Report to CodeClimate
-        run: |
-          curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
-          ./cc-test-reporter sum-coverage -o - reports/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
