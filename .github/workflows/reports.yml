@@ -4,6 +4,7 @@ on:
   workflow_run:
     workflows: [Code Quality]
     types: [requested]
+    branches: [main]
 
 env:
   CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
