@@ -20,11 +20,13 @@ jobs:
 
     steps:
       - name: Download test reports
-        uses: actions/download-artifact@v3
+        uses: dawidd6/action-download-artifact@v2
         with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           name: test-reports
+          workflow_conclusion: succes
 
-      - name: Report to CodeClimate
+      - name: Submit to CodeClimate
         run: |
           curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
           ./cc-test-reporter sum-coverage -o - reports/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
