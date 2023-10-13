@@ -1,5 +1,7 @@
 name: Deploy
-run-name: 'deploy: ${{ github.ref_name }} with ${{ github.event_name }}'
+run-name: >-
+  deploy(${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}): ${{ github.ref_name }}
+  with ${{ github.event_name == 'workflow_dispatch' && github.actor || github.event_name }}
 
 on:
   release:
