@@ -3,8 +3,7 @@ name: Report
 on:
   workflow_run:
     workflows: [Code Quality]
-    types: [requested]
-    branches: [main]
+    types: [completed]
 
 env:
   CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
