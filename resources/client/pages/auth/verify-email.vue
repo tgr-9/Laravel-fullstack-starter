@@ -15,7 +15,7 @@ function resend() {
 
   <n-button
     type="primary"
-    style="width: 100%;"
+    class="w-full"
     @click="resend"
   >
     {{ $t('auth.actions.resend') }}

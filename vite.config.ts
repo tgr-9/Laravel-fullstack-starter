@@ -1,5 +1,6 @@
 import { resolve } from 'node:path'
 import { readFileSync } from 'node:fs'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
 import laravel from 'laravel-vite-plugin'
@@ -44,6 +45,7 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
+      sourcemap: mode === 'development' || 'SENTRY_AUTH_TOKEN' in env,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 2000,
       rollupOptions: {
@@ -65,6 +67,7 @@ export default defineConfig(({ mode }) => {
       'import.meta.env.APP_URL': JSON.stringify(env.APP_URL),
       'import.meta.env.APP_ENV': JSON.stringify(env.APP_ENV),
       'import.meta.env.SENTRY_DSN': JSON.stringify(env.SENTRY_DSN),
+      'import.meta.env.SENTRY_PROFILING_ENABLE': Boolean(env.SENTRY_PROFILING_ENABLE),
     },
 
     server: {
@@ -85,6 +88,15 @@ export default defineConfig(({ mode }) => {
       }),
 
       vue(),
+
+      /**
+       * @see https://www.npmjs.com/package/@sentry/vite-plugin
+       */
+      sentryVitePlugin({
+        org: env.SENTRY_ORG,
+        project: env.SENTRY_PROJECT,
+        authToken: env.SENTRY_AUTH_TOKEN,
+      }),
 
       /**
        * @see https://windicss.org/integrations/vite.html

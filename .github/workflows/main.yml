@@ -77,7 +77,13 @@ jobs:
         run: pnpm install
 
       - name: Build frontend
-        run: pnpm build --mode ${{ env.APP_ENV }}
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: creasico
+          SENTRY_PROJECT: creasi-skeleton
+        run: |
+          composer ziggy:generate
+          pnpm build --mode ${{ env.APP_ENV }}
 
       - name: Store assets
         uses: actions/upload-artifact@v3
@@ -170,6 +176,7 @@ jobs:
     needs: units
 
     env:
+      DEBUGBAR_ENABLED: true
       DUSK_HEADLESS_DISABLED: true
       TELESCOPE_ENABLED: false
 

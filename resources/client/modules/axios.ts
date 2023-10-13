@@ -1,17 +1,30 @@
-import { captureException } from '@sentry/vue'
+import { captureException, setExtras } from '@sentry/vue'
 import axios from 'axios'
-import type { AxiosError, AxiosStatic } from 'axios'
+import type { AxiosError, AxiosResponse, AxiosStatic } from 'axios'
 
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 axios.defaults.withCredentials = true
+axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 axios.interceptors.response.use(response => response, (error: AxiosError) => {
-  if (error.response?.status === 401) {
-    window.location.replace(route('login'))
+  const response = error.response as AxiosResponse
+
+  if (response.status === 401) {
+    location.replace(route('login'))
+    return
+  }
+
+  if (response.status === 419) {
+    location.reload()
     return
   }
 
   // Capture error response data to sentry
-  captureException(error.response?.data)
+  setExtras({
+    payload: JSON.parse(error.config?.data ?? '{}'),
+  })
+
+  captureException(
+    error.config?.headers.has('X-Inertia') ? error : response.data,
+  )
 
   throw error
 })

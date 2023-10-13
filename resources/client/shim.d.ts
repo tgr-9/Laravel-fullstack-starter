@@ -1,19 +1,14 @@
-import type { PageProps, Page } from '@inertiajs/core'
 import type { App } from 'vue'
 
 export {}
 
-interface AppPageProps extends PageProps {
-  user?: UserProp
-  flash: FlashProp
+interface AppMessage {
+  type?: "warning" | "error" | "info" | "success"
+  title: string
+  description: string
 }
 
-interface FlashProp {
-  success?: boolean
-  errors: array
-}
-
-interface UserProp {
+interface AppUser {
   name: string
   email: string
 }
@@ -32,8 +27,11 @@ declare global {
   }
 }
 
-declare module '@inertiajs/vue3' {
-  export function usePage<T extends AppPageProps>(): Page<T>
+declare module '@inertiajs/core' {
+  export interface PageProps {
+    user: AppUser | null
+    message: AppMessage | null
+  }
 }
 
 declare module '@vue/runtime-core' {

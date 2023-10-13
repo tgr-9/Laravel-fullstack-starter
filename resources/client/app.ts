@@ -38,6 +38,10 @@ function getPageKey(name: string, defined?: string): string {
   return segment.join('.')
 }
 
+window.addEventListener('unhandledrejection', (e) => {
+  console.error(e.reason)
+})
+
 createInertiaApp({
   title: title => [title, import.meta.env.APP_NAME].filter((str?: string) => !!str).join(' | '),
   resolve: (name) => {
