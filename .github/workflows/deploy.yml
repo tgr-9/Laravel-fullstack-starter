@@ -1,7 +1,6 @@
 name: Deploy
 run-name: >-
-  deploy(${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}): ${{ github.ref_name }}
-  with ${{ github.event_name == 'workflow_dispatch' && github.actor || github.event_name }}
+  deploy ${{ github.ref_name }} to ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
 
 on:
   release:
@@ -37,7 +36,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to ${{ vars.APP_ENV }}
+    name: Deploy to ${{ github.env.APP_ENV }}
     needs: build
 
     environment:
@@ -60,18 +59,18 @@ jobs:
           coverage: none
 
       - name: Prepare environment
-        id: composer-cache
+        id: prepare
         run: |
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
           composer config -g github-oauth.github.com ${{ secrets.PAT }}
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache Composer dependencies
         uses: actions/cache@v3
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-8.1-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-8.1-composer-
+          path: ${{ steps.prepare.outputs.composer-cache }}
+          key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: php-8.1-composer-
 
       - name: Download assets
         id: download
@@ -80,7 +79,7 @@ jobs:
           name: public
           path: public
 
-      - name: Install PHP dependencies
+      - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress --ansi
 
       - name: Deploy
@@ -89,4 +88,4 @@ jobs:
           private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
           ssh-config: ${{ secrets.DEPLOY_STAGING_CONFIG }}
           verbosity: ''
-          dep: deploy -f scripts/deploy.php env=${{ env.APP_ENV }}
+          dep: deploy -f scripts/deploy.php env=${{ env.APP_ENV }} --branch ${{ github.ref_name }}
