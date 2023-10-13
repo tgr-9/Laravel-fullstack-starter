@@ -50,9 +50,10 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Prepare composer
+      - name: Prepare environment
         id: composer-cache
         run: |
+          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
           composer config -g github-oauth.github.com ${{ secrets.PAT }}
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
@@ -60,8 +61,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          key: ${{ runner.os }}-8.1-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-8.1-composer-
 
       - name: Download assets
         id: download
