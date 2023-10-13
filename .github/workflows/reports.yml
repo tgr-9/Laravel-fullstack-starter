@@ -1,0 +1,31 @@
+name: Report
+
+on:
+  workflow_run:
+    workflows: [Code Quality]
+    types: [requested]
+    branches: [main]
+
+env:
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+  CC_TEST_REPORTER_URL: ${{ vars.CC_TEST_REPORTER_URL }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverages:
+    name: Tests Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download test reports
+        uses: actions/download-artifact@v3
+        with:
+          name: test-reports
+
+      - name: Report to CodeClimate
+        run: |
+          curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
+          ./cc-test-reporter sum-coverage -o - reports/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
