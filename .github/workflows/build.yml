@@ -20,7 +20,7 @@ jobs:
     env:
       APP_ENV: ${{ vars.APP_ENV }}
       APP_URL: ${{ vars.APP_URL }}
-      COMPOSER_CACHE_DIR:
+      # COMPOSER_CACHE_DIR:
 
     steps:
       - name: Checkout
@@ -46,17 +46,19 @@ jobs:
           cache: pnpm
           node-version: 18.x
 
-      - name: Prepare Environments
+      - name: Prepare environment
+        id: composer-cache
         run: |
-          echo "COMPOSER_CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
+          composer config -g github-oauth.github.com ${{ secrets.PAT }}
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Prepare Composer Cache
         uses: actions/cache@v3
         with:
-          path: ${{ env.COMPOSER_CACHE_DIR }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-8.1-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-8.1-composer-
 
       - name: Install PHP dependencies
         run: |
