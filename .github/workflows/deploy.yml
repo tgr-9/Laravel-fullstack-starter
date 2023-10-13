@@ -84,12 +84,13 @@ jobs:
           SENTRY_PROJECT: creasi-skeleton
         run: |
           composer ziggy:generate
+          php artisan vendor:publish --tag creasi-assets
           pnpm build --mode ${{ vars.APP_ENV }}
 
       - name: Deploy
         uses: deployphp/action@v1
         with:
-          private-key: ${{ secrets.STAGING_SERVER_RSAKEY }}
-          ssh-config: ${{ secrets.STAGING_SERVER_SSH_CONFIG }}
+          private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
+          ssh-config: ${{ secrets.DEPLOY_STAGING_CONFIG }}
           verbosity: ''
           dep: deploy -f scripts/deploy.php
