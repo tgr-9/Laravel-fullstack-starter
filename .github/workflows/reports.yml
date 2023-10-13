@@ -25,6 +25,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           name: test-reports
           search_artifacts: true
+          workflow: main.yml
           workflow_conclusion: succes
 
       - name: Submit to CodeClimate
