@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Creasi\Base\Contracts\HasIdentity;
+use Creasi\Base\Models\Concerns\WithIdentity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -17,11 +19,12 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @method static \Database\Factories\UserFactory<static> factory()
  */
-class User extends Authenticatable
+class User extends Authenticatable implements HasIdentity
 {
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
+    use WithIdentity;
 
     protected $fillable = ['name', 'email', 'password'];
 

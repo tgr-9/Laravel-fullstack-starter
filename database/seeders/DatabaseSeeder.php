@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             return;
         }
 
-        User::factory()->create([
+        User::factory()->withIdentity()->create([
             'name' => 'creasi',
             'email' => 'admin@creasi.dev',
         ]);
