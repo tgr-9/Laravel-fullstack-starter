@@ -29,7 +29,7 @@ host('skeleton.creasi.dev')
 task('deploy:assets', function () {
     $conn = currentHost()->connectionString();
 
-    runLocally("rsync -zrtv ../public/{build,vendor} {$conn}:{{release_or_current_path}}/public/");
+    runLocally("rsync -zrtv --exclude '*.map' ../public/{build,vendor} {$conn}:{{release_or_current_path}}/public/");
 })->desc('Deploy static assets');
 
 // Hooks
