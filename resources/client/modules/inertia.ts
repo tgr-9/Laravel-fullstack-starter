@@ -47,7 +47,7 @@ declare module 'vue' {
 declare module 'ziggy-js' {
   export default function route(
     name: keyof AppRoutes,
-    params?: RouteParamsWithQueryOverload | Record<string, unknown>,
+    params?: Record<string, unknown>,
     absolute?: boolean,
   ): string
 }

@@ -58,7 +58,7 @@ const pageTitle = computed(() => props.title || t(props.page))
   }
 
   .n-form {
-    @apply flex flex-col gap-5 border-b border-b-gray-500 pb-6;
+    @apply flex flex-col gap-5 border-b light:border-light-500 dark:border-gray-500 pb-6;
 
     .n-form-item {
       --n-feedback-height: auto !important;

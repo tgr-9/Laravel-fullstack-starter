@@ -7,7 +7,7 @@ const { paths } = defineProps<{
 </script>
 
 <template>
-  <header class="w-full bg-dark-800 border-b border-light-500 dark:border-dark-500">
+  <header class="w-full dark:bg-dark-800 border-b light:border-light-500 dark:border-dark-500">
     <div class="container md:mx-auto py-2">
       <n-breadcrumb v-if="paths.length > 0">
         <n-breadcrumb-item>
