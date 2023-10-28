@@ -21,10 +21,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: Build
-    # uses: creasico/laravel-project/.github/workflows/build.yml@main
-    uses: ./.github/workflows/build.yml
+  prepare:
+    name: Prepare
+    # uses: creasico/laravel-project/.github/workflows/prepare.yml@main
+    uses: ./.github/workflows/prepare.yml
     secrets: inherit
     with:
       target: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
@@ -32,7 +32,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
-    needs: build
+    needs: prepare
 
     environment:
       name: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
@@ -56,16 +56,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prepare environment
-        id: prepare
-        run: |
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
       - name: Cache Composer dependencies
         uses: actions/cache@v3
         with:
-          path: ${{ steps.prepare.outputs.composer-cache }}
+          path: ${{ needs.prepare.outputs.composer-cache }}
           key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: php-8.1-composer-
 
