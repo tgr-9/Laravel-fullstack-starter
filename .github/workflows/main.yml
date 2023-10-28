@@ -66,12 +66,13 @@ jobs:
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: xdebug
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare environment
         id: prepare
         run: |
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          composer config -g github-oauth.github.com ${{ secrets.PAT }}
           echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Prepare Composer Cache
@@ -138,6 +139,8 @@ jobs:
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: xdebug
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Download assets
         id: download
@@ -150,7 +153,6 @@ jobs:
         id: prepare
         run: |
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          composer config -g github-oauth.github.com ${{ secrets.PAT }}
           echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Prepare Composer Cache
