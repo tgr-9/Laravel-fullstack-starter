@@ -27,16 +27,16 @@ env:
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
 jobs:
-  build:
+  prepare:
     name: Build
-    # uses: creasico/laravel-project/.github/workflows/build.yml@main
-    uses: ./.github/workflows/build.yml
+    # uses: creasico/laravel-project/.github/workflows/prepare.yml@main
+    uses: ./.github/workflows/prepare.yml
     secrets: inherit
 
   units:
     name: Unit Test with PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: prepare
 
     services:
       postgresql:
@@ -69,16 +69,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prepare environment
-        id: prepare
-        run: |
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
       - name: Prepare Composer Cache
         uses: actions/cache@v3
         with:
-          path: ${{ steps.prepare.outputs.composer-cache }}
+          path: ${{ needs.prepare.outputs.composer-cache }}
           key: php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: php-${{ matrix.php }}-composer-
 
@@ -110,7 +104,7 @@ jobs:
     name: Integration Test on BrowserStack
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
-    needs: build
+    needs: prepare
 
     env:
       DEBUGBAR_ENABLED: false
@@ -149,16 +143,10 @@ jobs:
           name: build-${{ env.APP_ENV }}
           path: public
 
-      - name: Prepare environment
-        id: prepare
-        run: |
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
       - name: Prepare Composer Cache
         uses: actions/cache@v3
         with:
-          path: ${{ steps.prepare.outputs.composer-cache }}
+          path: ${{ needs.prepare.outputs.composer-cache }}
           key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: php-8.1-composer-
 
