@@ -34,8 +34,8 @@ jobs:
     secrets: inherit
 
   units:
-    runs-on: ubuntu-latest
     name: Unit Test with PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
     needs: build
 
     services:
@@ -88,6 +88,7 @@ jobs:
         run: php artisan test --ansi --coverage
 
       - name: Generate reports for CodeClimate
+        if: github.actor != 'dependabot[bot]'
         env:
           COVERAGE_FILE: tests/reports/clover.xml
           CODECLIMATE_REPORT: tests/reports/codeclimate.${{ matrix.php }}.json
@@ -96,6 +97,7 @@ jobs:
           ./cc-test-reporter format-coverage -t clover -o $CODECLIMATE_REPORT $COVERAGE_FILE
 
       - name: Upload tests reports
+        if: github.actor != 'dependabot[bot]'
         uses: actions/upload-artifact@v3
         with:
           name: test-reports
@@ -104,8 +106,9 @@ jobs:
             tests/reports
 
   e2e:
-    runs-on: ubuntu-latest
     name: Integration Test on BrowserStack
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
     needs: build
 
     env:
@@ -195,6 +198,7 @@ jobs:
 
   reports:
     name: Report Test Coverages
+    if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
     needs: units
 
