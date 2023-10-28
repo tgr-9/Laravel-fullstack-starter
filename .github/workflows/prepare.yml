@@ -1,4 +1,4 @@
-name: Build
+name: Prepare
 
 on:
   workflow_call:
@@ -8,11 +8,16 @@ on:
         default: testing
         required: false
         type: string
+    outputs:
+      composer-cache:
+        value: ${{ jobs.build.outputs.composer-cache }}
 
 jobs:
-  frontend:
+  build:
     runs-on: ubuntu-latest
-    name: Target ${{ inputs.target }}
+    name: Build for `${{ inputs.target }}`
+    outputs:
+      composer-cache: ${{ steps.prepare.outputs.composer-cache }}
 
     environment:
       name: ${{ inputs.target }}
