@@ -1,4 +1,4 @@
-name: Build
+name: Prepare
 
 on:
   workflow_call:
@@ -8,11 +8,16 @@ on:
         default: testing
         required: false
         type: string
+    outputs:
+      composer-cache:
+        value: ${{ jobs.build.outputs.composer-cache }}
 
 jobs:
-  frontend:
+  build:
     runs-on: ubuntu-latest
-    name: Target ${{ inputs.target }}
+    name: Build for `${{ inputs.target }}`
+    outputs:
+      composer-cache: ${{ steps.prepare.outputs.composer-cache }}
 
     environment:
       name: ${{ inputs.target }}
@@ -32,6 +37,8 @@ jobs:
           extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
           tools: composer:v2
           coverage: none
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
@@ -49,7 +56,6 @@ jobs:
         id: prepare
         run: |
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          composer config -g github-oauth.github.com ${{ secrets.PAT }}
           echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Prepare Composer Cache
