@@ -3,14 +3,6 @@ integration:
 - 'app/Providers/**.php'
 - 'tests/Browser/**.php'
 
-config:
-  - any:
-    - '.github/*.yml'
-    - 'config/**.php'
-    - '*.config.ts'
-  - all:
-    - 'config/auth.php'
-
 docs:
 - '.env.example'
 - '**.md'
