@@ -28,7 +28,7 @@ env:
 
 jobs:
   prepare:
-    name: Build
+    name: Prepare
     # uses: creasico/laravel-project/.github/workflows/prepare.yml@main
     uses: ./.github/workflows/prepare.yml
     secrets: inherit
