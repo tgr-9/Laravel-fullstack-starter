@@ -13,10 +13,10 @@ updates:
     groups:
       dependencies:
         dependency-type: "production"
-        update-types: [minor, patch]
+        patterns: ['*']
       dev-dependencies:
         dependency-type: "development"
-        update-types: [minor, patch]
+        patterns: ['*']
 
   - package-ecosystem: npm
     directory: "/"
@@ -29,5 +29,8 @@ updates:
       - "dependencies"
     groups:
       dependencies:
+        dependency-type: "production"
+        patterns: ['*']
+      dev-dependencies:
         dependency-type: "development"
-        update-types: [minor, patch]
+        patterns: ['*']
