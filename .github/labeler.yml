@@ -1,0 +1,52 @@
+integration:
+- '.github/workflows/*.yml'
+- 'app/Providers/**.php'
+- 'tests/Browser/**.php'
+
+docs:
+- '.env.example'
+- '**.md'
+
+deployment:
+- '.github/workflows/deploy.yml'
+- 'scripts/deploy.php'
+- 'scripts/deploy/**'
+
+api:
+- 'app/Http/Controllers/Api/**.php'
+- 'app/Http/Resources/**.php'
+- 'routes/api.php'
+
+authentication:
+- 'app/Http/Controller/Auth/**.php'
+- 'config/auth.php'
+- 'routes/auth.php'
+
+authorization:
+- 'app/Http/Middleware/**.php'
+- 'app/Policies/**.php'
+
+experiences:
+- 'app/Http/Controllers/**.php'
+- 'app/Http/Requests/**.php'
+- 'app/Views/**.php'
+- 'routes/web.php'
+
+localization:
+- 'resources/lang/**'
+
+UI:
+- 'app/Views/**.php'
+- 'resources/client/**'
+- 'resources/views/**'
+
+'db: schema':
+- 'app/Models/**.php'
+- 'database/factories/**.php'
+- 'database/migrations/**.php'
+
+'db: seeder':
+- 'database/seeders/**.php'
+
+enhancement:
+- '**'
