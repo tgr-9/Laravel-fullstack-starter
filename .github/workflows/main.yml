@@ -6,7 +6,7 @@ on:
   push:
     branches: [main]
     # paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
-  pull_request:
+  pull_request_target:
     branches: [main]
     # paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
 
