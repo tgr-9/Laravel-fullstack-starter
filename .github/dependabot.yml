@@ -8,6 +8,8 @@ updates:
       timezone: "Asia/Jakarta"
     open-pull-requests-limit: 5
     versioning-strategy: increase-if-necessary
+    labels:
+      - "dependencies"
     groups:
       dependencies:
         dependency-type: "production"
@@ -23,6 +25,8 @@ updates:
       timezone: "Asia/Jakarta"
     open-pull-requests-limit: 5
     versioning-strategy: increase-if-necessary
+    labels:
+      - "dependencies"
     groups:
       dependencies:
         dependency-type: "development"
