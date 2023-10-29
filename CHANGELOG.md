@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.1](https://github.com/creasico/laravel-project/compare/v0.1.0...v0.1.1) (2023-10-29)
+
+
+### Features
+
+* **ci:** switch `release` and `deploy` workflow trigger ([bafb38a](https://github.com/creasico/laravel-project/commit/bafb38ab54e44cfdc3b1e2c19939e51b7b740daa))
+
 ## [0.1.0](https://github.com/creasico/laravel-project/compare/v0.0.3...v0.1.0) (2023-10-28)
 
 
