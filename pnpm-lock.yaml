@@ -73,9 +73,6 @@ devDependencies:
   eslint:
     specifier: ^8.51.0
     version: 8.52.0
-  husky:
-    specifier: ^8.0.3
-    version: 8.0.3
   laravel-vite-plugin:
     specifier: ^0.8.1
     version: 0.8.1(vite@4.5.0)
@@ -85,6 +82,9 @@ devDependencies:
   naive-ui:
     specifier: ^2.35.0
     version: 2.35.0(vue@3.3.7)
+  simple-git-hooks:
+    specifier: ^2.9.0
+    version: 2.9.0
   standard-version:
     specifier: ^9.5.0
     version: 9.5.0
@@ -4581,12 +4581,6 @@ packages:
     engines: {node: '>=16.17.0'}
     dev: true
 
-  /husky@8.0.3:
-    resolution: {integrity: sha512-+dQSyqPh4x1hlO1swXBiNb2HzTDN1I2IGLQx1GrBuiqFJfoMrnZWwVmatvSiO+Iz8fBUnf+lekwNo4c2LlXItg==}
-    engines: {node: '>=14'}
-    hasBin: true
-    dev: true
-
   /idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
     dev: true
@@ -6170,6 +6164,12 @@ packages:
   /signal-exit@4.1.0:
     resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
+    dev: true
+
+  /simple-git-hooks@2.9.0:
+    resolution: {integrity: sha512-waSQ5paUQtyGC0ZxlHmcMmD9I1rRXauikBwX31bX58l5vTOhCEcBC5Bi+ZDkPXTjDnZAF8TbCqKBY+9+sVPScw==}
+    hasBin: true
+    requiresBuild: true
     dev: true
 
   /slash@3.0.0:
