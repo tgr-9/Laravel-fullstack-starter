@@ -18,8 +18,8 @@
     "vue-i18n": "^9.5.0"
   },
   "devDependencies": {
-    "@commitlint/cli": "^17.7.2",
-    "@commitlint/config-conventional": "^17.7.0",
+    "@commitlint/cli": "^18.2.0",
+    "@commitlint/config-conventional": "^18.1.0",
     "@creasico/eslint-config": "^0.0.1",
     "@fontsource/nunito": "^5.0.13",
     "@iconify/vue": "^4.1.1",
@@ -28,7 +28,7 @@
     "@intlify/unplugin-vue-i18n": "^1.4.0",
     "@sentry/vite-plugin": "^2.8.0",
     "@sentry/vue": "^7.73.0",
-    "@types/node": "^18.18.4",
+    "@types/node": "^20.8.9",
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/compiler-sfc": "^3.3.4",
     "@vue/runtime-core": "^3.3.4",
@@ -42,7 +42,7 @@
     "standard-version": "^9.5.0",
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.2",
-    "vite": "~4.4.11",
+    "vite": "~4.5.0",
     "vite-plugin-pwa": "^0.16.5",
     "vite-plugin-windicss": "^1.9.1",
     "windicss": "^3.5.6",
