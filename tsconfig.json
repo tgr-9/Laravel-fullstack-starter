@@ -9,8 +9,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "public",
-    "module": "esnext",
-    "target": "esnext",
+    "module": "ESNext",
+    "target": "ESNext",
     "jsx": "preserve",
     "strict": true,
     "allowJs": true,
@@ -22,20 +22,21 @@
     "declaration": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
     "useDefineForClassFields": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "lib": ["ESNext", "DOM", "WebWorker"],
-    "typeRoots": [
-      "./node_modules/@types/",
-      "./resources/client/"
-    ],
     "types": [
-      "vite/client"
-      // "vite-plugin-pwa/client",
+      "vite/client",
+      "vue/ref-macros",
+      "vite-plugin-pwa/client",
+      "@intlify/unplugin-vue-i18n/messages"
     ],
     "paths": {
       "~/*": ["resources/client/*"]
     }
-  }
+  },
+  "vueCompilerOptions": {}
 }
