@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.3](https://github.com/creasico/laravel-project/compare/v0.1.2...v0.1.3) (2023-10-29)
+
+
+### Features
+
+* initialize `simple-git-hooks` as described [#31](https://github.com/creasico/laravel-project/issues/31) ([50b417e](https://github.com/creasico/laravel-project/commit/50b417e267e2e666f27f13599ce5ef0e999097a2))
+
+
+### Bug Fixes
+
+* **ci:** fix misconfigured release workflow ([59e141b](https://github.com/creasico/laravel-project/commit/59e141b3343dbe6e89cc4fcd0db267a5c9ba1e5d))
+
 ### [0.1.2](https://github.com/creasico/laravel-project/compare/v0.1.1...v0.1.2) (2023-10-29)
 
 ### [0.1.1](https://github.com/creasico/laravel-project/compare/v0.1.0...v0.1.1) (2023-10-29)
