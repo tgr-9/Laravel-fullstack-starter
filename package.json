@@ -7,6 +7,7 @@
     "build": "vite build",
     "dev": "vite",
     "lint": "eslint --ext .ts,.json,.vue resources",
+    "postinstall": "simple-git-hooks",
     "release": "standard-version -s"
   },
   "dependencies": {
@@ -14,7 +15,7 @@
     "date-fns": "^2.30.0",
     "qs": "^6.11.2",
     "vue": "^3.3.4",
-    "vue-i18n": "^9.5.0"
+    "vue-i18n": "^9.6.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^18.2.0",
