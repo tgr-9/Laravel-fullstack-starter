@@ -6,6 +6,6 @@ changelog:
       - dependabot[bot]
 
   categories:
-    - title: What's Changed
+    - title: Contributions
       labels:
         - '*'
