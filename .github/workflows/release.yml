@@ -22,5 +22,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        discussion_category_name: true
+        generate_release_notes: true
         body_path: PUBLISH.md
