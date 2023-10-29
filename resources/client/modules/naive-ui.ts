@@ -22,7 +22,7 @@ export const install: AppModuleInstall = ({ app, isClient }): void => {
   app.config.globalProperties.$loading = loadingBar
 }
 
-declare module 'vue' {
+declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
     $message: MessageApi
     $dialog: DialogApi
