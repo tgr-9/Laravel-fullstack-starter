@@ -1,10 +1,12 @@
 import { createInertiaApp } from '@inertiajs/vue3'
 import type { DefineComponent } from 'vue'
 import { createApp, h } from 'vue'
+import piniaPersistedState from 'pinia-plugin-persistedstate'
 
 // import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
+import { createPinia } from 'pinia'
 
 createThemeOverrides({
   common: {
@@ -67,8 +69,13 @@ createInertiaApp({
   },
   setup({ el, App, props, plugin }) {
     const isClient = typeof window !== 'undefined'
+    const pinia = createPinia()
+
+    pinia.use(piniaPersistedState)
+
     const app = createApp({ render: () => h(App, props) })
       .use(plugin)
+      .use(pinia)
 
     Object.values(import.meta.glob<{ install: AppModuleInstall }>('./modules/*.ts', { eager: true })).forEach((i) => {
       Promise.resolve(i.install({ app, isClient }))
