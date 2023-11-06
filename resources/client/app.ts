@@ -1,6 +1,8 @@
 import { createInertiaApp } from '@inertiajs/vue3'
-import type { DefineComponent } from 'vue'
+import { createPinia } from 'pinia'
+import piniaPersistedState from 'pinia-plugin-persistedstate'
 import { createApp, h } from 'vue'
+import type { DefineComponent } from 'vue'
 
 // import 'virtual:windi-devtools'
 import 'virtual:windi.css'
@@ -60,15 +62,20 @@ createInertiaApp({
     page.default.layout = h(layout.default, {
       page: getPageKey(name, page.default.pageName),
       title: page.default.pageTitle,
-      paths: page.default.breadcrumb || [],
+      paths: page.default.paths || [],
     })
 
     return page
   },
   setup({ el, App, props, plugin }) {
     const isClient = typeof window !== 'undefined'
+    const pinia = createPinia()
+
+    pinia.use(piniaPersistedState)
+
     const app = createApp({ render: () => h(App, props) })
       .use(plugin)
+      .use(pinia)
 
     Object.values(import.meta.glob<{ install: AppModuleInstall }>('./modules/*.ts', { eager: true })).forEach((i) => {
       Promise.resolve(i.install({ app, isClient }))
