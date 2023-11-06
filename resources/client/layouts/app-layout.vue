@@ -4,6 +4,7 @@ import { Head as iHead } from '@inertiajs/vue3'
 import { breakpointsTailwind } from '@vueuse/core'
 import { NDropdown, NLayoutSider, NMenu } from 'naive-ui'
 import type { MenuInst } from 'naive-ui'
+import type { BreadcrumbItem } from '~/utils/navigations'
 
 defineOptions({
   inheritAttrs: false,
@@ -44,6 +45,21 @@ const siderCollapsedMode = computed(() => onSmallScreen.value ? 'transform' : 'w
 const siderCollapsedWidth = computed(() => onSmallScreen.value ? 0 : 64)
 const logoWidth = computed(() => siderCollapsed.value ? 48 : undefined)
 const touches = reactive({ x: 0, y: 0 })
+const paths = computed(() => {
+  const items = props.paths.reduce((paths, item) => {
+    paths.push({
+      label: t(item),
+    })
+
+    return paths
+  }, [] as BreadcrumbItem[])
+
+  items.push({
+    label: pageTitle.value,
+  })
+
+  return items
+})
 
 onClickOutside(sider, () => {
   if (onSmallScreen.value)
@@ -134,7 +150,7 @@ function touchEnd(e: TouchEvent) {
 
       <n-layout-content>
         <page-header :paths="paths" class="page-content-section">
-          <h1 class="text-xl font-bold" v-html="pageTitle" />
+          <h1 class="text-3xl font-bold" v-html="pageTitle" />
         </page-header>
 
         <page-main class="page-content-section">

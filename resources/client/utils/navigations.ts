@@ -1,7 +1,7 @@
 import { Icon } from '@iconify/vue'
 import { Link, router } from '@inertiajs/vue3'
 import type { RemovableRef } from '@vueuse/core'
-import type { DropdownOption, MenuOption } from 'naive-ui'
+import type { BreadcrumbItemProps, DropdownOption, MenuOption } from 'naive-ui'
 import type { AppRoutes } from '~/modules/inertia'
 
 export interface NavigationItem {
@@ -11,6 +11,12 @@ export interface NavigationItem {
   type?: 'divider' | 'group'
   disabled?: boolean
   children?: NavigationItem[]
+}
+
+export interface BreadcrumbItem extends BreadcrumbItemProps {
+  label: string
+  icon?: string
+  clickable?: boolean
 }
 
 /**
