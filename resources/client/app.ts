@@ -1,12 +1,12 @@
 import { createInertiaApp } from '@inertiajs/vue3'
-import type { DefineComponent } from 'vue'
-import { createApp, h } from 'vue'
+import { createPinia } from 'pinia'
 import piniaPersistedState from 'pinia-plugin-persistedstate'
+import { createApp, h } from 'vue'
+import type { DefineComponent } from 'vue'
 
 // import 'virtual:windi-devtools'
 import 'virtual:windi.css'
 import '~/app.css'
-import { createPinia } from 'pinia'
 
 createThemeOverrides({
   common: {
@@ -62,7 +62,7 @@ createInertiaApp({
     page.default.layout = h(layout.default, {
       page: getPageKey(name, page.default.pageName),
       title: page.default.pageTitle,
-      paths: page.default.breadcrumb || [],
+      paths: page.default.paths || [],
     })
 
     return page

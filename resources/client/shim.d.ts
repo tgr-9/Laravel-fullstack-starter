@@ -57,6 +57,6 @@ declare module '@vue/runtime-core' {
     /**
      * Define paths of current page
      */
-    breadcrumb?: string[]
+    paths?: string[]
   }
 }
