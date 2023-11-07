@@ -25,12 +25,9 @@ onMounted(async () => {
   await nusa.fetchProvinces()
 })
 
-watch(
-  () => model[props.path],
-  (value) => {
-    nusa.province(typeof value === 'string' ? +value : value)
-  },
-)
+watch(() => model[props.path], (value) => {
+  nusa.province(typeof value === 'string' ? +value : value)
+})
 
 function update(value: number) {
   nusa.province_code = value

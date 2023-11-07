@@ -4,9 +4,8 @@ import type { SelectOption } from 'naive-ui'
 import type { GenericData } from '~/types/api'
 
 const props = defineProps<{
-  path: string
+  path: keyof GenericData
   label: string
-  options: SelectOption[]
   placeholder?: string
   autofocus?: boolean
   multiple?: boolean
@@ -14,7 +13,8 @@ const props = defineProps<{
   loading?: boolean
   disabled?: boolean
   model: InertiaForm<GenericData>
-  validation: Record<string, 'error' | undefined>
+  validation: Record<keyof GenericData, 'error' | undefined>
+  options: SelectOption[]
 }>()
 
 defineEmits(['search', 'update'])
