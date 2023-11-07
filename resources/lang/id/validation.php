@@ -165,6 +165,16 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'rt' => 'RT',
+        'rw' => 'RW',
+        'line' => 'Alamat',
+        'address_line' => 'Alamat',
+        'province_code' => 'Propinsi',
+        'regency_code' => 'Kota/Kabupaten',
+        'district_code' => 'Kecamatan',
+        'village_code' => 'Kelurahan',
+        'postal_code' => 'Kode Pos',
+    ],
 
 ];
