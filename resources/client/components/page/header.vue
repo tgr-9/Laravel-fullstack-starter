@@ -27,7 +27,8 @@ const paths = computed(() => props.paths.map((path) => {
         :clickable="path.clickable"
         :href="path.href"
       >
-        <icon v-if="path.icon" :icon="path.icon" class="text-base inline-block m-0" />{{ path.label }}
+        <icon v-if="path.icon" :icon="path.icon" class="text-base inline-block m-0" />
+        <span v-html="path.label" />
       </n-breadcrumb-item>
     </n-breadcrumb>
 
@@ -45,10 +46,6 @@ const paths = computed(() => props.paths.map((path) => {
 
   & &-item {
     @apply items-center;
-
-    &__link {
-      color: red;
-    }
   }
 }
 </style>
