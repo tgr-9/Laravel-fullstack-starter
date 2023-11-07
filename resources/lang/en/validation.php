@@ -165,6 +165,16 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'rt' => 'RT',
+        'rw' => 'RW',
+        'line' => 'Address Line',
+        'address_line' => 'Address Line',
+        'province_code' => 'Province',
+        'regency_code' => 'Regency',
+        'district_code' => 'District',
+        'village_code' => 'Village',
+        'postal_code' => 'Postal Code',
+    ],
 
 ];
