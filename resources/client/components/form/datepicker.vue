@@ -3,13 +3,13 @@ import type { InertiaForm } from '@inertiajs/vue3'
 import type { GenericData } from '~/types/api'
 
 const props = defineProps<{
-  path: string
-  label: string
+  path: keyof GenericData
+  label?: string
   placeholder?: string
   autofocus?: boolean
   disabled?: boolean
   model: InertiaForm<GenericData>
-  validation: Record<string, 'error' | undefined>
+  validation: Record<keyof GenericData, 'error' | undefined>
 }>()
 
 const model = reactive(props.model)

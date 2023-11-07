@@ -26,12 +26,9 @@ const options = computed<SelectOption[]>(() => nusa.districts.map(i => ({
   value: i.code,
 })))
 
-watch(
-  () => model[props.path],
-  async (value) => {
-    await nusa.district(typeof value === 'string' ? +value : value)
-  },
-)
+watch(() => model[props.path], async (value) => {
+  await nusa.district(typeof value === 'string' ? +value : value)
+})
 
 watchEffect(async () => {
   if (props.regencyCode !== null) {

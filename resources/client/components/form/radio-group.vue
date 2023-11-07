@@ -3,12 +3,13 @@ import type { InertiaForm } from '@inertiajs/vue3'
 import type { GenericData } from '~/types/api'
 
 const props = defineProps<{
-  path: string
-  label: string
-  options: RadioOption[]
+  path: keyof GenericData
+  label?: string
   placeholder?: string
+  disabled?: boolean
   model: InertiaForm<GenericData>
-  validation: Record<string, 'error' | undefined>
+  validation: Record<keyof GenericData, 'error' | undefined>
+  options: RadioOption[]
 }>()
 
 export interface RadioOption {
@@ -18,6 +19,7 @@ export interface RadioOption {
 
 const model = reactive(props.model)
 const validation = reactive(props.validation)
+const disabled = computed(() => props.disabled || model.processing)
 </script>
 
 <template>
@@ -29,13 +31,7 @@ const validation = reactive(props.validation)
   >
     <n-radio-group v-model:value="model[props.path]" :name="props.path">
       <template v-for="opt of props.options" :key="opt.value">
-        <n-radio
-          :value="opt.value"
-          :loading="model.processing"
-          :disabled="model.processing"
-        >
-          {{ opt.label }}
-        </n-radio>
+        <n-radio :value="opt.value" :disabled="disabled" :label="opt.label" />
       </template>
     </n-radio-group>
   </n-form-item>
