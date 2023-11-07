@@ -1,4 +1,4 @@
-export interface GenericData extends Record<string, any> {}
+export type GenericData = Record<string, any>
 
 interface BaseResponse {
   meta: Record<string, unknown>
