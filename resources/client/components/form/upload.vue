@@ -4,13 +4,15 @@ import type { ListType } from 'naive-ui/es/upload/src/interface'
 import type { GenericData } from '~/types/api'
 
 const props = defineProps<{
-  path: string
+  path: keyof GenericData
   label: string
   accept: string
   listType: ListType
-  max: number
+  max?: number
+  loading?: boolean
+  disabled?: boolean
   model: InertiaForm<GenericData>
-  validation: Record<string, 'error' | undefined>
+  validation: Record<keyof GenericData, 'error' | undefined>
 }>()
 
 const model = reactive(props.model)

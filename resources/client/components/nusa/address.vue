@@ -74,10 +74,11 @@ function updateVillage() {
   <form-input
     path="address_line" label="Alamat Lengkap"
     placeholder="Alamat Jalan/Gang/Blok dan Nomor Rumah"
+    class="w-full lg:w-2/3 items-start"
     :model="model" :validation="validation"
   />
 
-  <div class="flex gap-3 w-full">
+  <div class="flex gap-4 w-full">
     <form-input
       path="rt" label="RT"
       placeholder="000"
@@ -102,7 +103,7 @@ function updateVillage() {
     />
   </div>
 
-  <div class="flex gap-3 w-full">
+  <div class="flex gap-4 w-full flex-col md:flex-row">
     <nusa-province
       path="province_code" label="Provinsi"
       class="w-full md:w-1/2 lg:w-1/3 items-start"
@@ -119,7 +120,7 @@ function updateVillage() {
     />
   </div>
 
-  <div class="flex gap-3 w-full">
+  <div class="flex gap-4 w-full flex-col md:flex-row">
     <nusa-district
       path="district_code" label="Kecamatan"
       class="w-full md:w-1/2 lg:w-1/3 items-start"
