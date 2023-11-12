@@ -10,9 +10,13 @@ export interface ItemResponse<T = GenericData> extends BaseResponse {
 }
 
 export interface CollectionResponse<T = GenericData> extends BaseResponse {
-  current_page: number
-  last_page: number
   data: T[]
-  per_page: number
-  total: number
+  meta: {
+    current_page: number
+    from: number
+    last_page: number
+    per_page: number
+    to: number
+    total: number
+  }
 }
