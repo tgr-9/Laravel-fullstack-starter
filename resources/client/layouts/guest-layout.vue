@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Head as iHead } from '@inertiajs/vue3'
+import type { Message, User } from '~/types/app'
 
 defineOptions({
   inheritAttrs: false,
@@ -9,6 +10,9 @@ const props = defineProps<{
   page: string
   paths: string[]
   title?: string
+  message?: Message | null
+  user?: User | null
+  errors?: Record<string, string> | null
 }>()
 
 const { t } = useI18n()
@@ -25,9 +29,9 @@ const pageTitle = computed(() => props.title || t(props.page))
 
         <n-card :title="pageTitle">
           <n-alert
-            v-if="$page.props.message"
-            :title="$page.props.message.title"
-            :type="$page.props.message.type"
+            v-if="props.message"
+            :title="props.message.title"
+            :type="props.message.type"
           />
 
           <slot />
