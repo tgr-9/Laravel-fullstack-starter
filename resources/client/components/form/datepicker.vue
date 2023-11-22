@@ -8,6 +8,8 @@ const props = defineProps<{
   placeholder?: string
   autofocus?: boolean
   disabled?: boolean
+  inputProps?: Record<string, string>
+  labelProps?: Record<string, string>
   model: InertiaForm<GenericData>
   validation: Record<keyof GenericData, 'error' | undefined>
 }>()
@@ -15,6 +17,13 @@ const props = defineProps<{
 const model = reactive(props.model)
 const validation = reactive(props.validation)
 const disabled = computed(() => props.disabled || model.processing)
+const labelProps = computed(() => ({ for: props.path, ...(props.labelProps || {}) }))
+const inputProps = computed(() => ({
+  ...(props.inputProps || {}),
+  autocomplete: props.path,
+  name: props.path,
+  id: props.path,
+}))
 
 /**
  * Make sure any value passed to the `n-date-picker` component is a unix timestamp
@@ -35,14 +44,14 @@ function ensureNumeric(value: string | number | Date): number {
 <template>
   <n-form-item
     :path="props.path" :label="props.label"
-    :label-props="{ for: props.path }"
+    :label-props="labelProps"
     :validation-status="validation[props.path]"
     :feedback="model.errors[props.path]"
   >
     <n-date-picker
       v-model:value="model[props.path]"
       :placeholder="props.placeholder"
-      :input-props="{ id: props.path, name: props.path }"
+      :input-props="inputProps"
       :loading="model.processing"
       :disabled="disabled"
       :autofocus="props.autofocus"

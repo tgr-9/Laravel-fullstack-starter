@@ -7,6 +7,7 @@ const props = defineProps<{
   label?: string
   placeholder?: string
   disabled?: boolean
+  labelProps?: Record<string, string>
   model: InertiaForm<GenericData>
   validation: Record<keyof GenericData, 'error' | undefined>
   options: RadioOption[]
@@ -20,12 +21,13 @@ export interface RadioOption {
 const model = reactive(props.model)
 const validation = reactive(props.validation)
 const disabled = computed(() => props.disabled || model.processing)
+const labelProps = computed(() => ({ for: props.path, ...(props.labelProps || {}) }))
 </script>
 
 <template>
   <n-form-item
     :path="props.path" :label="props.label"
-    :label-props="{ for: props.path }"
+    :label-props="labelProps"
     :validation-status="validation[props.path]"
     :feedback="model.errors[props.path]"
   >
