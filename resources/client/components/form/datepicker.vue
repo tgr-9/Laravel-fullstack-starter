@@ -4,18 +4,20 @@ import type { GenericData } from '~/types/api'
 
 const props = defineProps<{
   path: keyof GenericData
+  model: InertiaForm<GenericData>
   label?: string
   placeholder?: string
   autofocus?: boolean
   disabled?: boolean
   inputProps?: Record<string, string>
   labelProps?: Record<string, string>
-  model: InertiaForm<GenericData>
-  validation: Record<keyof GenericData, 'error' | undefined>
 }>()
 
 const model = reactive(props.model)
-const validation = reactive(props.validation)
+const validation = reactiveComputed(() => ({
+  [props.path]: model.errors[props.path] !== undefined ? 'error' : undefined,
+}))
+
 const disabled = computed(() => props.disabled || model.processing)
 const labelProps = computed(() => ({ for: props.path, ...(props.labelProps || {}) }))
 const inputProps = computed(() => ({
@@ -43,6 +45,7 @@ function ensureNumeric(value: string | number | Date): number {
 
 <template>
   <n-form-item
+    class="items-start"
     :path="props.path" :label="props.label"
     :label-props="labelProps"
     :validation-status="validation[props.path]"

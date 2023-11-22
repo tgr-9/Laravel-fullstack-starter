@@ -5,6 +5,7 @@ import type { GenericData } from '~/types/api'
 
 const props = defineProps<{
   path: keyof GenericData
+  model: InertiaForm<GenericData>
   label?: string
   type?: InputProps['type']
   placeholder?: string
@@ -13,21 +14,22 @@ const props = defineProps<{
   loading?: boolean
   inputProps?: Record<string, string>
   labelProps?: Record<string, string>
-  model: InertiaForm<GenericData>
-  validation: Record<keyof GenericData, 'error' | undefined>
 }>()
 
 defineEmits(['update'])
 
 const model = reactive(props.model)
-const validation = reactive(props.validation)
+const validation = reactiveComputed(() => ({
+  [props.path]: model.errors[props.path] !== undefined ? 'error' : undefined,
+}))
+
 const disabled = computed(() => props.disabled || model.processing)
 const loading = computed(() => props.loading || model.processing)
 const showPasswordOn = computed(() => props.type === 'password' ? 'mousedown' : undefined)
 const labelProps = computed(() => ({ for: props.path, ...(props.labelProps || {}) }))
 const inputProps = computed(() => ({
-  ...(props.inputProps || {}),
   autocomplete: props.path,
+  ...(props.inputProps || {}),
   name: props.path,
   id: props.path,
 }))
@@ -43,6 +45,7 @@ watch(() => model[props.path], (value) => {
 
 <template>
   <n-form-item
+    class="items-start"
     :path="props.path" :label="props.label"
     :label-props="labelProps"
     :validation-status="validation[props.path]"

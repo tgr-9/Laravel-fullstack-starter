@@ -4,13 +4,12 @@ import type { GenericData } from '~/types/api'
 
 const props = defineProps<{
   path: keyof GenericData
+  model: InertiaForm<GenericData>
+  options: RadioOption[]
   label?: string
   placeholder?: string
   disabled?: boolean
   labelProps?: Record<string, string>
-  model: InertiaForm<GenericData>
-  validation: Record<keyof GenericData, 'error' | undefined>
-  options: RadioOption[]
 }>()
 
 export interface RadioOption {
@@ -19,13 +18,17 @@ export interface RadioOption {
 }
 
 const model = reactive(props.model)
-const validation = reactive(props.validation)
+const validation = reactiveComputed(() => ({
+  [props.path]: model.errors[props.path] !== undefined ? 'error' : undefined,
+}))
+
 const disabled = computed(() => props.disabled || model.processing)
 const labelProps = computed(() => ({ for: props.path, ...(props.labelProps || {}) }))
 </script>
 
 <template>
   <n-form-item
+    class="items-start"
     :path="props.path" :label="props.label"
     :label-props="labelProps"
     :validation-status="validation[props.path]"
