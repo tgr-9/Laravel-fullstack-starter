@@ -5,7 +5,7 @@ defineOptions({
   layoutName: 'guest-layout',
 })
 
-interface ConfirmPasswordForm extends Record<string, unknown> {
+interface ConfirmPasswordForm {
   password: string
 }
 
@@ -13,13 +13,9 @@ const model = useForm<ConfirmPasswordForm>({
   password: '',
 })
 
-const validation = reactiveComputed<{ [k in keyof Partial<ConfirmPasswordForm>]: 'error' | undefined }>(() => ({
-  password: model.errors.password !== undefined ? 'error' : undefined,
-}))
-
 function submit() {
   model.post(route('password.confirm'), {
-    onFinish: () => model.reset('email'),
+    onFinish: () => model.reset('password'),
   })
 }
 </script>
@@ -30,24 +26,13 @@ function submit() {
   </n-alert>
 
   <n-form :model="model" class="form-login" @submit.prevent="submit">
-    <n-form-item
-      path="password"
+    <form-input
+      path="password" type="password"
       :label="$t('auth.password.label')"
-      :feedback="model.errors.password"
-      :validation-status="validation.password"
-      :label-props="{ for: 'password' }"
-    >
-      <n-input
-        v-model:value="model.password"
-        show-password-on="mousedown"
-        type="password"
-        :input-props="{ id: 'password', name: 'password' }"
-        :placeholder="$t('auth.password.placeholder')"
-        :loading="model.processing"
-        :disabled="model.processing"
-        :autofocus="true"
-      />
-    </n-form-item>
+      :placeholder="$t('auth.password.placeholder')"
+      :model="model"
+      :autofocus="true"
+    />
 
     <n-button
       attr-type="submit"

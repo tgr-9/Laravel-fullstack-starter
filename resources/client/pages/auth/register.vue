@@ -5,7 +5,7 @@ defineOptions({
   layoutName: 'guest-layout',
 })
 
-interface RegisterForm extends Record<string, unknown> {
+interface RegisterForm {
   email: string
   password: string
   confirm_password: string
@@ -17,12 +17,6 @@ const model = useForm<RegisterForm>({
   confirm_password: '',
 })
 
-const validation = reactiveComputed<{ [k in keyof Partial<RegisterForm>]: 'error' | undefined }>(() => ({
-  email: model.errors.email !== undefined ? 'error' : undefined,
-  password: model.errors.password !== undefined ? 'error' : undefined,
-  confirm_password: model.errors.confirm_password !== undefined ? 'error' : undefined,
-}))
-
 function submit() {
   model.post(route('register'), {
     onFinish: () => model.reset('password', 'confirm_password'),
@@ -32,58 +26,29 @@ function submit() {
 
 <template>
   <n-form :model="model" class="form-login" @submit.prevent="submit">
-    <n-form-item
+    <form-input
       path="email"
       :label="$t('auth.email.label')"
-      :feedback="model.errors.email"
-      :validation-status="validation.email"
-      :label-props="{ for: 'username' }"
-    >
-      <n-input
-        v-model:value="model.email"
-        :input-props="{ id: 'email', name: 'email', type: 'email' }"
-        :placeholder="$t('auth.email.placeholder')"
-        :loading="model.processing"
-        :disabled="model.processing"
-        :autofocus="true"
-      />
-    </n-form-item>
+      :placeholder="$t('auth.email.placeholder')"
+      :model="model"
+      :autofocus="true"
+    />
 
-    <n-form-item
-      path="password"
+    <form-input
+      path="password" type="password"
       :label="$t('auth.password.label')"
-      :feedback="model.errors.password"
-      :validation-status="validation.password"
-      :label-props="{ for: 'password' }"
-    >
-      <n-input
-        v-model:value="model.password"
-        show-password-on="mousedown"
-        type="password"
-        :input-props="{ id: 'password', name: 'password' }"
-        :placeholder="$t('auth.password.placeholder')"
-        :loading="model.processing"
-        :disabled="model.processing"
-      />
-    </n-form-item>
+      :placeholder="$t('auth.password.placeholder')"
+      :input-props="{ autocomplete: 'new-password' }"
+      :model="model"
+    />
 
-    <n-form-item
-      path="confirm_password"
+    <form-input
+      path="confirm_password" type="password"
       :label="$t('auth.confirm_password.label')"
-      :feedback="model.errors.confirm_password"
-      :validation-status="validation.confirm_password"
-      :label-props="{ for: 'confirm_password' }"
-    >
-      <n-input
-        v-model:value="model.confirm_password"
-        show-password-on="mousedown"
-        type="password"
-        :input-props="{ id: 'confirm_password', name: 'confirm_password' }"
-        :placeholder="$t('auth.confirm_password.placeholder')"
-        :loading="model.processing"
-        :disabled="model.processing"
-      />
-    </n-form-item>
+      :placeholder="$t('auth.confirm_password.placeholder')"
+      :input-props="{ autocomplete: 'confirm-password' }"
+      :model="model"
+    />
 
     <n-button
       attr-type="submit"

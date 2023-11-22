@@ -6,12 +6,10 @@ import type { Addressable } from '~/utils/nusa'
 
 const props = defineProps<{
   model: InertiaForm<Addressable>
-  validation: Record<keyof Addressable, 'error' | undefined>
 }>()
 
 const nusa = useNusaStore()
 const model = reactive(props.model)
-const validation = reactive(props.validation)
 const fetchingPostalCode = ref<boolean>(false)
 
 async function updatePostalCode(value: number) {
@@ -74,31 +72,30 @@ function updateVillage() {
   <form-input
     path="address_line" label="Alamat Lengkap"
     placeholder="Alamat Jalan/Gang/Blok dan Nomor Rumah"
-    class="w-full lg:w-2/3 items-start"
-    :model="model" :validation="validation"
+    class="w-full lg:w-2/3"
+    :model="model"
   />
 
   <div class="flex gap-4 w-full">
     <form-input
       path="rt" label="RT"
       placeholder="000"
-      class="w-full md:w-1/3 lg:w-auto items-start"
-      :model="model" :validation="validation"
+      class="w-full md:w-1/3 lg:w-auto"
+      :model="model"
     />
 
     <form-input
       path="rw" label="RW"
       placeholder="000"
-      class="w-full md:w-1/3 lg:w-auto items-start"
-      :model="model" :validation="validation"
+      class="w-full md:w-1/3 lg:w-auto"
+      :model="model"
     />
 
     <form-input
       path="postal_code" label="Kode POS"
       placeholder="12345"
-      class="w-full md:w-1/3 lg:w-auto items-start"
-      :model="model" :validation="validation"
-      :loading="fetchingPostalCode"
+      class="w-full md:w-1/3 lg:w-auto"
+      :model="model" :loading="fetchingPostalCode"
       @update="updatePostalCode"
     />
   </div>
@@ -106,16 +103,15 @@ function updateVillage() {
   <div class="flex gap-4 w-full flex-col md:flex-row">
     <nusa-province
       path="province_code" label="Provinsi"
-      class="w-full md:w-1/2 lg:w-1/3 items-start"
-      :model="model" :validation="validation"
+      class="w-full md:w-1/2 lg:w-1/3"
+      :model="model"
       @update="updateProvince"
     />
 
     <nusa-regency
       path="regency_code" label="Kota/Kabupaten"
-      class="w-full md:w-1/2 lg:w-1/3 items-start"
-      :province-code="model.province_code"
-      :model="model" :validation="validation"
+      class="w-full md:w-1/2 lg:w-1/3"
+      :model="model" :province-code="model.province_code"
       @update="updateRegency"
     />
   </div>
@@ -123,17 +119,15 @@ function updateVillage() {
   <div class="flex gap-4 w-full flex-col md:flex-row">
     <nusa-district
       path="district_code" label="Kecamatan"
-      class="w-full md:w-1/2 lg:w-1/3 items-start"
-      :regency-code="model.regency_code"
-      :model="model" :validation="validation"
+      class="w-full md:w-1/2 lg:w-1/3"
+      :model="model" :regency-code="model.regency_code"
       @update="updateDistrict"
     />
 
     <nusa-village
       path="village_code" label="Kelurahan"
-      class="w-full md:w-1/2 lg:w-1/3 items-start"
-      :district-code="model.district_code"
-      :model="model" :validation="validation"
+      class="w-full md:w-1/2 lg:w-1/3"
+      :model="model" :district-code="model.district_code"
       @update="updateVillage"
     />
   </div>
