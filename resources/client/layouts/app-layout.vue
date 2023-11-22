@@ -4,6 +4,7 @@ import { Head as iHead } from '@inertiajs/vue3'
 import { breakpointsTailwind } from '@vueuse/core'
 import { NDropdown, NLayoutSider, NMenu } from 'naive-ui'
 import type { MenuInst } from 'naive-ui'
+import type { Message, User } from '~/types/app'
 import type { BreadcrumbItem } from '~/utils/navigations'
 
 defineOptions({
@@ -14,6 +15,9 @@ const props = defineProps<{
   page: string
   paths: string[]
   title?: string
+  message?: Message | null
+  user: User
+  errors?: Record<string, string> | null
 }>()
 
 const { t } = useI18n()
@@ -141,7 +145,7 @@ function touchEnd(e: TouchEvent) {
               </n-avatar>
 
               <p id="user-menu-label">
-                {{ $page.props.user?.name }}
+                {{ props.user.name }}
               </p>
             </n-button>
           </n-dropdown>
@@ -155,9 +159,9 @@ function touchEnd(e: TouchEvent) {
 
         <page-main class="page-content-section">
           <n-alert
-            v-if="$page.props.message"
-            :title="$page.props.message.title"
-            :type="$page.props.message.type"
+            v-if="props.message"
+            :title="props.message.title"
+            :type="props.message.type"
           />
 
           <slot />

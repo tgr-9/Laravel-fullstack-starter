@@ -3,17 +3,6 @@ import type { App } from 'vue'
 
 export {}
 
-interface AppMessage {
-  type?: "warning" | "error" | "info" | "success"
-  title: string
-  description: string
-}
-
-interface AppUser {
-  name: string
-  email: string
-}
-
 declare global {
   type AppLocale = 'id' | 'en'
 
@@ -31,14 +20,7 @@ declare global {
   }
 }
 
-declare module '@inertiajs/core' {
-  export interface PageProps {
-    user: AppUser | null
-    message: AppMessage | null
-  }
-}
-
-declare module '@vue/runtime-core' {
+declare module 'vue' {
   /**
    * Component Custom Options for page components
    */
