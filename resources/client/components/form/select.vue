@@ -12,6 +12,8 @@ const props = defineProps<{
   clearable?: boolean
   loading?: boolean
   disabled?: boolean
+  inputProps?: Record<string, string>
+  labelProps?: Record<string, string>
   model: InertiaForm<GenericData>
   validation: Record<keyof GenericData, 'error' | undefined>
   options: SelectOption[]
@@ -23,12 +25,19 @@ const model = reactive(props.model)
 const validation = reactive(props.validation)
 const disabled = computed(() => props.disabled || model.processing)
 const loading = computed(() => props.loading || model.processing)
+const labelProps = computed(() => ({ for: props.path, ...(props.labelProps || {}) }))
+const inputProps = computed(() => ({
+  ...(props.inputProps || {}),
+  autocomplete: props.path,
+  name: props.path,
+  id: props.path,
+}))
 </script>
 
 <template>
   <n-form-item
     :path="props.path" :label="props.label"
-    :label-props="{ for: props.path }"
+    :label-props="labelProps"
     :validation-status="validation[props.path]"
     :feedback="model.errors[props.path]"
   >
@@ -37,7 +46,7 @@ const loading = computed(() => props.loading || model.processing)
       filterable remote
       :clearable="props.clearable"
       :placeholder="props.placeholder"
-      :input-props="{ id: props.path, name: props.path }"
+      :input-props="inputProps"
       :options="props.options"
       :multiple="props.multiple"
       :loading="loading"

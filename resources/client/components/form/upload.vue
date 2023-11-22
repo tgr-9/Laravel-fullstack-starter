@@ -11,18 +11,27 @@ const props = defineProps<{
   max?: number
   loading?: boolean
   disabled?: boolean
+  inputProps?: Record<string, string>
+  labelProps?: Record<string, string>
   model: InertiaForm<GenericData>
   validation: Record<keyof GenericData, 'error' | undefined>
 }>()
 
 const model = reactive(props.model)
 const validation = reactive(props.validation)
+const labelProps = computed(() => ({ for: props.path, ...(props.labelProps || {}) }))
+const inputProps = computed(() => ({
+  ...(props.inputProps || {}),
+  autocomplete: props.path,
+  name: props.path,
+  id: props.path,
+}))
 </script>
 
 <template>
   <n-form-item
     :path="props.path" :label="props.label"
-    :label-props="{ for: props.path }"
+    :label-props="labelProps"
     :validation-status="validation[props.path]"
     :feedback="model.errors[props.path]"
   >
@@ -31,7 +40,7 @@ const validation = reactive(props.validation)
       :list-type="props.listType"
       :accept="props.accept"
       :max="props.max"
-      :input-props="{ id: props.path, name: props.path }"
+      :input-props="inputProps"
       :loading="model.processing"
       :disabled="model.processing"
     />
