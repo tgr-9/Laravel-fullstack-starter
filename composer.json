@@ -22,19 +22,19 @@
   "require": {
     "php": ">=8.1",
     "creasi/laravel-base": "dev-main",
-    "creasi/laravel-nusa": "^0.1.2",
+    "creasi/laravel-nusa": "^0.1.5",
     "fakerphp/faker": "^1.9.1",
     "guzzlehttp/guzzle": "^7.2",
     "inertiajs/inertia-laravel": "^0.6.9",
     "laravel/framework": "^10.0",
     "laravel/sanctum": "^3.0",
-    "sentry/sentry-laravel": "^3.1"
+    "sentry/sentry-laravel": "^4.0"
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.7",
     "creasi/dusk-browserstack": "^0.2.2",
-    "deployer/deployer": "^7.0",
-    "laravel/dusk": "^7.0",
+    "deployer/deployer": "^7.3",
+    "laravel/dusk": "^7.11",
     "laravel/pint": "^1.1",
     "laravel/telescope": "^4.9",
     "laravel/tinker": "^2.7",
