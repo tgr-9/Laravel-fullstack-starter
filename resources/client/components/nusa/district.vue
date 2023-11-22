@@ -9,14 +9,12 @@ const props = defineProps<{
   label: string
   regencyCode?: Regency['code'] | null
   model: InertiaForm<Addressable>
-  validation: Record<keyof Addressable, 'error' | undefined>
 }>()
 
 const emit = defineEmits(['update'])
 
 const nusa = useNusaStore()
 const model = reactive(props.model)
-const validation = reactive(props.validation)
 const loading = toRef(model.processing)
 const disabled = computed(() => props.regencyCode !== undefined)
 const keyword = ref<string | undefined>()
@@ -57,8 +55,8 @@ function search(value: string) {
   <form-select
     placeholder="Pilih Kecamatan"
     clearable :loading="loading" :disabled="disabled"
-    :path="props.path" :label="props.label" :options="options"
-    :model="model" :validation="validation"
+    :path="props.path" :label="props.label"
+    :model="model" :options="options"
     @search="search"
     @update="update"
   />

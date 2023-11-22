@@ -8,14 +8,12 @@ const props = defineProps<{
   path: keyof Addressable
   label: string
   model: InertiaForm<Addressable>
-  validation: Record<keyof Addressable, 'error' | undefined>
 }>()
 
 const emit = defineEmits(['update'])
 
 const nusa = useNusaStore()
 const model = reactive(props.model)
-const validation = reactive(props.validation)
 const options = computed<SelectOption[]>(() => nusa.provinces.map(i => ({
   label: i.name,
   value: i.code,
@@ -39,8 +37,8 @@ function update(value: number) {
   <form-select
     placeholder="Pilih Provinsi"
     class="w-full md:w-1/2 lg:w-1/3 items-start"
-    :path="props.path" :label="props.label" :options="options"
-    :model="model" :validation="validation"
+    :path="props.path" :label="props.label"
+    :model="model" :options="options"
     @update="update"
   />
 </template>
