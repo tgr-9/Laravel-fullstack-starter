@@ -1,3 +1,4 @@
+import type { Errors, InertiaForm } from '@inertiajs/vue3'
 import type { App } from 'vue'
 
 export {}
@@ -15,6 +16,9 @@ interface AppUser {
 
 declare global {
   type AppLocale = 'id' | 'en'
+
+  type GenericModelForm<T> = InertiaForm<T>
+  type GenericValidation<T> = Record<keyof T, 'error' | undefined>
 
   /**
    * Application module install function.
