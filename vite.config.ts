@@ -12,8 +12,18 @@ import { VitePWA as pwa } from 'vite-plugin-pwa'
 import { defineConfig, loadEnv } from 'vite'
 
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, '.', ['APP', 'SENTRY', 'VITE'])
+  const env = loadEnv(mode, '.', ['APP', 'FIREBASE', 'SENTRY', 'VITE'])
   const rootdir = 'resources/client'
+
+  const firebaseConfig = {
+    projectId: env.FIREBASE_PROJECT_ID,
+    appId: env.FIREBASE_APP_ID,
+    apiKey: env.FIREBASE_API_KEY,
+    authDomain: `${env.FIREBASE_PROJECT_ID}.firebaseapp.com`,
+    databaseURL: env.FIREBASE_DATABASE_URL,
+    storageBucket: `${env.FIREBASE_PROJECT_ID}.appspot.com`,
+    messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
+  }
 
   function httpsCert() {
     if (!env.APP_URL.startsWith('https://'))
@@ -62,10 +72,12 @@ export default defineConfig(({ mode }) => {
     },
 
     define: {
+      'FIREBASE_CONFIG': JSON.stringify(firebaseConfig),
       'import.meta.env.APP_NAME': JSON.stringify(env.APP_NAME),
       'import.meta.env.APP_LOCALE': JSON.stringify(env.APP_LOCALE),
       'import.meta.env.APP_URL': JSON.stringify(env.APP_URL),
       'import.meta.env.APP_ENV': JSON.stringify(env.APP_ENV),
+      'import.meta.env.FIREBASE_VAPID_KEY': JSON.stringify(env.FIREBASE_VAPID_KEY),
       'import.meta.env.SENTRY_DSN': JSON.stringify(env.SENTRY_DSN),
       'import.meta.env.SENTRY_PROFILING_ENABLE': Boolean(env.SENTRY_PROFILING_ENABLE ?? 0),
     },
@@ -153,7 +165,8 @@ export default defineConfig(({ mode }) => {
        */
       pwa({
         devOptions: {
-          enabled: (mode !== 'production' && !!env.APP_DEBUG),
+          // enabled: (mode !== 'production' && !!env.APP_DEBUG),
+          type: mode !== 'production' ? 'classic' : 'module',
         },
         filename: 'sw.ts',
         srcDir: rootdir,
@@ -168,10 +181,8 @@ export default defineConfig(({ mode }) => {
           name: env.APP_NAME,
           short_name: env.APP_NAME,
           start_url: '/',
-          background_color: '#ffffff',
           lang: env.APP_LOCALE || 'id',
           scope: '/',
-          theme_color: '#ffffff',
           orientation: 'any',
           icons: [
             {
