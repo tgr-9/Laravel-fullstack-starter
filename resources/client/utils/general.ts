@@ -14,6 +14,7 @@ export function logger(...args: any) {
 export interface AppPreference {
   locale: AppLocale | string
   theme: BasicColorSchema
+  deviceToken?: string
 }
 
 /**
