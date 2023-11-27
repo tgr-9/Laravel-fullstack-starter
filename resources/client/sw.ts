@@ -20,10 +20,6 @@ self.addEventListener('install', () => {
   self.skipWaiting()
 })
 
-self.addEventListener('fetch', (e) => {
-  console.log(e.request.url) // eslint-disable-line no-console
-})
-
 self.addEventListener('activate', () => {
   if (Notification.permission !== 'granted') {
     console.warn('No notification permission granted')
@@ -47,6 +43,20 @@ self.addEventListener('activate', () => {
       },
     })
   })
+})
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close()
+
+  e.waitUntil(self.clients.matchAll({ type: 'window' }).then((clients) => {
+    if (clients.length === 0) {
+      self.clients.openWindow('/')
+      return
+    }
+
+    // This part still now working as expected
+    clients[0].focus()
+  }))
 })
 
 clientsClaim()
