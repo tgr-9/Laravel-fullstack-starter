@@ -5,6 +5,34 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
     return
 
   const { registerSW } = await import('virtual:pwa-register')
+  const { $message, $notification } = app.config.globalProperties
+
+  navigator.serviceWorker.addEventListener('message', ({ data }) => {
+    console.info('SW message received: ', data) // eslint-disable-line no-console
+    if (data?.type === 'notification') {
+      $notification.info({
+        title: data.title,
+        content: data.body,
+      })
+    }
+  })
+
+  try {
+    if (Notification.permission === 'denied')
+      throw new Error('Notifications are denied by the user')
+
+    if (Notification.permission !== 'granted') {
+      const permission = await Notification.requestPermission()
+
+      if (permission === 'denied')
+        throw new Error('Notifications are denied by the user')
+
+      location.reload()
+    }
+  }
+  catch (e) {
+    console.warn((e as Error).message)
+  }
 
   registerSW({
     immediate: true,
@@ -18,14 +46,14 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
         await getMessagingToken(registration)
       }
       catch (e) {
-        console.error(e)
+        console.warn((e as Error).message)
       }
     },
     onRegisterError(error) {
       console.error('SW registration failed: ', error)
     },
     onNeedRefresh() {
-      app.config.globalProperties.$message.info('Your app is updated, please reload the page', {
+      $message.info('Your app is updated, please reload the page', {
         duration: 10000,
         onClose() {
           location.reload()
@@ -33,7 +61,7 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
       })
     },
     onOfflineReady() {
-      app.config.globalProperties.$message.info('Your app is offline ready')
+      $message.info('Your app is offline ready')
     },
   })
 }
