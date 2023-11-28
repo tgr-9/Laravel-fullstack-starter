@@ -174,7 +174,8 @@ export default defineConfig(({ mode }) => {
         strategies: 'injectManifest',
         workbox: {
           mode,
-          globPatterns: ['**/*.{css,ico,js,jpeg,png,svg}'],
+          globPatterns: ['**/*.{css,ico,js,jpeg,png,svg,woff2}'],
+          navigateFallback: '/',
         },
         manifest: {
           id: '/',

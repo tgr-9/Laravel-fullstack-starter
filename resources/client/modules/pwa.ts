@@ -26,8 +26,6 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
 
       if (permission === 'denied')
         throw new Error('Notifications are denied by the user')
-
-      // location.reload()
     }
   }
   catch (e) {

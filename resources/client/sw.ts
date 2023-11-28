@@ -1,4 +1,3 @@
-import type { FirebaseApp } from 'firebase/app'
 import { initializeApp } from 'firebase/app'
 import { getMessaging, onBackgroundMessage } from 'firebase/messaging/sw'
 import { cacheNames, clientsClaim } from 'workbox-core'
@@ -8,7 +7,6 @@ import { CacheFirst } from 'workbox-strategies'
 
 declare let self: ServiceWorkerGlobalScope & Record<string, any>
 const cacheName = cacheNames.runtime
-let firebaseApp: FirebaseApp | undefined
 
 cleanupOutdatedCaches()
 
@@ -21,9 +19,9 @@ self.addEventListener('install', () => {
 })
 
 self.addEventListener('activate', (e) => {
-  firebaseApp = initializeApp(FIREBASE_CONFIG)
+  initializeApp(FIREBASE_CONFIG)
 
-  const messaging = getMessaging(firebaseApp)
+  const messaging = getMessaging()
 
   onBackgroundMessage(messaging, ({ notification, fcmOptions }) => {
     if (!notification)
@@ -44,7 +42,7 @@ self.addEventListener('activate', (e) => {
       return
     }
 
-    self.registration.showNotification(notification.title!, {
+    e.waitUntil(self.registration.showNotification(notification.title!, {
       body: notification.body,
       icon: notification.icon || '/favicon.ico',
       badge: '/vendor/creasico/icon-192x192.png',
@@ -52,7 +50,7 @@ self.addEventListener('activate', (e) => {
       data: {
         url: fcmOptions?.link || '/',
       },
-    })
+    }))
   })
 })
 
