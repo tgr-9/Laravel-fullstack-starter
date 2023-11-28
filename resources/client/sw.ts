@@ -20,12 +20,7 @@ self.addEventListener('install', () => {
   self.skipWaiting()
 })
 
-self.addEventListener('activate', () => {
-  if (Notification.permission !== 'granted') {
-    console.warn('No notification permission granted')
-    return
-  }
-
+self.addEventListener('activate', (e) => {
   firebaseApp = initializeApp(FIREBASE_CONFIG)
 
   const messaging = getMessaging(firebaseApp)
@@ -34,17 +29,36 @@ self.addEventListener('activate', () => {
     if (!notification)
       return
 
+    if (Notification.permission !== 'granted') {
+      e.waitUntil(self.clients.matchAll({ type: 'window' }).then((clients) => {
+        for (const client of clients) {
+          client.postMessage({
+            type: 'notification',
+            title: notification.title,
+            body: notification.body,
+            icon: notification.icon,
+          })
+        }
+      }))
+
+      return
+    }
+
     self.registration.showNotification(notification.title!, {
       body: notification.body,
       icon: notification.icon || '/favicon.ico',
+      badge: '/vendor/creasico/icon-192x192.png',
       lang: 'id',
       data: {
-        url: fcmOptions?.link,
+        url: fcmOptions?.link || '/',
       },
     })
   })
 })
 
+/**
+ * Handles a notification click event
+ */
 self.addEventListener('notificationclick', (e) => {
   e.notification.close()
 
