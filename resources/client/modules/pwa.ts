@@ -21,13 +21,13 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
     if (Notification.permission === 'denied')
       throw new Error('Notifications are denied by the user')
 
-    if (Notification.permission !== 'granted') {
+    if (Notification.permission === 'default') {
       const permission = await Notification.requestPermission()
 
       if (permission === 'denied')
         throw new Error('Notifications are denied by the user')
 
-      location.reload()
+      // location.reload()
     }
   }
   catch (e) {
