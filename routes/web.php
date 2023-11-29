@@ -38,9 +38,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('supports', Controllers\SupportController::class)->name('supports.home');
 
-    Route::get('parent', Controllers\TestController::class)->name('parent.home');
-    Route::get('parent/child-1', Controllers\TestController::class)->name('parent.child-1.home');
-    Route::get('parent/child-2', Controllers\TestController::class)->name('parent.child-2.home');
+    Route::get('parent', Controllers\SampleController::class)->name('parent.home');
+    Route::get('parent/child-1', Controllers\SampleController::class)->name('parent.child-1.home');
+    Route::get('parent/child-2', Controllers\SampleController::class)->name('parent.child-2.home');
 
     Route::resource('users', Controllers\UserController::class)
         ->only('index', 'create', 'edit')

@@ -32,7 +32,7 @@ class NavigationsComposer
             ],
             [
                 'route' => 'parent.home',
-                'label' => 'Sample Menu',
+                'label' => __('sample.menu'),
                 'icon' => 'tabler:box',
                 'children' => [
                     [
