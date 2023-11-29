@@ -23,7 +23,7 @@ self.addEventListener('activate', (e) => {
 
   const messaging = getMessaging()
 
-  onBackgroundMessage(messaging, ({ notification, fcmOptions }) => {
+  onBackgroundMessage(messaging, ({ notification, fcmOptions, data }) => {
     if (!notification)
       return
 
@@ -32,9 +32,8 @@ self.addEventListener('activate', (e) => {
         for (const client of clients) {
           client.postMessage({
             type: 'notification',
-            title: notification.title,
-            body: notification.body,
-            icon: notification.icon,
+            notification,
+            data,
           })
         }
       }))

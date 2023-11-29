@@ -1,6 +1,6 @@
 import type { FirebaseApp, FirebaseOptions } from 'firebase/app'
 import { initializeApp } from 'firebase/app'
-import { type Messaging, getMessaging, getToken, onMessage } from 'firebase/messaging'
+import { type Messaging, getMessaging, getToken } from 'firebase/messaging'
 
 export interface FirebaseInstances {
   app?: FirebaseApp
@@ -19,14 +19,6 @@ export const install: AppModuleInstall = async ({ app, isClient }): Promise<void
 
   if (!instance.messaging)
     instance.messaging = getMessaging(instance.app)
-
-  onMessage(instance.messaging, ({ notification }) => {
-    logger('Message received. ', notification)
-    app.config.globalProperties.$notification.info({
-      title: notification?.title,
-      content: notification?.body,
-    })
-  })
 }
 
 export async function getMessagingToken(registration?: ServiceWorkerRegistration): Promise<string> {
