@@ -21,11 +21,13 @@ class FcmChannel
         Http::asJson()->withHeaders([
             'Authorization' => 'key='.env('FIREBASE_SERVER_KEY'),
         ])->post('https://fcm.googleapis.com/fcm/send', [
-            'content_available' => true,
             'priority' => $message->priority,
             'notification' => [
                 'title' => $message->title,
                 'body' => $message->body,
+            ],
+            'fcm_options' => [
+                'link' => \route('home'),
             ],
             'registration_ids' => $message->tokens,
         ]);

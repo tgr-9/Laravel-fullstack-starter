@@ -8,13 +8,11 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
   const { $message, $notification } = app.config.globalProperties
 
   navigator.serviceWorker.addEventListener('message', ({ data }) => {
-    console.info('SW message received: ', data) // eslint-disable-line no-console
-    if (data?.type === 'notification') {
-      $notification.info({
-        title: data.title,
-        content: data.body,
-      })
-    }
+    console.info('Background Message Received:', data) // eslint-disable-line no-console
+    $notification.info({
+      title: data.notification.title,
+      content: data.notification.body,
+    })
   })
 
   try {
