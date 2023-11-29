@@ -42,6 +42,8 @@ Route::middleware('auth')->group(function () {
     Route::get('parent/child-1', Controllers\SampleController::class)->name('parent.child-1.home');
     Route::get('parent/child-2', Controllers\SampleController::class)->name('parent.child-2.home');
 
+    Route::post('parent/firebase', [Controllers\SampleController::class, 'firebase'])->name('sample.firebase');
+
     Route::resource('users', Controllers\UserController::class)
         ->only('index', 'create', 'edit')
         ->names(['index' => 'users.home']);
