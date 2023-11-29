@@ -12,6 +12,14 @@ function notify(type: NotificationType) {
     content: 'Test',
   })
 }
+
+async function notifyFirebase() {
+  const { data } = await axios.post(route('sample.firebase'), {
+    tokens: [appPreference.value.deviceToken],
+  })
+
+  logger(data)
+}
 </script>
 
 <template>
@@ -24,6 +32,12 @@ function notify(type: NotificationType) {
 
     <page-section title="Notification">
       <n-button @click="notify('error')">
+        Show Notification
+      </n-button>
+    </page-section>
+
+    <page-section title="Firebase Notif">
+      <n-button @click="notifyFirebase()">
         Show Notification
       </n-button>
     </page-section>
