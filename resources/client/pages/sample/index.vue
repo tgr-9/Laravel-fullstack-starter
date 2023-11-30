@@ -5,7 +5,7 @@ defineOptions({
   pageName: 'sample.routes.index',
 })
 
-const { notification } = useNaiveDiscreteApi()
+const { message, notification } = useNaiveDiscreteApi()
 
 function notify(type: NotificationType) {
   notification[type]({
@@ -14,11 +14,16 @@ function notify(type: NotificationType) {
 }
 
 async function notifyFirebase() {
-  const { data } = await axios.post(route('sample.firebase'), {
-    tokens: [appPreference.value.deviceToken],
-  })
+  try {
+    const { data } = await axios.post(route('sample.firebase'), {
+      tokens: [appPreference.value.deviceToken],
+    })
 
-  logger(data)
+    logger(data)
+  }
+  catch (e) {
+    message.warning('Could not sent notification')
+  }
 }
 </script>
 
