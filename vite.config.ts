@@ -170,7 +170,7 @@ export default defineConfig(({ mode }) => {
         },
         filename: 'sw.ts',
         srcDir: rootdir,
-        registerType: 'autoUpdate',
+        registerType: 'prompt',
         strategies: 'injectManifest',
         workbox: {
           mode,

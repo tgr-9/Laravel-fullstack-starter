@@ -33,32 +33,25 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
   registerSW({
     immediate: true,
     async onRegisteredSW(_, registration) {
-      if (!registration) {
-        console.warn('Registration failed')
-        return
-      }
-
       try {
         await getMessagingToken(registration)
-        logger('Registration successful')
+        console.info('Registration successful') // eslint-disable-line no-console
       }
       catch (e) {
         console.warn((e as Error).message)
+        location.reload()
       }
     },
     onRegisterError(error) {
       console.error('SW registration failed: ', error)
     },
     onNeedRefresh() {
-      $message.info('Your app is updated, please reload the page', {
+      $message.info('The App has been updated, please reload the page', {
         duration: 10000,
         onClose() {
           location.reload()
         },
       })
-    },
-    onOfflineReady() {
-      $message.info('Your app is offline ready')
     },
   })
 }
