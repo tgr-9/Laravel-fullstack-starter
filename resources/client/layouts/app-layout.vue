@@ -91,7 +91,7 @@ function touchEnd(e: TouchEvent) {
   <i-head :title="pageTitle" />
 
   <app-wrapper class="app-layout">
-    <n-layout has-sider class="transition-all" @touchstart="touchStart" @touchend="touchEnd">
+    <n-layout has-sider class="transition-all" @touchstart.passive="touchStart" @touchend.passive="touchEnd">
       <n-layout-sider
         ref="sider"
         bordered
