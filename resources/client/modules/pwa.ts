@@ -1,10 +1,10 @@
+import { registerSW } from 'virtual:pwa-register'
 import { getMessagingToken } from './firebase'
 
 export const install: AppModuleInstall = async ({ app, isClient }) => {
   if (!isClient)
     return
 
-  const { registerSW } = await import('virtual:pwa-register')
   const { $message, $notification } = app.config.globalProperties
 
   navigator.serviceWorker.addEventListener('message', ({ data }) => {
@@ -40,6 +40,7 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
 
       try {
         await getMessagingToken(registration)
+        logger('Registration successful')
       }
       catch (e) {
         console.warn((e as Error).message)
