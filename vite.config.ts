@@ -1,5 +1,4 @@
 import { resolve } from 'node:path'
-import { readFileSync } from 'node:fs'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 import i18n from '@intlify/unplugin-vue-i18n/vite'
 import vue from '@vitejs/plugin-vue'
@@ -30,7 +29,7 @@ export default defineConfig(({ mode }) => {
   return {
     resolve: {
       alias: {
-        '~': `${resolve(__dirname, rootDir)}`,
+        '~': resolve(__dirname, rootDir),
       },
     },
 
@@ -209,15 +208,15 @@ export default defineConfig(({ mode }) => {
 
 function httpsCert(url: URL) {
   if (url.protocol !== 'https:')
-    return false
+    return undefined
 
   try {
     return {
-      cert: readFileSync(resolve(__dirname, 'storage/local-cert.pem')),
-      key: readFileSync(resolve(__dirname, 'storage/local-key.pem')),
+      cert: resolve(__dirname, 'storage/local-cert.pem'),
+      key: resolve(__dirname, 'storage/local-key.pem'),
     }
   }
   catch {
-    return false
+    return undefined
   }
 }
