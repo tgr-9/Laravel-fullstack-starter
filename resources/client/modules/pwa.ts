@@ -38,8 +38,8 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
         console.info('Registration successful') // eslint-disable-line no-console
       }
       catch (e) {
-        console.warn((e as Error).message)
-        location.reload()
+        console.warn((e as Error).stack)
+        // location.reload()
       }
     },
     onRegisterError(error) {
