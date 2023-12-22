@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', ['APP', 'FIREBASE', 'SENTRY', 'VITE'])
   const rootDir = 'resources/client'
   const appURL = new URL(env.APP_URL)
-  const isDev = ['local', 'testing'].includes(env.APP_ENV) || mode === 'dev'
+  const isDev = ['local', 'testing'].includes(env.APP_ENV)
 
   const firebaseConfig = {
     projectId: env.FIREBASE_PROJECT_ID,
@@ -27,25 +27,10 @@ export default defineConfig(({ mode }) => {
     messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
   }
 
-  function httpsCert() {
-    if (appURL.protocol !== 'https:')
-      return false
-
-    try {
-      return {
-        cert: readFileSync(resolve(__dirname, 'storage/local-cert.pem')),
-        key: readFileSync(resolve(__dirname, 'storage/local-key.pem')),
-      }
-    }
-    catch {
-      return false
-    }
-  }
-
   return {
     resolve: {
       alias: {
-        '~/': `${resolve(__dirname, rootDir)}/`,
+        '~': `${resolve(__dirname, rootDir)}`,
       },
     },
 
@@ -57,7 +42,7 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
-      sourcemap: mode === 'development' || 'SENTRY_AUTH_TOKEN' in env,
+      sourcemap: isDev || 'SENTRY_AUTH_TOKEN' in env,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 2000,
       rollupOptions: {
@@ -85,11 +70,14 @@ export default defineConfig(({ mode }) => {
     },
 
     server: {
+      host: appURL.host,
       hmr: { host: appURL.host },
-      https: httpsCert(),
+      https: httpsCert(appURL),
     },
 
     plugins: [
+      vue(),
+
       /**
        * @see https://laravel.com/docs/vite
        */
@@ -101,12 +89,11 @@ export default defineConfig(({ mode }) => {
         // refresh: true,
       }),
 
-      vue(),
-
       /**
        * @see https://www.npmjs.com/package/@sentry/vite-plugin
        */
       sentryVitePlugin({
+        disable: !('SENTRY_AUTH_TOKEN' in env),
         org: env.SENTRY_ORG,
         project: env.SENTRY_PROJECT,
         authToken: env.SENTRY_AUTH_TOKEN,
@@ -219,3 +206,18 @@ export default defineConfig(({ mode }) => {
     ],
   }
 })
+
+function httpsCert(url: URL) {
+  if (url.protocol !== 'https:')
+    return false
+
+  try {
+    return {
+      cert: readFileSync(resolve(__dirname, 'storage/local-cert.pem')),
+      key: readFileSync(resolve(__dirname, 'storage/local-key.pem')),
+    }
+  }
+  catch {
+    return false
+  }
+}
