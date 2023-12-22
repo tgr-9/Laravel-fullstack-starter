@@ -196,7 +196,8 @@ jobs:
       - name: Download test reports
         uses: actions/download-artifact@v4
         with:
-          name: test-reports
+          pattern: test-reports-*
+          merge-multiple: true
 
       - name: Submit to CodeClimate
         run: |
