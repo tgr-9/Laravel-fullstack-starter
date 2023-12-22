@@ -1,52 +1,61 @@
 integration:
-- '.github/workflows/*.yml'
-- 'app/Providers/**.php'
-- 'tests/Browser/**.php'
+- changed-files:
+  - '.github/workflows/*.yml'
+  - 'app/Providers/**.php'
+  - 'tests/Browser/**.php'
 
 docs:
-- '.env.example'
-- '**.md'
+- changed-files:
+  - '.env.example'
+  - '**.md'
 
 deployment:
-- '.github/workflows/deploy.yml'
-- 'scripts/deploy.php'
-- 'scripts/deploy/**'
+- changed-files:
+  - '.github/workflows/deploy.yml'
+  - 'scripts/deploy.php'
+  - 'scripts/deploy/**'
 
 api:
-- 'app/Http/Controllers/Api/**.php'
-- 'app/Http/Resources/**.php'
-- 'routes/api.php'
+- changed-files:
+  - 'app/Http/Controllers/Api/**.php'
+  - 'app/Http/Resources/**.php'
+  - 'routes/api.php'
 
 authentication:
-- 'app/Http/Controller/Auth/**.php'
-- 'config/auth.php'
-- 'routes/auth.php'
+- changed-files:
+  - 'app/Http/Controller/Auth/**.php'
+  - 'config/auth.php'
+  - 'routes/auth.php'
 
 authorization:
-- 'app/Http/Middleware/**.php'
-- 'app/Policies/**.php'
+- changed-files:
+  - 'app/Http/Middleware/**.php'
+  - 'app/Policies/**.php'
 
 experiences:
-- 'app/Http/Controllers/**.php'
-- 'app/Http/Requests/**.php'
-- 'app/Views/**.php'
-- 'routes/web.php'
+- changed-files:
+  - 'app/Http/Controllers/**.php'
+  - 'app/Http/Requests/**.php'
+  - 'app/Views/**.php'
+  - 'routes/web.php'
 
 localization:
-- 'resources/lang/**'
+- changed-files: 'resources/lang/**'
 
 UI:
-- 'app/Views/**.php'
-- 'resources/client/**'
-- 'resources/views/**'
+- changed-files:
+  - 'app/Views/**.php'
+  - 'resources/client/**'
+  - 'resources/views/**'
 
 'db: schema':
-- 'app/Models/**.php'
-- 'database/factories/**.php'
-- 'database/migrations/**.php'
+- changed-files:
+  - 'app/Models/**.php'
+  - 'database/factories/**.php'
+  - 'database/migrations/**.php'
 
 'db: seeder':
-- 'database/seeders/**.php'
+- changed-files: 'database/seeders/**.php'
 
 enhancement:
-- '**'
+- changed-files: '**'
