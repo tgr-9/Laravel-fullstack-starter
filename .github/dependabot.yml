@@ -1,13 +1,19 @@
 version: 2
 
 updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly
+      timezone: "Asia/Jakarta"
+
   - package-ecosystem: composer
     directory: "/"
     schedule:
       interval: monthly
       timezone: "Asia/Jakarta"
     open-pull-requests-limit: 5
-    versioning-strategy: increase-if-necessary
+    versioning-strategy: lockfile-only
     labels:
       - "dependencies"
     groups:
@@ -24,7 +30,7 @@ updates:
       interval: monthly
       timezone: "Asia/Jakarta"
     open-pull-requests-limit: 5
-    versioning-strategy: increase-if-necessary
+    versioning-strategy: lockfile-only
     labels:
       - "dependencies"
     groups:
