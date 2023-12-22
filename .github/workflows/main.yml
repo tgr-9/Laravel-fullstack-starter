@@ -14,7 +14,7 @@ env:
   APP_NAME: ${{ vars.APP_NAME }}
   APP_ENV: ${{ vars.APP_ENV }}
   APP_URL: ${{ vars.APP_URL }}
-  APP_KEY: ${{ secrets.APP_KEY }}
+  APP_KEY: base64:wd/Cak9eudgF0z4HcmvkjAzw1zmKorlVLGjNabomfQs=
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
