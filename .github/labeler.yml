@@ -1,61 +1,73 @@
 integration:
 - changed-files:
-  - '.github/workflows/*.yml'
-  - 'app/Providers/**.php'
-  - 'tests/Browser/**.php'
+  - any-glob-to-any-file:
+    - '.github/workflows/*.yml'
+    - 'app/Providers/**.php'
+    - 'tests/Browser/**.php'
 
 docs:
 - changed-files:
-  - '.env.example'
-  - '**.md'
+  - any-glob-to-any-file:
+    - '.env.example'
+    - '**.md'
 
 deployment:
 - changed-files:
-  - '.github/workflows/deploy.yml'
-  - 'scripts/deploy.php'
-  - 'scripts/deploy/**'
+  - any-glob-to-any-file:
+    - '.github/workflows/deploy.yml'
+    - 'scripts/deploy.php'
+    - 'scripts/deploy/**'
 
 api:
 - changed-files:
-  - 'app/Http/Controllers/Api/**.php'
-  - 'app/Http/Resources/**.php'
-  - 'routes/api.php'
+  - any-glob-to-any-file:
+    - 'app/Http/Controllers/Api/**.php'
+    - 'app/Http/Resources/**.php'
+    - 'routes/api.php'
 
 authentication:
 - changed-files:
-  - 'app/Http/Controller/Auth/**.php'
-  - 'config/auth.php'
-  - 'routes/auth.php'
+  - any-glob-to-any-file:
+    - 'app/Http/Controller/Auth/**.php'
+    - 'config/auth.php'
+    - 'routes/auth.php'
 
 authorization:
 - changed-files:
-  - 'app/Http/Middleware/**.php'
-  - 'app/Policies/**.php'
+  - any-glob-to-any-file:
+    - 'app/Http/Middleware/**.php'
+    - 'app/Policies/**.php'
 
 experiences:
 - changed-files:
-  - 'app/Http/Controllers/**.php'
-  - 'app/Http/Requests/**.php'
-  - 'app/Views/**.php'
-  - 'routes/web.php'
+  - any-glob-to-any-file:
+    - 'app/Http/Controllers/**.php'
+    - 'app/Http/Requests/**.php'
+    - 'app/Views/**.php'
+    - 'routes/web.php'
 
 localization:
-- changed-files: 'resources/lang/**'
+- changed-files:
+  - any-glob-to-any-file: 'resources/lang/**'
 
 UI:
 - changed-files:
-  - 'app/Views/**.php'
-  - 'resources/client/**'
-  - 'resources/views/**'
+  - any-glob-to-any-file:
+    - 'app/Views/**.php'
+    - 'resources/client/**'
+    - 'resources/views/**'
 
 'db: schema':
 - changed-files:
-  - 'app/Models/**.php'
-  - 'database/factories/**.php'
-  - 'database/migrations/**.php'
+  - any-glob-to-any-file:
+    - 'app/Models/**.php'
+    - 'database/factories/**.php'
+    - 'database/migrations/**.php'
 
 'db: seeder':
-- changed-files: 'database/seeders/**.php'
+- changed-files:
+  - any-glob-to-any-file: 'database/seeders/**.php'
 
 enhancement:
-- changed-files: '**'
+- changed-files:
+  - any-glob-to-any-file: '**'
