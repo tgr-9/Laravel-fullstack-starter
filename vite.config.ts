@@ -13,8 +13,9 @@ import { defineConfig, loadEnv } from 'vite'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', ['APP', 'FIREBASE', 'SENTRY', 'VITE'])
-  const rootdir = 'resources/client'
+  const rootDir = 'resources/client'
   const appURL = new URL(env.APP_URL)
+  const isDev = ['local', 'testing'].includes(env.APP_ENV) || mode === 'dev'
 
   const firebaseConfig = {
     projectId: env.FIREBASE_PROJECT_ID,
@@ -44,7 +45,7 @@ export default defineConfig(({ mode }) => {
   return {
     resolve: {
       alias: {
-        '~/': `${resolve(__dirname, rootdir)}/`,
+        '~/': `${resolve(__dirname, rootDir)}/`,
       },
     },
 
@@ -94,7 +95,7 @@ export default defineConfig(({ mode }) => {
        */
       laravel({
         input: [
-          `${rootdir}/app.ts`,
+          `${rootDir}/app.ts`,
         ],
         // valetTls: env.APP_ENV === 'local' && env.APP_URL.startsWith('https://'),
         // refresh: true,
@@ -109,7 +110,7 @@ export default defineConfig(({ mode }) => {
         org: env.SENTRY_ORG,
         project: env.SENTRY_PROJECT,
         authToken: env.SENTRY_AUTH_TOKEN,
-        telemetry: !['local', 'testing'].includes(env.APP_ENV),
+        telemetry: !isDev,
       }),
 
       /**
@@ -121,9 +122,9 @@ export default defineConfig(({ mode }) => {
        * @see https://github.com/antfu/unplugin-auto-import
        */
       autoImport({
-        dts: `${rootdir}/auto-imports.d.ts`,
+        dts: `${rootDir}/auto-imports.d.ts`,
         dirs: [
-          `${rootdir}/utils`,
+          `${rootDir}/utils`,
           // `${rootdir}/store`,
         ],
         imports: [
@@ -140,9 +141,9 @@ export default defineConfig(({ mode }) => {
        * @see https://github.com/antfu/unplugin-vue-components
        */
       components({
-        dts: `${rootdir}/components.d.ts`,
+        dts: `${rootDir}/components.d.ts`,
         dirs: [
-          `${rootdir}/components`,
+          `${rootDir}/components`,
           // `${rootdir}/layouts`,
         ],
         directoryAsNamespace: true,
@@ -166,11 +167,11 @@ export default defineConfig(({ mode }) => {
        */
       pwa({
         devOptions: {
-          enabled: (mode !== 'production' && !!env.APP_DEBUG),
+          // enabled: (mode !== 'production' && !!env.APP_DEBUG),
           type: mode !== 'production' ? 'classic' : 'module',
         },
         filename: 'sw.ts',
-        srcDir: rootdir,
+        srcDir: rootDir,
         registerType: 'prompt',
         strategies: 'injectManifest',
         workbox: {
