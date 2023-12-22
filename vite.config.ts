@@ -14,6 +14,7 @@ import { defineConfig, loadEnv } from 'vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', ['APP', 'FIREBASE', 'SENTRY', 'VITE'])
   const rootdir = 'resources/client'
+  const appURL = new URL(env.APP_URL)
 
   const firebaseConfig = {
     projectId: env.FIREBASE_PROJECT_ID,
@@ -26,7 +27,7 @@ export default defineConfig(({ mode }) => {
   }
 
   function httpsCert() {
-    if (!env.APP_URL.startsWith('https://'))
+    if (appURL.protocol !== 'https:')
       return false
 
     try {
@@ -83,7 +84,7 @@ export default defineConfig(({ mode }) => {
     },
 
     server: {
-      host: '127.0.0.1',
+      hmr: { host: appURL.host },
       https: httpsCert(),
     },
 
@@ -165,7 +166,7 @@ export default defineConfig(({ mode }) => {
        */
       pwa({
         devOptions: {
-          // enabled: (mode !== 'production' && !!env.APP_DEBUG),
+          enabled: (mode !== 'production' && !!env.APP_DEBUG),
           type: mode !== 'production' ? 'classic' : 'module',
         },
         filename: 'sw.ts',
