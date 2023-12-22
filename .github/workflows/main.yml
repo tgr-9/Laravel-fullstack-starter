@@ -93,9 +93,9 @@ jobs:
 
       - name: Upload tests reports
         if: github.actor != 'dependabot[bot]'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: test-reports
+          name: test-reports-${{ matrix.php }}
           path: |
             tests/coverage
             tests/reports
@@ -138,7 +138,7 @@ jobs:
 
       - name: Download assets
         id: download
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-${{ env.APP_ENV }}
           path: public
@@ -174,7 +174,7 @@ jobs:
 
       - name: Upload e2e tests logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: e2e-logs
           path: |
@@ -194,9 +194,10 @@ jobs:
 
     steps:
       - name: Download test reports
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: test-reports
+          pattern: test-reports-*
+          merge-multiple: true
 
       - name: Submit to CodeClimate
         run: |
