@@ -13,7 +13,9 @@ import { defineConfig, loadEnv } from 'vite'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, '.', ['APP', 'FIREBASE', 'SENTRY', 'VITE'])
-  const rootdir = 'resources/client'
+  const rootDir = 'resources/client'
+  const appURL = new URL(env.APP_URL)
+  const isDev = ['local', 'testing'].includes(env.APP_ENV)
 
   const firebaseConfig = {
     projectId: env.FIREBASE_PROJECT_ID,
@@ -25,25 +27,10 @@ export default defineConfig(({ mode }) => {
     messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
   }
 
-  function httpsCert() {
-    if (!env.APP_URL.startsWith('https://'))
-      return false
-
-    try {
-      return {
-        cert: readFileSync(resolve(__dirname, 'storage/local-cert.pem')),
-        key: readFileSync(resolve(__dirname, 'storage/local-key.pem')),
-      }
-    }
-    catch {
-      return false
-    }
-  }
-
   return {
     resolve: {
       alias: {
-        '~/': `${resolve(__dirname, rootdir)}/`,
+        '~': `${resolve(__dirname, rootDir)}`,
       },
     },
 
@@ -55,7 +42,7 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
-      sourcemap: mode === 'development' || 'SENTRY_AUTH_TOKEN' in env,
+      sourcemap: isDev || 'SENTRY_AUTH_TOKEN' in env,
       reportCompressedSize: false,
       chunkSizeWarningLimit: 2000,
       rollupOptions: {
@@ -83,32 +70,34 @@ export default defineConfig(({ mode }) => {
     },
 
     server: {
-      host: '127.0.0.1',
-      https: httpsCert(),
+      host: appURL.host,
+      hmr: { host: appURL.host },
+      https: httpsCert(appURL),
     },
 
     plugins: [
+      vue(),
+
       /**
        * @see https://laravel.com/docs/vite
        */
       laravel({
         input: [
-          `${rootdir}/app.ts`,
+          `${rootDir}/app.ts`,
         ],
         // valetTls: env.APP_ENV === 'local' && env.APP_URL.startsWith('https://'),
         // refresh: true,
       }),
 
-      vue(),
-
       /**
        * @see https://www.npmjs.com/package/@sentry/vite-plugin
        */
       sentryVitePlugin({
+        disable: !('SENTRY_AUTH_TOKEN' in env),
         org: env.SENTRY_ORG,
         project: env.SENTRY_PROJECT,
         authToken: env.SENTRY_AUTH_TOKEN,
-        telemetry: !['local', 'testing'].includes(env.APP_ENV),
+        telemetry: !isDev,
       }),
 
       /**
@@ -120,9 +109,9 @@ export default defineConfig(({ mode }) => {
        * @see https://github.com/antfu/unplugin-auto-import
        */
       autoImport({
-        dts: `${rootdir}/auto-imports.d.ts`,
+        dts: `${rootDir}/auto-imports.d.ts`,
         dirs: [
-          `${rootdir}/utils`,
+          `${rootDir}/utils`,
           // `${rootdir}/store`,
         ],
         imports: [
@@ -139,9 +128,9 @@ export default defineConfig(({ mode }) => {
        * @see https://github.com/antfu/unplugin-vue-components
        */
       components({
-        dts: `${rootdir}/components.d.ts`,
+        dts: `${rootDir}/components.d.ts`,
         dirs: [
-          `${rootdir}/components`,
+          `${rootDir}/components`,
           // `${rootdir}/layouts`,
         ],
         directoryAsNamespace: true,
@@ -169,7 +158,7 @@ export default defineConfig(({ mode }) => {
           type: mode !== 'production' ? 'classic' : 'module',
         },
         filename: 'sw.ts',
-        srcDir: rootdir,
+        srcDir: rootDir,
         registerType: 'prompt',
         strategies: 'injectManifest',
         workbox: {
@@ -217,3 +206,18 @@ export default defineConfig(({ mode }) => {
     ],
   }
 })
+
+function httpsCert(url: URL) {
+  if (url.protocol !== 'https:')
+    return false
+
+  try {
+    return {
+      cert: readFileSync(resolve(__dirname, 'storage/local-cert.pem')),
+      key: readFileSync(resolve(__dirname, 'storage/local-key.pem')),
+    }
+  }
+  catch {
+    return false
+  }
+}
