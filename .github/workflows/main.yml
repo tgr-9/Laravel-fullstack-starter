@@ -93,7 +93,7 @@ jobs:
 
       - name: Upload tests reports
         if: github.actor != 'dependabot[bot]'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports
           path: |
@@ -174,7 +174,7 @@ jobs:
 
       - name: Upload e2e tests logs
         if: failure()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: e2e-logs
           path: |
