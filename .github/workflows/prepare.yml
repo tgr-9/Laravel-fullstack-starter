@@ -47,7 +47,7 @@ jobs:
           run_install: true
 
       - name: Setup node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           cache: pnpm
           node-version: 18.x
