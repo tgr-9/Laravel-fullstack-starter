@@ -43,7 +43,7 @@ const {
 } = useNavigation('user')
 
 const pageTitle = computed(() => props.title || t(props.page))
-const siderCollapsed = computed(() => menuPreference.value.collapsed || (onMediumScreen.value && !onSmallScreen.value))
+const siderCollapsed = computed(() => appNavigation.value.collapsed || (onMediumScreen.value && !onSmallScreen.value))
 const siderPosition = computed(() => onSmallScreen.value ? 'absolute' : 'static')
 const siderCollapsedMode = computed(() => onSmallScreen.value ? 'transform' : 'width')
 const siderCollapsedWidth = computed(() => onSmallScreen.value ? 0 : 64)
@@ -117,8 +117,8 @@ function touchEnd(e: TouchEvent) {
         <main id="main-navigation" class="n-layout-sider-section w-full flex-grow py-2">
           <n-menu
             ref="mainMenu"
-            v-model:value="menuPreference.activeKey"
-            v-model:expanded-keys="menuPreference.expandedKeys"
+            v-model:value="appNavigation.activeKey"
+            v-model:expanded-keys="appNavigation.expandedKeys"
             :collapsed-icon-size="22"
             :collapsed-width="64"
             :on-update:expanded-keys="updateMainExpandedKeys"

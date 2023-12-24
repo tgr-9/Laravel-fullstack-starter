@@ -20,7 +20,7 @@ export interface AppPreference {
 /**
  * State of global application preference.
  */
-export const appPreference: RemovableRef<AppPreference> = useSessionStorage<AppPreference>('app-preference', {
+export const appPreference: RemovableRef<AppPreference> = useLocalStorage<AppPreference>('app-preference', {
   locale: document.documentElement.lang,
   theme: 'auto',
 })

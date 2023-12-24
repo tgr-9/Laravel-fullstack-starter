@@ -22,7 +22,7 @@ export interface BreadcrumbItem extends BreadcrumbItemProps {
 /**
  * Global menu preference.
  */
-export interface MenuPreference {
+export interface AppNavigation {
   collapsed: boolean
   activeKey?: string
   expandedKeys: string[]
@@ -63,7 +63,7 @@ export type NavigationType = keyof NavigationOptions
 /**
  * State of global menu preference.
  */
-export const menuPreference: RemovableRef<MenuPreference> = useSessionStorage<MenuPreference>('menu-preference', {
+export const appNavigation: RemovableRef<AppNavigation> = useLocalStorage<AppNavigation>('app-navigation', {
   collapsed: false,
   expandedKeys: [],
 })
@@ -127,10 +127,13 @@ function transformMenu(type: NavigationType, parent?: MenuOption) {
       },
     }
 
-    if (!menuPreference.value.activeKey && menu.active)
+    if (appNavigation.value.activeKey && appNavigation.value.activeKey === menu.key)
+      router.get(route(nav.route as string))
+
+    if (!appNavigation.value.activeKey && menu.active)
       updateActiveKey(menu.key as string)
 
-    if (menuPreference.value.expandedKeys.length === 0 && menu.active && !!parent)
+    if (appNavigation.value.expandedKeys.length === 0 && menu.active && !!parent)
       updateExpandedKeys([parent.key as string])
 
     if (nav.children)
@@ -141,15 +144,15 @@ function transformMenu(type: NavigationType, parent?: MenuOption) {
 }
 
 function updateCollapse(collapsed: boolean) {
-  menuPreference.value.collapsed = collapsed
+  appNavigation.value.collapsed = collapsed
 }
 
 function updateActiveKey(key?: string) {
-  menuPreference.value.activeKey = key
+  appNavigation.value.activeKey = key
 }
 
 function updateExpandedKeys(keys: string[]) {
-  menuPreference.value.expandedKeys = keys
+  appNavigation.value.expandedKeys = keys
 }
 
 /**
@@ -159,7 +162,7 @@ function updateExpandedKeys(keys: string[]) {
  * @returns Navigation configurations
  */
 export function useNavigation(type: NavigationType): Navigations {
-  if (menuPreference.value.activeKey === 'logout') {
+  if (appNavigation.value.activeKey === 'logout') {
     updateActiveKey()
     updateExpandedKeys([])
   }
