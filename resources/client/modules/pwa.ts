@@ -6,13 +6,17 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
     return
 
   const { $message, $notification } = app.config.globalProperties
+  const { t } = useI18n()
 
   navigator.serviceWorker.addEventListener('message', ({ data }) => {
     console.info('Background Message Received:', data) // eslint-disable-line no-console
-    $notification.info({
-      title: data.notification.title,
-      content: data.notification.body,
-    })
+
+    if (data.type === 'notification') {
+      $notification.info({
+        title: data.notification.title,
+        content: data.notification.body,
+      })
+    }
   })
 
   try {
@@ -33,6 +37,9 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
   registerSW({
     immediate: true,
     async onRegisteredSW(_, registration) {
+      if (!registration)
+        return
+
       try {
         await getMessagingToken(registration)
         console.info('Registration successful') // eslint-disable-line no-console
@@ -47,10 +54,11 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
       console.error('SW registration failed: ', error)
     },
     onNeedRefresh() {
-      $message.info('The App has been updated, please reload the page', {
-        duration: 10000,
-        onClose() {
-          location.reload()
+      $message.info(t('dashboard.update-notice'), {
+        duration: 0,
+        closable: true,
+        async onClose() {
+          navigator.serviceWorker.controller?.postMessage({ type: 'SKIP_WAITING' })
         },
       })
     },
