@@ -26,6 +26,45 @@ export default defineConfig(({ mode }) => {
     messagingSenderId: env.FIREBASE_MESSAGING_SENDER_ID,
   }
 
+  /**
+   * Define the icons that:
+   * 1. We want to include in the webmanifest, and
+   * 2. We want to service worker to pre-cache for offline use.
+   */
+  const manifestIcons = [
+    {
+      src: '/vendor/creasico/favicon.svg',
+      sizes: '512x512',
+      type: 'image/svg+xml',
+    },
+    {
+      src: '/vendor/creasico/icon-192x192.png',
+      sizes: '192x192',
+      type: 'image/png',
+    },
+    {
+      src: '/vendor/creasico/icon-512x512.png',
+      sizes: '512x512',
+      type: 'image/png',
+    },
+    {
+      src: '/vendor/creasico/icon-512x512.png',
+      sizes: '512x512',
+      type: 'image/png',
+      purpose: 'maskable',
+    },
+  ]
+
+  /**
+   * Define the icons that:
+   * 1. We don't need in the webmanifest, and
+   * 2. We want to service worker to pre-cache for offline use.
+   */
+  const publicIcons = [
+    { src: '/favicon.ico' },
+    { src: '/vendor/creasico/apple-touch-icon.png' },
+  ]
+
   return {
     resolve: {
       alias: {
@@ -152,19 +191,11 @@ export default defineConfig(({ mode }) => {
        * @see https://vite-pwa-org.netlify.app/guide
        */
       pwa({
+        buildBase: '/build/',
         devOptions: {
           // enabled: (mode !== 'production' && !!env.APP_DEBUG),
-          type: mode !== 'production' ? 'classic' : 'module',
         },
-        filename: 'sw.ts',
-        srcDir: rootDir,
-        registerType: 'prompt',
-        strategies: 'injectManifest',
-        workbox: {
-          mode,
-          globPatterns: ['**/*.{css,ico,js,jpeg,png,svg,woff2}'],
-          navigateFallback: '/',
-        },
+        includeAssets: [],
         manifest: {
           id: '/',
           name: env.APP_NAME,
@@ -173,33 +204,25 @@ export default defineConfig(({ mode }) => {
           lang: env.APP_LOCALE || 'id',
           scope: '/',
           orientation: 'any',
-          icons: [
-            {
-              src: '/favicon.ico',
-              sizes: '48x48',
-            },
-            {
-              src: '/vendor/creasico/favicon.svg',
-              sizes: '512x512',
-              type: 'image/svg+xml',
-            },
-            {
-              src: '/vendor/creasico/icon-192x192.png',
-              sizes: '192x192',
-              type: 'image/png',
-            },
-            {
-              src: '/vendor/creasico/icon-512x512.png',
-              sizes: '512x512',
-              type: 'image/png',
-            },
-            {
-              src: '/vendor/creasico/icon-512x512.png',
-              sizes: '512x512',
-              type: 'image/png',
-              purpose: 'maskable',
-            },
+          icons: manifestIcons,
+        },
+        scope: '/',
+        srcDir: rootDir,
+        workbox: {
+          additionalManifestEntries: [
+            // Cache the root URL to get hold of the PWA HTML entrypoint
+            // https://github.com/vite-pwa/vite-plugin-pwa/issues/431#issuecomment-1703151065
+            { url: '/', revision: `${Date.now()}` },
+
+            // Cache the icons defined above for the manifest
+            ...manifestIcons.map(i => ({ url: i.src, revision: `${Date.now()}` })),
+
+            // Cache the other offline icons defined above
+            ...publicIcons.map(i => ({ url: i.src, revision: `${Date.now()}` })),
           ],
+          globPatterns: ['**/*.{css,ico,js,jpeg,png,svg,woff2}'],
+          navigateFallback: '/',
+          skipWaiting: true,
         },
       }),
     ],
