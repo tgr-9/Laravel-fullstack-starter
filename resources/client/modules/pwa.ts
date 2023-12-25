@@ -1,24 +1,15 @@
 import { registerSW } from 'virtual:pwa-register'
-import { getMessagingToken } from './firebase'
+import { registerMessagingToken } from './firebase'
 
 export const install: AppModuleInstall = async ({ app, isClient }) => {
   if (!isClient)
     return
 
-  const { $message, $notification } = app.config.globalProperties
-  const { t } = useI18n()
-
-  navigator.serviceWorker.addEventListener('message', ({ data }) => {
-    console.info('Background Message Received:', data) // eslint-disable-line no-console
-
-    if (data.type === 'notification') {
-      $notification.info({
-        title: data.notification.title,
-        content: data.notification.body,
-      })
-    }
-  })
-
+  /**
+   * Request for notification permissions.
+   *
+   * **Note:** In MS Edge, the permission request will be blocked by the browser.
+   */
   try {
     if (Notification.permission === 'denied')
       throw new Error('Notifications are denied by the user')
@@ -34,31 +25,44 @@ export const install: AppModuleInstall = async ({ app, isClient }) => {
     console.warn((e as Error).message)
   }
 
+  const { $message, $notification, $t } = app.config.globalProperties
+
+  /**
+   * Listen to background messages.
+   */
+  navigator.serviceWorker.addEventListener('message', ({ data }) => {
+    /**
+     * Forward the notification to foreground when it comes from background firebase messaging.
+     */
+    if (data.isFirebaseMessaging) {
+      $notification.info({
+        title: data.notification.title,
+        content: data.notification.body,
+      })
+    }
+  })
+
   registerSW({
     immediate: true,
     async onRegisteredSW(_, registration) {
       if (!registration)
         return
 
-      try {
-        await getMessagingToken(registration)
-        console.info('Registration successful') // eslint-disable-line no-console
-      }
-      catch (e) {
-        const err = e as Error
-        console.warn(err.name, ':', err.message)
-        // location.reload()
-      }
+      await registerMessagingToken(registration)
     },
     onRegisterError(error) {
       console.error('SW registration failed: ', error)
     },
     onNeedRefresh() {
-      $message.info(t('dashboard.update-notice'), {
+      $message.info($t('dashboard.update-notice'), {
         duration: 0,
         closable: true,
         async onClose() {
-          navigator.serviceWorker.controller?.postMessage({ type: 'SKIP_WAITING' })
+          const reg = await navigator.serviceWorker.getRegistration()
+
+          reg?.active?.postMessage({ type: 'SKIP_WAITING' })
+
+          await reg?.update()
         },
       })
     },
