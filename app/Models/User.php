@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Creasi\Base\Contracts\HasDevices;
 use Creasi\Base\Contracts\HasIdentity;
+use Creasi\Base\Models\Concerns\WithDevices;
 use Creasi\Base\Models\Concerns\WithIdentity;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -19,11 +22,12 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @method static \Database\Factories\UserFactory<static> factory()
  */
-class User extends Authenticatable implements HasIdentity
+class User extends Authenticatable implements HasDevices, HasIdentity
 {
     use HasApiTokens;
     use HasFactory;
     use Notifiable;
+    use WithDevices;
     use WithIdentity;
 
     protected $fillable = ['name', 'email', 'password'];
@@ -34,15 +38,8 @@ class User extends Authenticatable implements HasIdentity
         'email_verified_at' => 'immutable_datetime',
     ];
 
-    protected $appends = [];
-
-    public function setPasswordAttribute(string $value)
+    public function password(): Attribute
     {
-        $this->attributes['password'] = \bcrypt($value);
-    }
-
-    public function getAuthIdentifierName()
-    {
-        return 'name';
+        return Attribute::set(fn ($value) => \bcrypt($value));
     }
 }

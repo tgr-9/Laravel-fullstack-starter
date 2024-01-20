@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\User;
+use App\Notifications\Messages\Priority;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
@@ -16,7 +17,7 @@ class SampleNotification extends Notification
     public function __construct(
         private string $title,
         private string $body,
-        private array $tokens,
+        readonly public Priority $priority = Priority::Normal,
     ) {
         //
     }
@@ -28,6 +29,10 @@ class SampleNotification extends Notification
      */
     public function via(User $notifiable): array
     {
+        if (empty($notifiable->deviceTokens())) {
+            return [];
+        }
+
         return [
             Channels\FcmChannel::class,
             'database',
@@ -39,7 +44,12 @@ class SampleNotification extends Notification
      */
     public function toFcm(User $notifiable): Messages\FcmMessage
     {
-        return new Messages\FcmMessage($this->title, $this->body, $this->tokens);
+        return new Messages\FcmMessage(
+            $notifiable,
+            $this->title,
+            $this->body,
+            $this->priority
+        );
     }
 
     /**
@@ -52,7 +62,7 @@ class SampleNotification extends Notification
         return [
             'title' => $this->title,
             'body' => $this->body,
-            'deviceTokens' => $this->tokens,
+            'deviceTokens' => $notifiable->deviceTokens(),
         ];
     }
 }
