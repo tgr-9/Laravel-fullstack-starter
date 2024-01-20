@@ -55,16 +55,6 @@ export default defineConfig(({ mode }) => {
     },
   ]
 
-  /**
-   * Define the icons that:
-   * 1. We don't need in the webmanifest, and
-   * 2. We want to service worker to pre-cache for offline use.
-   */
-  const publicIcons = [
-    { src: '/favicon.ico' },
-    { src: '/vendor/creasico/apple-touch-icon.png' },
-  ]
-
   return {
     resolve: {
       alias: {
@@ -191,38 +181,24 @@ export default defineConfig(({ mode }) => {
        * @see https://vite-pwa-org.netlify.app/guide
        */
       pwa({
+        scope: '/',
         buildBase: '/build/',
         devOptions: {
           // enabled: (mode !== 'production' && !!env.APP_DEBUG),
         },
+        srcDir: rootDir,
+        filename: 'sw.ts',
         includeAssets: [],
+        strategies: 'injectManifest',
         manifest: {
           id: '/',
+          scope: '/',
+          start_url: '/',
           name: env.APP_NAME,
           short_name: env.APP_NAME,
-          start_url: '/',
           lang: env.APP_LOCALE || 'id',
-          scope: '/',
-          orientation: 'any',
+          orientation: 'portrait-primary',
           icons: manifestIcons,
-        },
-        scope: '/',
-        srcDir: rootDir,
-        workbox: {
-          additionalManifestEntries: [
-            // Cache the root URL to get hold of the PWA HTML entrypoint
-            // https://github.com/vite-pwa/vite-plugin-pwa/issues/431#issuecomment-1703151065
-            { url: '/', revision: `${Date.now()}` },
-
-            // Cache the icons defined above for the manifest
-            ...manifestIcons.map(i => ({ url: i.src, revision: `${Date.now()}` })),
-
-            // Cache the other offline icons defined above
-            ...publicIcons.map(i => ({ url: i.src, revision: `${Date.now()}` })),
-          ],
-          globPatterns: ['**/*.{css,ico,js,jpeg,png,svg,woff2}'],
-          navigateFallback: '/',
-          skipWaiting: true,
         },
       }),
     ],

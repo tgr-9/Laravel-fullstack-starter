@@ -15,9 +15,7 @@ function notify(type: NotificationType) {
 
 async function notifyFirebase() {
   try {
-    const { data } = await axios.post(route('sample.firebase'), {
-      tokens: [appPreference.value.deviceToken],
-    })
+    const { data } = await axios.post(route('sample.firebase'))
 
     logger(data)
   }

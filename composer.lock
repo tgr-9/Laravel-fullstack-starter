@@ -136,12 +136,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/creasico/laravel-base.git",
-                "reference": "05f38322eee3257ceec8fdd5c539d717fbb14fbe"
+                "reference": "41224a266f4cb96a3b0e9904be97c832c14d48fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-base/zipball/05f38322eee3257ceec8fdd5c539d717fbb14fbe",
-                "reference": "05f38322eee3257ceec8fdd5c539d717fbb14fbe",
+                "url": "https://api.github.com/repos/creasico/laravel-base/zipball/41224a266f4cb96a3b0e9904be97c832c14d48fb",
+                "reference": "41224a266f4cb96a3b0e9904be97c832c14d48fb",
                 "shasum": ""
             },
             "require": {
@@ -208,7 +208,7 @@
                 "source": "https://github.com/creasico/laravel-base",
                 "issues": "https://github.com/creasico/laravel-base/issues"
             },
-            "time": "2023-11-14T00:39:50+00:00"
+            "time": "2023-12-25T23:20:50+00:00"
         },
         {
             "name": "creasi/laravel-nusa",

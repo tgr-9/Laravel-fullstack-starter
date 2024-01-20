@@ -18,15 +18,9 @@ class SampleController extends Controller
 
     public function firebase(Request $request)
     {
-        $request->validate([
-            'tokens' => ['required', 'array'],
-            'tokens.*' => ['required', 'string'],
-        ]);
-
         $request->user()->notify(new SampleNotification(
             title: 'Test Notification',
             body: 'This is just test notification',
-            tokens: $request->input('tokens', []),
         ));
 
         return \response([

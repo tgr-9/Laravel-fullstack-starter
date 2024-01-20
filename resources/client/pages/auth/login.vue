@@ -9,12 +9,14 @@ interface LoginForm {
   username: string
   password: string
   remember: boolean
+  device?: string
 }
 
 const model = useForm<LoginForm>({
   username: '',
   password: '',
   remember: false,
+  device: appPreference.value.deviceToken,
 })
 
 function submit() {
