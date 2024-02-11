@@ -7,7 +7,6 @@
     "editorconfig.editorconfig",
     "github.vscode-pull-request-github",
     "lokalise.i18n-ally",
-    "mikestead.dotenv",
     "ms-vscode-remote.remote-containers",
     "mtxr.sqltools",
     "mtxr.sqltools-driver-pg",
@@ -15,6 +14,7 @@
     "rangav.vscode-thunder-client",
     "voorjaar.windicss-intellisense",
     "vue.volar",
-    "xdebug.php-debug"
+    "xdebug.php-debug",
+    "mikestead.dotenv"
   ]
 }
