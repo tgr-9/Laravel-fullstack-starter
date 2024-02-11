@@ -59,7 +59,7 @@ jobs:
           echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Prepare Composer Cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ${{ steps.prepare.outputs.composer-cache }}
           key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
