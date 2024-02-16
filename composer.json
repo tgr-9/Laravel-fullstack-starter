@@ -32,7 +32,7 @@
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.7",
-    "creasi/dusk-browserstack": "^0.2.2",
+    "creasi/dusk-browserstack": "dev-main",
     "deployer/deployer": "^7.3",
     "laravel/dusk": "^7.11",
     "laravel/pint": "^1.1",

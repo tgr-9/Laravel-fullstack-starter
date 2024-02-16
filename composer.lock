@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "195d9db894add9688fb033f7e16ad74b",
+    "content-hash": "b77c99f4cb4b34b0fba2b4c165025021",
     "packages": [
         {
             "name": "brick/math",
@@ -6354,28 +6354,34 @@
         },
         {
             "name": "creasi/dusk-browserstack",
-            "version": "v0.2.3",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/creasico/laravel-dusk-browserstack.git",
-                "reference": "4ea6e1b5a70d77c82b5eb1217f12625ffa99f44e"
+                "reference": "353cfe29a1329992a9148c4bc8d1d73c0d03859e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/4ea6e1b5a70d77c82b5eb1217f12625ffa99f44e",
-                "reference": "4ea6e1b5a70d77c82b5eb1217f12625ffa99f44e",
+                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/353cfe29a1329992a9148c4bc8d1d73c0d03859e",
+                "reference": "353cfe29a1329992a9148c4bc8d1d73c0d03859e",
                 "shasum": ""
             },
             "require": {
+                "ext-zip": "*",
+                "illuminate/console": "^9.0|^10.0",
+                "illuminate/support": "^9.0|^10.0",
                 "laravel/dusk": "^7.0",
-                "php": "^8.1"
+                "php": "^8.1",
+                "symfony/process": "^6.0"
             },
             "require-dev": {
                 "inertiajs/inertia-laravel": "^0.6.9",
                 "laravel/pint": "^1.1",
                 "nunomaduro/collision": "^7.4",
-                "orchestra/testbench": "^8.5"
+                "orchestra/testbench": "^7.0|^8.0",
+                "orchestra/testbench-dusk": "^7.0|^8.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -6417,7 +6423,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-06T21:30:51+00:00"
+            "time": "2024-02-16T18:56:47+00:00"
         },
         {
             "name": "deployer/deployer",
@@ -9245,7 +9251,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "creasi/laravel-base": 20
+        "creasi/laravel-base": 20,
+        "creasi/dusk-browserstack": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
