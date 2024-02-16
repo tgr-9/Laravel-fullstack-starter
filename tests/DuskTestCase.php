@@ -27,7 +27,13 @@ abstract class DuskTestCase extends BaseTestCase
      */
     public static function prepare()
     {
-        if (! static::runningInSail() && ! static::hasBrowserStackKey()) {
+        if (static::hasBrowserStackKey()) {
+            static::startBrowserStackLocal();
+
+            return;
+        }
+
+        if (! static::runningInSail()) {
             static::startChromeDriver();
         }
 
