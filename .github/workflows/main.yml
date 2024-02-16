@@ -153,24 +153,29 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress --ansi
 
-      - name: Setup BrowserStack env  # Invokes the setup-env action
-        uses: browserstack/github-actions/setup-env@master
-        with:
-          username:  ${{ secrets.BROWSERSTACK_USERNAME }}
-          access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      # - name: Setup BrowserStack env  # Invokes the setup-env action
+      #   uses: browserstack/github-actions/setup-env@master
+      #   with:
+      #     username:  ${{ secrets.BROWSERSTACK_USERNAME }}
+      #     access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
-      - name: Start BrowserStack local tunnel
-        uses: browserstack/github-actions/setup-local@master
-        with:
-          local-testing: start
-          local-logging-level: all-logs
-          local-identifier: random
+      # - name: Start BrowserStack local tunnel
+      #   uses: browserstack/github-actions/setup-local@master
+      #   with:
+      #     local-testing: start
+      #     local-logging-level: all-logs
+      #     local-identifier: random
 
       - name: Start dev server
         run: php artisan serve > /dev/null 2>&1 &
 
       - name: Run e2e tests
-        run: php artisan dusk --colors=always
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+        run: |
+         php artisan dusk:browserstack-local
+         php artisan dusk --colors=always
 
       - name: Upload e2e tests logs
         if: failure()
@@ -181,10 +186,10 @@ jobs:
             tests/Browser/console
             tests/Browser/screenshots
 
-      - name: Stop BrowserStack local tunnel
-        uses: browserstack/github-actions/setup-local@master
-        with:
-          local-testing: stop
+      # - name: Stop BrowserStack local tunnel
+      #   uses: browserstack/github-actions/setup-local@master
+      #   with:
+      #     local-testing: stop
 
   reports:
     name: Report Test Coverages
