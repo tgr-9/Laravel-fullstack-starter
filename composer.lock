@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b77c99f4cb4b34b0fba2b4c165025021",
+    "content-hash": "dccfc4eb1d08e5986e7c69051c0f0e58",
     "packages": [
         {
             "name": "brick/math",
@@ -6354,16 +6354,16 @@
         },
         {
             "name": "creasi/dusk-browserstack",
-            "version": "dev-main",
+            "version": "v0.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/creasico/laravel-dusk-browserstack.git",
-                "reference": "353cfe29a1329992a9148c4bc8d1d73c0d03859e"
+                "reference": "b9134d37e540aa2447a35bb723bc2a079a2dc4cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/353cfe29a1329992a9148c4bc8d1d73c0d03859e",
-                "reference": "353cfe29a1329992a9148c4bc8d1d73c0d03859e",
+                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/b9134d37e540aa2447a35bb723bc2a079a2dc4cd",
+                "reference": "b9134d37e540aa2447a35bb723bc2a079a2dc4cd",
                 "shasum": ""
             },
             "require": {
@@ -6381,7 +6381,6 @@
                 "orchestra/testbench": "^7.0|^8.0",
                 "orchestra/testbench-dusk": "^7.0|^8.0"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -6423,7 +6422,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-16T18:56:47+00:00"
+            "time": "2024-02-16T19:45:36+00:00"
         },
         {
             "name": "deployer/deployer",
@@ -9251,8 +9250,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "creasi/laravel-base": 20,
-        "creasi/dusk-browserstack": 20
+        "creasi/laravel-base": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
