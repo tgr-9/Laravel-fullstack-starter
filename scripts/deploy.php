@@ -27,9 +27,21 @@ host('skeleton.creasi.dev')
 // Tasks
 
 task('deploy:assets', function () {
-    $conn = currentHost()->connectionString();
+    $config = ['flags' => '-zrtv'];
+    $env = get('labels')['env'] ?? null;
+    $masterData = "storage/app/master-data.{$env}.xlsx";
 
-    runLocally("rsync -zrtv --exclude '*.map' ../public/{build,vendor} {$conn}:{{release_or_current_path}}/public/");
+    if (! \file_exists($masterData)) {
+        $masterData = 'storage/app/master-data.xlsx';
+    }
+
+    if (\file_exists($masterData)) {
+        upload($masterData, '{{release_or_current_path}}/storage/app', $config);
+    }
+
+    upload('public/{build,vendor}', '{{release_or_current_path}}/public/', $config + [
+        'options' => ['--exclude=*.map'],
+    ]);
 })->desc('Deploy static assets');
 
 // Hooks

@@ -8,8 +8,8 @@ use Illuminate\Foundation\Testing\WithFaker;
 
 trait CreatesApplication
 {
-    use WithFaker;
     use DatabaseMigrations;
+    use WithFaker;
 
     /**
      * Creates the application.
