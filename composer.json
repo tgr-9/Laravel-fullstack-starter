@@ -32,7 +32,7 @@
   },
   "require-dev": {
     "barryvdh/laravel-debugbar": "^3.7",
-    "creasi/dusk-browserstack": "^0.2.2",
+    "creasi/dusk-browserstack": "^0.3.0",
     "deployer/deployer": "^7.3",
     "laravel/dusk": "^7.11",
     "laravel/pint": "^1.1",
@@ -48,6 +48,7 @@
     "symfony/css-selector": ">=7.0",
     "symfony/event-dispatcher": ">=7.0",
     "symfony/options-resolver": ">=7.0",
+    "symfony/psr-http-message-bridge": ">=7.0",
     "symfony/string": ">=7.0"
   },
   "autoload": {

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use Creasi\Base\Models\Concerns\Factories\WithIdentity;
+use Creasi\Base\Models\Factories\Concerns\WithIdentity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
