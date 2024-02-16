@@ -153,19 +153,6 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress --ansi
 
-      # - name: Setup BrowserStack env  # Invokes the setup-env action
-      #   uses: browserstack/github-actions/setup-env@master
-      #   with:
-      #     username:  ${{ secrets.BROWSERSTACK_USERNAME }}
-      #     access-key: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-
-      # - name: Start BrowserStack local tunnel
-      #   uses: browserstack/github-actions/setup-local@master
-      #   with:
-      #     local-testing: start
-      #     local-logging-level: all-logs
-      #     local-identifier: random
-
       - name: Start dev server
         run: php artisan serve > /dev/null 2>&1 &
 
@@ -185,11 +172,6 @@ jobs:
           path: |
             tests/Browser/console
             tests/Browser/screenshots
-
-      # - name: Stop BrowserStack local tunnel
-      #   uses: browserstack/github-actions/setup-local@master
-      #   with:
-      #     local-testing: stop
 
   reports:
     name: Report Test Coverages
