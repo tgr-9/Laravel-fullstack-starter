@@ -31,16 +31,16 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
+    name: Deploy to ${{ needs.prepare.outputs.target-env }}
     needs: prepare
 
     environment:
-      name: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
-      url: ${{ vars.APP_URL }}
+      name: ${{ needs.prepare.outputs.target-env }}
+      url: ${{ env.APP_URL }}
 
     env:
-      APP_ENV: ${{ vars.APP_ENV }}
-      APP_URL: ${{ vars.APP_URL }}
+      APP_ENV: ${{ needs.prepare.outputs.target-env }}
+      APP_URL: ${{ needs.prepare.outputs.target-url }}
 
     steps:
       - name: Checkout
@@ -77,6 +77,6 @@ jobs:
         uses: deployphp/action@master
         with:
           private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
-          ssh-config: ${{ secrets.DEPLOY_STAGING_CONFIG }}
+          ssh-config: ${{ secrets.DEPLOY_SSH_CONFIG }}
           verbosity: ''
           dep: deploy -f scripts/deploy.php env=${{ env.APP_ENV }} --branch ${{ github.ref_name }}

@@ -9,6 +9,10 @@ on:
         required: false
         type: string
     outputs:
+      target-env:
+        value: ${{ jobs.build.outputs.target-env }}
+      target-url:
+        value: ${{ jobs.build.outputs.target-url }}
       composer-cache:
         value: ${{ jobs.build.outputs.composer-cache }}
 
@@ -17,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     name: Build for `${{ inputs.target }}`
     outputs:
+      target-env: ${{ inputs.target }}
+      target-url: ${{ env.APP_URL }}
       composer-cache: ${{ steps.prepare.outputs.composer-cache }}
 
     environment:
