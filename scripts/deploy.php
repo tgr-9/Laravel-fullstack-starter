@@ -26,21 +26,20 @@ host('skeleton.creasi.dev')
 
 // Tasks
 
-task('deploy:assets', function () {
+task('deploy:assets', function () use ($rootDir) {
     $config = ['flags' => '-zrtv'];
     $env = get('labels')['env'] ?? null;
-    $masterData = "storage/app/master-data.{$env}.xlsx";
+    $masterData = "{$rootDir}/storage/app/master-data.{$env}.xlsx";
 
     if (! \file_exists($masterData)) {
-        $masterData = 'storage/app/master-data.xlsx';
+        $masterData = $rootDir.'/storage/app/master-data.xlsx';
     }
 
     if (\file_exists($masterData)) {
         upload($masterData, '{{release_or_current_path}}/storage/app', $config);
     }
 
-    runLocally('ls -lah public/{build,vendor} && echo $PWD');
-    upload('public/{build,vendor}', '{{release_or_current_path}}/public/', $config + [
+    upload($rootDir.'/public/{build,vendor}', '{{release_or_current_path}}/public/', $config + [
         'options' => ['--exclude=*.map'],
     ]);
 })->desc('Deploy static assets');
