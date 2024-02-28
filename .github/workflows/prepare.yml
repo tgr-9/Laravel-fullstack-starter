@@ -9,27 +9,48 @@ on:
         required: false
         type: string
     outputs:
+      composer-cache:
+        value: ${{ jobs.build.outputs.composer-cache }}
       target-env:
         value: ${{ jobs.build.outputs.target-env }}
       target-url:
         value: ${{ jobs.build.outputs.target-url }}
-      composer-cache:
-        value: ${{ jobs.build.outputs.composer-cache }}
+      should-reports:
+        value: ${{ jobs.build.outputs.should-reports }}
 
 jobs:
+  labels:
+    name: Labels
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Labeler
+        uses: actions/labeler@v5
+        with:
+          dot: true
+
   build:
     runs-on: ubuntu-latest
     name: Build for `${{ inputs.target }}`
     outputs:
       target-env: ${{ inputs.target }}
       target-url: ${{ env.APP_URL }}
-      composer-cache: ${{ steps.prepare.outputs.composer-cache }}
+      composer-cache: ${{ steps.environments.outputs.composer-cache }}
+      should-reports: ${{ steps.environments.outputs.should-reports }}
 
     environment:
       name: ${{ inputs.target }}
 
     env:
-      APP_ENV: ${{ vars.APP_ENV }}
+      APP_ENV: ${{ inputs.target }}
       APP_URL: ${{ vars.APP_URL }}
 
     steps:
@@ -58,16 +79,19 @@ jobs:
           cache: pnpm
           node-version: 18.x
 
-      - name: Prepare environment
-        id: prepare
+      - name: Setup environment
+        id: environments
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
+          git config user.name "Creasi.HQ" && git config user.email "developers@creasi.co"
           echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          echo "should-reports=$([[ -n \"$CC_TEST_REPORTER_ID\" ]] && echo '1')" >> $GITHUB_OUTPUT
 
       - name: Prepare Composer Cache
         uses: actions/cache@v4
         with:
-          path: ${{ steps.prepare.outputs.composer-cache }}
+          path: ${{ steps.environments.outputs.composer-cache }}
           key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: php-8.1-composer-
 
@@ -81,7 +105,7 @@ jobs:
         env:
           APP_NAME: ${{ vars.APP_NAME }}
           APP_LOCALE: id
-          FIREBASE_PROJECT_ID: creasi-co
+          FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
           FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
@@ -90,7 +114,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_ORG: creasico
-          SENTRY_PROJECT: creasi-skeleton
+          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
           VITE_API_URL: ${{ env.APP_URL }}/api
           VITE_GTM_ID: 'G-1KQP24LR0L'
         run: |
