@@ -3,6 +3,8 @@ run-name: >-
   deploy ${{ github.ref_name }} to ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
 
 on:
+  pull_request:
+    branches: [main]
   release:
     types: [published]
   workflow_dispatch:
@@ -11,6 +13,10 @@ on:
         description: Deployment target
         required: true
         type: environment
+      reset:
+        description: Reset database
+        default: false
+        type: boolean
   workflow_run:
     workflows: [Code Quality]
     types: [completed]
@@ -76,8 +82,13 @@ jobs:
 
       - name: Deploy
         uses: deployphp/action@master
+        env:
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_RESET: ${{ github.event_name == 'workflow_dispatch' && inputs.reset || false }}
+          DEPLOY_ARGS: --branch ${{ needs.prepare.outputs.target-branch }} --${{ env.DB_RESET == 'true' && 'no-reset' || 'no-reset' }}
         with:
           private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
           ssh-config: ${{ secrets.DEPLOY_SSH_CONFIG }}
           verbosity: ''
-          dep: deploy -f scripts/deploy.php env=${{ env.APP_ENV }} --branch ${{ github.ref_name }}
+          dep: deploy -f scripts/deploy.php env=staging ${{ env.DEPLOY_ARGS }}

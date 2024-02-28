@@ -15,9 +15,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        if ($this->app->environment('local')) {
-            $this->app->register(\Laravel\Telescope\TelescopeServiceProvider::class);
-            // $this->app->register(TelescopeServiceProvider::class);
+        if (app()->environment('local') && \class_exists('\Laravel\Telescope\TelescopeServiceProvider')) {
+            app()->register(\Laravel\Telescope\TelescopeServiceProvider::class);
+            // app()->register(TelescopeServiceProvider::class);
         }
         // .
     }
