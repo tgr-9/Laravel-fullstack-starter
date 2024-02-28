@@ -74,7 +74,7 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress --ansi
 
       - name: Deploy
-        uses: deployphp/action@v1
+        uses: deployphp/action@master
         with:
           private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
           ssh-config: ${{ secrets.DEPLOY_STAGING_CONFIG }}
