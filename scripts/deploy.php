@@ -2,7 +2,7 @@
 
 namespace Deployer;
 
-$rootDir = \realpath(__DIR__.'/..');
+$rootDir = \dirname(__DIR__);
 
 require 'recipe/laravel.php';
 require $rootDir.'/vendor/autoload.php';
@@ -10,7 +10,7 @@ require $rootDir.'/vendor/autoload.php';
 // Config
 
 set('repository', 'git@github.com:creasico/laravel-project.git');
-set('keep_releases', 5);
+set('keep_releases', 3);
 
 add('shared_files', []);
 add('shared_dirs', ['public/build', 'public/vendor']);
@@ -26,20 +26,21 @@ host('skeleton.creasi.dev')
 
 // Tasks
 
-task('deploy:assets', function () use ($rootDir) {
+task('deploy:assets', function () {
     $config = ['flags' => '-zrtv'];
     $env = get('labels')['env'] ?? null;
-    $masterData = "{$rootDir}/storage/app/master-data.{$env}.xlsx";
+    $masterData = "storage/app/master-data.{$env}.xlsx";
 
     if (! \file_exists($masterData)) {
-        $masterData = $rootDir.'/storage/app/master-data.xlsx';
+        $masterData = 'storage/app/master-data.xlsx';
     }
 
     if (\file_exists($masterData)) {
         upload($masterData, '{{release_or_current_path}}/storage/app', $config);
     }
 
-    upload($rootDir.'/public/{build,vendor}', '{{release_or_current_path}}/public/', $config + [
+    upload('public/vendor', '{{release_or_current_path}}/public/', $config);
+    upload('public/build', '{{release_or_current_path}}/public/', $config + [
         'options' => ['--exclude=*.map'],
     ]);
 })->desc('Deploy static assets');
