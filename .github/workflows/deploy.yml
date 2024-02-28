@@ -23,6 +23,7 @@ concurrency:
 jobs:
   prepare:
     name: Prepare
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.target != 'testing' }}
     # uses: creasico/laravel-project/.github/workflows/prepare.yml@main
     uses: ./.github/workflows/prepare.yml
     secrets: inherit
