@@ -71,9 +71,7 @@ jobs:
           path: public
 
       - name: Install dependencies
-        run: |
-          composer install --prefer-dist --no-interaction --no-progress --ansi
-          ls -lah public
+        run: composer install --prefer-dist --no-interaction --no-progress --ansi
 
       - name: Deploy
         uses: deployphp/action@master

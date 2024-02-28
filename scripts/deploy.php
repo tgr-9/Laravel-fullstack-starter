@@ -39,6 +39,7 @@ task('deploy:assets', function () {
         upload($masterData, '{{release_or_current_path}}/storage/app', $config);
     }
 
+    runLocally('ls -lah public/{build,vendor} && echo $PWD');
     upload('public/{build,vendor}', '{{release_or_current_path}}/public/', $config + [
         'options' => ['--exclude=*.map'],
     ]);
