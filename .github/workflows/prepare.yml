@@ -11,12 +11,14 @@ on:
     outputs:
       composer-cache:
         value: ${{ jobs.build.outputs.composer-cache }}
+      should-reports:
+        value: ${{ jobs.build.outputs.should-reports }}
+      target-branch:
+        value: ${{ jobs.build.outputs.target-branch }}
       target-env:
         value: ${{ jobs.build.outputs.target-env }}
       target-url:
         value: ${{ jobs.build.outputs.target-url }}
-      should-reports:
-        value: ${{ jobs.build.outputs.should-reports }}
 
 jobs:
   labels:
@@ -41,13 +43,11 @@ jobs:
     runs-on: ubuntu-latest
     name: Build for `${{ inputs.target }}`
     outputs:
-      target-env: ${{ inputs.target }}
-      target-url: ${{ env.APP_URL }}
       composer-cache: ${{ steps.environments.outputs.composer-cache }}
       should-reports: ${{ steps.environments.outputs.should-reports }}
-
-    environment:
-      name: ${{ inputs.target }}
+      target-branch: ${{ steps.environments.outputs.target-branch }}
+      target-env: ${{ env.APP_ENV }}
+      target-url: ${{ env.APP_URL }}
 
     env:
       APP_ENV: ${{ inputs.target }}
@@ -85,6 +85,7 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         run: |
           git config user.name "Creasi.HQ" && git config user.email "developers@creasi.co"
+          echo "target-branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
           echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
           echo "should-reports=$([[ -n \"$CC_TEST_REPORTER_ID\" ]] && echo '1')" >> $GITHUB_OUTPUT
 
@@ -98,6 +99,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer install --prefer-dist --no-interaction --no-progress --ansi
+          composer dep deploy:info -- --branch ${{ steps.environments.outputs.target-branch }}
           composer ziggy:generate
           php artisan vendor:publish --tag creasi-assets --ansi
 
