@@ -75,6 +75,7 @@
       "@php artisan key:generate --ansi"
     ],
     "dep": [
+      "Composer\\Config::disableProcessTimeout",
       "dep --ansi -f scripts/deploy.php"
     ],
     "fix": [
