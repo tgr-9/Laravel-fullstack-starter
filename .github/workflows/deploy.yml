@@ -3,8 +3,6 @@ run-name: >-
   deploy ${{ github.ref_name }} to ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
 
 on:
-  pull_request:
-    branches: [main]
   release:
     types: [published]
   workflow_dispatch:
@@ -20,7 +18,6 @@ on:
   workflow_run:
     workflows: [Code Quality]
     types: [completed]
-    branches: [main]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
