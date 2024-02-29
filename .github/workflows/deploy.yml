@@ -18,7 +18,7 @@ on:
   workflow_run:
     workflows: [Code Quality]
     types: [completed]
-    branches: [main, feat/*]
+    branches: [main, feat/**]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
