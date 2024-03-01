@@ -84,7 +84,7 @@ jobs:
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_RESET: ${{ github.event_name == 'workflow_dispatch' && inputs.reset || false }}
-          DEPLOY_ARGS: --branch ${{ needs.prepare.outputs.target-branch }} --${{ env.DB_RESET == 'true' && 'no-reset' || 'no-reset' }}
+          DEPLOY_ARGS: --branch ${{ needs.prepare.outputs.target-branch }} --${{ env.DB_RESET == 'true' && 'reset' || 'no-reset' }}
         with:
           private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
           ssh-config: ${{ secrets.DEPLOY_SSH_CONFIG }}
