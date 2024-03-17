@@ -42,7 +42,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
           tools: composer:v2
           coverage: none
@@ -75,8 +75,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ steps.environments.outputs.composer-cache }}
-          key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: php-8.1-composer-
+          key: php-8.2-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: php-8.2-composer-
 
       - name: Install dependencies
         run: |
