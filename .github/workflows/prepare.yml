@@ -31,11 +31,6 @@ jobs:
       target-env: ${{ env.APP_ENV }}
       target-url: ${{ env.APP_URL }}
 
-    permissions:
-      contents: read
-      packages: read
-      repository-projects: read
-
     env:
       APP_ENV: ${{ inputs.target }}
       APP_URL: ${{ vars.APP_URL }}
@@ -52,7 +47,7 @@ jobs:
           tools: composer:v2
           coverage: none
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v3
