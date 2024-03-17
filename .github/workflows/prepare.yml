@@ -79,9 +79,11 @@ jobs:
           restore-keys: php-8.2-composer-
 
       - name: Install dependencies
+        env:
+          BRANCH: ${{ steps.environments.outputs.target-branch }}
         run: |
           composer install --prefer-dist --no-interaction --no-progress --ansi
-          composer dep deploy:info env=${{ env.APP_ENV }} -- --branch ${{ steps.environments.outputs.target-branch }}
+          [[ $APP_ENV != 'testing' ]] && composer dep deploy:info env=${{ env.APP_ENV }} -- --branch $BRANCH
           composer ziggy:generate
           php artisan vendor:publish --tag creasi-assets --ansi
 
