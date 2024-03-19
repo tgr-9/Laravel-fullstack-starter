@@ -6354,32 +6354,32 @@
         },
         {
             "name": "creasi/dusk-browserstack",
-            "version": "v0.3.0",
+            "version": "v0.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/creasico/laravel-dusk-browserstack.git",
-                "reference": "b9134d37e540aa2447a35bb723bc2a079a2dc4cd"
+                "reference": "b9048dd0cc30ca925d390d624a1d678fa3541a9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/b9134d37e540aa2447a35bb723bc2a079a2dc4cd",
-                "reference": "b9134d37e540aa2447a35bb723bc2a079a2dc4cd",
+                "url": "https://api.github.com/repos/creasico/laravel-dusk-browserstack/zipball/b9048dd0cc30ca925d390d624a1d678fa3541a9c",
+                "reference": "b9048dd0cc30ca925d390d624a1d678fa3541a9c",
                 "shasum": ""
             },
             "require": {
                 "ext-zip": "*",
-                "illuminate/console": "^9.0|^10.0",
-                "illuminate/support": "^9.0|^10.0",
-                "laravel/dusk": "^7.0",
+                "illuminate/console": "^9.0|^10.0|^11.0",
+                "illuminate/support": "^9.0|^10.0|^11.0",
+                "laravel/dusk": "^7.0|^8.0",
                 "php": "^8.1",
-                "symfony/process": "^6.0"
+                "symfony/process": "^6.0|^7.0"
             },
             "require-dev": {
                 "inertiajs/inertia-laravel": "^0.6.9",
                 "laravel/pint": "^1.1",
-                "nunomaduro/collision": "^7.4",
-                "orchestra/testbench": "^7.0|^8.0",
-                "orchestra/testbench-dusk": "^7.0|^8.0"
+                "nunomaduro/collision": "^7.4|^8.0",
+                "orchestra/testbench": "^7.0|^8.0|^9.0",
+                "orchestra/testbench-dusk": "^7.0|^8.0|^9.0"
             },
             "type": "library",
             "extra": {
@@ -6422,7 +6422,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-16T19:45:36+00:00"
+            "time": "2024-03-19T19:06:05+00:00"
         },
         {
             "name": "deployer/deployer",
