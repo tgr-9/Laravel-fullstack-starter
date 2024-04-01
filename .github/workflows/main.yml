@@ -179,8 +179,8 @@ jobs:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
         run: |
-         php artisan dusk:browserstack-local
-         php artisan dusk --colors=always
+          php artisan dusk:browserstack-local
+          php artisan dusk --ansi
 
       - name: Upload e2e tests logs
         if: failure()
