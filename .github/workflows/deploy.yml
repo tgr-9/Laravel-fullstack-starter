@@ -75,7 +75,7 @@ jobs:
           echo "${{ secrets.DEPLOY_SSH_CONFIG }}" >> $HOME/.ssh/config
           chmod -r 600 $HOME/.ssh && ls -al $HOME/.ssh
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          git clone creasico@creasi.co:~/git/creasico-skeleton.git storage/deploy-tmp
+          git clone creasi.co:~/git/creasico-skeleton.git storage/deploy-tmp
 
       - name: Prepare deployment
         run: |
