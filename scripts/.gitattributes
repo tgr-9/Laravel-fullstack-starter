@@ -1,2 +1,3 @@
 /deploy.php        export-ignore
+/deploy.sh         export-ignore
 /post-create.sh    export-ignore
