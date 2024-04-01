@@ -69,11 +69,13 @@ jobs:
           path: public
 
       - name: Prepare environment
+        env:
+          SSH_RSAKEY: ${{ secrets.DEPLOY_SSH_RSAKEY }}
+          SSH_CONFIG: ${{ secrets.DEPLOY_SSH_CONFIG }}
         run: |
           [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
-          echo "${{ secrets.DEPLOY_SSH_RSAKEY }}" >> $HOME/.ssh/id_rsa
-          echo "${{ secrets.DEPLOY_SSH_CONFIG }}" >> $HOME/.ssh/config
-          chmod -r 600 $HOME/.ssh && ls -al $HOME/.ssh
+          echo $SSH_RSAKEY > $HOME/.ssh/id_rsa && echo $SSH_CONFIG > $HOME/.ssh/config
+          chmod 600 $HOME/.ssh/* && ls -al $HOME/.ssh
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
           git clone creasi.co:~/git/creasico-skeleton.git storage/deploy-tmp
 
