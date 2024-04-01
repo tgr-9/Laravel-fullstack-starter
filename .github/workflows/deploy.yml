@@ -68,14 +68,14 @@ jobs:
           name: build-${{ env.APP_ENV }}
           path: public
 
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          ssh-strict: false
-          ssh-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
-          repository: creasico@creasi.co:~/git/creasico-skeleton.git
-          path: storage/deploy-tmp
-          fetch-depth: 0
+      - name: Prepare environment
+        run: |
+          [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
+          echo "${{ secrets.DEPLOY_SSH_RSAKEY }}" >> $HOME/.ssh/id_rsa
+          echo "${{ secrets.DEPLOY_SSH_CONFIG }}" >> $HOME/.ssh/config
+          chmod -r 600 $HOME/.ssh && ls -al $HOME/.ssh
+          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
+          git clone creasico@creasi.co:~/git/creasico-skeleton.git storage/deploy-tmp
 
       - name: Prepare deployment
         run: |
