@@ -77,7 +77,7 @@ jobs:
           echo $SSH_RSAKEY > $HOME/.ssh/id_rsa && echo $SSH_CONFIG > $HOME/.ssh/config
           chmod 600 $HOME/.ssh/*
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          git clone ssh://creasico@creasi.co:423/~/git/creasico-skeleton.git storage/deploy-tmp
+          git clone creasi.co:~/git/creasico-skeleton.git storage/deploy-tmp
 
       - name: Prepare deployment
         run: |
