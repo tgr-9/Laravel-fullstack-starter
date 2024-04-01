@@ -32,7 +32,11 @@ jobs:
     uses: ./.github/workflows/prepare.yml
     secrets: inherit
     with:
-      target: ${{ github.event_name == 'workflow_dispatch' && inputs.target || 'staging' }}
+      target: ${{ github.event_name == 'workflow_dispatch' && inputs.target || matrix.target }}
+
+    strategy:
+      matrix:
+        target: [staging]
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,7 +59,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.1
-          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
+          extensions: curl, pcntl, ssh2, zip
           tools: composer:v2
           coverage: none
         env:
@@ -74,16 +78,15 @@ jobs:
           SSH_CONFIG: ${{ secrets.DEPLOY_SSH_CONFIG }}
         run: |
           [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
-          echo $SSH_RSAKEY > $HOME/.ssh/id_rsa && echo $SSH_CONFIG > $HOME/.ssh/config
+          echo "$SSH_RSAKEY" >> $HOME/.ssh/id_rsa
+          echo "$SSH_CONFIG" >> $HOME/.ssh/config
           chmod 600 $HOME/.ssh/*
           git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
-          git clone ssh://creasico@git.creasi.co:423/~/git/creasico-skeleton.git storage/deploy-tmp
 
-      - name: Prepare deployment
+      - name: Deploy
         run: |
-          composer extract
-          cd storage/deploy-tmp
-          git status
+          git clone ssh://creasico@git.creasi.co:423/~/git/creasico-skeleton.git storage/deploy-tmp
+          ./scripts/deploy.sh ${{ env.APP_ENV }}
 
       # - name: Cache Composer dependencies
       #   uses: actions/cache@v4
