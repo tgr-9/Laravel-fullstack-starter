@@ -80,11 +80,11 @@ jobs:
           [[ ! -d $HOME/.ssh ]] && mkdir $HOME/.ssh
           echo "$SSH_RSAKEY" >> $HOME/.ssh/id_rsa
           echo "$SSH_CONFIG" >> $HOME/.ssh/config
-          chmod 600 $HOME/.ssh/* && ls -lah $HOME/.ssh/
-          git config user.name "Creasi.HQ" && git config user.email "dev@creasi.co"
+          chmod 600 $HOME/.ssh/*
 
       - name: Deploy
         run: |
+          git config --global user.name "Creasi.HQ" && git config --global user.email "dev@creasi.co"
           git clone creasi.co:~/git/creasico-skeleton.git storage/deploy-tmp
           ./scripts/deploy.sh ${{ env.APP_ENV }}
 
