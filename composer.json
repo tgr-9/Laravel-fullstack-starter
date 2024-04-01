@@ -78,12 +78,6 @@
       "Composer\\Config::disableProcessTimeout",
       "dep --ansi -f scripts/deploy.php"
     ],
-    "export": [
-      "find storage/deploy-tmp -depth 1 ! -name .git ! -name storage/deploy-tmp -exec rm -rf {} +",
-      "git archive --format=tar --prefix=deploy-tmp/ HEAD | (cd storage && tar xf -)",
-      "rsync -av --exclude='*.map' public/build storage/deploy-tmp/public/",
-      "rm storage/deploy-tmp/public/.gitignore"
-    ],
     "fix": [
       "pint --preset laravel --ansi"
     ],
