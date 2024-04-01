@@ -61,13 +61,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Cache Composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ needs.prepare.outputs.composer-cache }}
-          key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: php-8.1-composer-
-
       - name: Download assets
         id: download
         uses: actions/download-artifact@v4
@@ -75,18 +68,40 @@ jobs:
           name: build-${{ env.APP_ENV }}
           path: public
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress --ansi
-
-      - name: Deploy
-        uses: deployphp/action@master
-        env:
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_RESET: ${{ github.event_name == 'workflow_dispatch' && inputs.reset || false }}
-          DEPLOY_ARGS: --branch ${{ needs.prepare.outputs.target-branch }} --${{ env.DB_RESET == 'true' && 'reset' || 'no-reset' }}
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
-          ssh-config: ${{ secrets.DEPLOY_SSH_CONFIG }}
-          verbosity: ''
-          dep: deploy -f scripts/deploy.php env=staging ${{ env.DEPLOY_ARGS }}
+          ssh-strict: false
+          ssh-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
+          repository: creasico@creasi.co:~/git/creasico-skeleton.git
+          path: storage/deploy-tmp
+          fetch-depth: 0
+
+      - name: Prepare deployment
+        run: |
+          composer extract
+          cd storage/deploy-tmp
+          git status
+
+      # - name: Cache Composer dependencies
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ needs.prepare.outputs.composer-cache }}
+      #     key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
+      #     restore-keys: php-8.1-composer-
+
+      # - name: Install dependencies
+      #   run: composer install --prefer-dist --no-interaction --no-progress --ansi
+
+      # - name: Deploy
+      #   uses: deployphp/action@master
+      #   env:
+      #     DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      #     DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      #     DB_RESET: ${{ github.event_name == 'workflow_dispatch' && inputs.reset || false }}
+      #     DEPLOY_ARGS: --branch ${{ needs.prepare.outputs.target-branch }} --${{ env.DB_RESET == 'true' && 'reset' || 'no-reset' }}
+      #   with:
+      #     private-key: ${{ secrets.DEPLOY_SSH_RSAKEY }}
+      #     ssh-config: ${{ secrets.DEPLOY_SSH_CONFIG }}
+      #     verbosity: ''
+      #     dep: deploy -f scripts/deploy.php env=staging ${{ env.DEPLOY_ARGS }}
