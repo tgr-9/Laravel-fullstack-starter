@@ -63,7 +63,7 @@ jobs:
           tools: composer:v2
           coverage: none
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Download assets
         id: download

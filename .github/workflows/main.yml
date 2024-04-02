@@ -20,8 +20,8 @@ env:
   # AWS_BUCKET: creasi-staging
   CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
   CC_TEST_REPORTER_URL: ${{ vars.CC_TEST_REPORTER_URL }}
-  DB_DATABASE: creasico
-  DB_USERNAME: creasico
+  DB_DATABASE: ${{ github.repository_owner }}
+  DB_USERNAME: ${{ github.repository_owner }}
   DB_PASSWORD: secret
   MAIL_FROM_ADDRESS: ${{ vars.MAIL_FROM_ADDRESS }}
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
@@ -65,7 +65,11 @@ jobs:
           POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
         ports:
           - 5432:5432
-        options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd=pg_isready
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     strategy:
       fail-fast: false
@@ -85,7 +89,7 @@ jobs:
           tools: composer:v2
           coverage: xdebug
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Prepare Composer Cache
         uses: actions/cache@v4
@@ -137,7 +141,11 @@ jobs:
           POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
         ports:
           - 5432:5432
-        options: --health-cmd=pg_isready --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --health-cmd=pg_isready
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
     steps:
       - name: Checkout sources
@@ -152,7 +160,7 @@ jobs:
           tools: composer:v2
           coverage: xdebug
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT }}
 
       - name: Download assets
         id: download
