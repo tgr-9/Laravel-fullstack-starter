@@ -8,6 +8,10 @@ on:
         default: testing
         required: false
         type: string
+      url:
+        description: 'URL target'
+        default: ${{ vars.APP_URL }}
+        type: string
     outputs:
       composer-cache:
         value: ${{ jobs.build.outputs.composer-cache }}
@@ -33,7 +37,7 @@ jobs:
 
     env:
       APP_ENV: ${{ inputs.target }}
-      APP_URL: ${{ vars.APP_URL }}
+      APP_URL: ${{ inputs.url }}
 
     steps:
       - name: Checkout
@@ -99,7 +103,7 @@ jobs:
           FIREBASE_VAPID_KEY: ${{ secrets.FIREBASE_VAPID_KEY }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          SENTRY_ORG: creasico
+          SENTRY_ORG: ${{ github.repository_owner }}
           SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
           VITE_API_URL: ${{ env.APP_URL }}/api
           VITE_GTM_ID: 'G-1KQP24LR0L'
