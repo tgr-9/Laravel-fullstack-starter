@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use Creasi\Base\Contracts\HasCredentialTokens;
-use Creasi\Base\Models\Concerns\WithCredentialTokens;
-use Creasi\Base\Models\Concerns\WithDevices;
-use Creasi\Base\Models\Concerns\WithIdentity;
-use Creasi\Base\Models\Contracts\HasDevices;
-use Creasi\Base\Models\Contracts\HasIdentity;
+use Creasi\Base\Database\Models\Concerns\WithCredentialTokens;
+use Creasi\Base\Database\Models\Concerns\WithDevices;
+use Creasi\Base\Database\Models\Contracts\HasDevices;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -23,13 +20,12 @@ use Illuminate\Notifications\Notifiable;
  *
  * @method static \Database\Factories\UserFactory<static> factory()
  */
-class User extends Authenticatable implements HasCredentialTokens, HasDevices, HasIdentity
+class User extends Authenticatable implements HasDevices
 {
     use HasFactory;
     use Notifiable;
     use WithCredentialTokens;
     use WithDevices;
-    use WithIdentity;
 
     protected $fillable = ['name', 'email', 'password'];
 
