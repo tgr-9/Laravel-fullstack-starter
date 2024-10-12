@@ -147,7 +147,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           extensions: curl, dom, gd, igbinary, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
           ini-values: error_reporting=E_ALL
           tools: composer:v2
@@ -170,7 +170,7 @@ jobs:
           restore-keys: ${{ needs.prepare.outputs.composer-cache-key }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress --ansi
+        run: composer update --prefer-dist --no-interaction --no-progress --ansi
 
       - name: Start dev server
         run: php artisan serve > /dev/null 2>&1 &
