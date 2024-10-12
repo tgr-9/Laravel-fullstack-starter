@@ -30,7 +30,7 @@
     "lib": ["ESNext", "DOM", "WebWorker"],
     "types": [
       "vite/client",
-      "vue/ref-macros",
+      // "vue/ref-macros",
       "vite-plugin-pwa/client",
       "@intlify/unplugin-vue-i18n/messages"
     ],
