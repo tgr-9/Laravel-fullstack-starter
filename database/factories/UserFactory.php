@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use Creasi\Base\Models\Factories\Concerns\WithIdentity;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -11,8 +10,6 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    use WithIdentity;
-
     /**
      * Define the model's default state.
      *

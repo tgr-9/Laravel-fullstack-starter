@@ -1,37 +1,50 @@
-name: Prepare
+name: Build
 
 on:
   workflow_call:
     inputs:
+      branch:
+        description: 'Branch target'
+        default: main
+        type: string
+      composer-cache:
+        required: true
+        type: string
+      composer-cache-key:
+        default: php-${{ inputs.php-version }}
+        type: string
+      php-version:
+        default:  '8.2'
+        type: string
+      sentry-project:
+        default: ${{ vars.SENTRY_PROJECT }}
+        type: string
       target:
         description: 'Build target'
         default: testing
-        required: false
         type: string
       url:
         description: 'URL target'
-        default: ${{ vars.APP_URL }}
+        default: http://localhost:8000
         type: string
     outputs:
-      composer-cache:
-        value: ${{ jobs.build.outputs.composer-cache }}
-      should-reports:
-        value: ${{ jobs.build.outputs.should-reports }}
-      target-branch:
-        value: ${{ jobs.build.outputs.target-branch }}
       target-env:
         value: ${{ jobs.build.outputs.target-env }}
       target-url:
         value: ${{ jobs.build.outputs.target-url }}
+    secrets:
+      ACCESS_TOKEN:
+        required: false
+      SENTRY_AUTH_TOKEN:
+        required: false
+      SENTRY_DSN:
+        required: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
     name: Build for `${{ inputs.target }}`
     outputs:
-      composer-cache: ${{ steps.environments.outputs.composer-cache }}
-      should-reports: ${{ steps.environments.outputs.should-reports }}
-      target-branch: ${{ steps.environments.outputs.target-branch }}
       target-env: ${{ env.APP_ENV }}
       target-url: ${{ env.APP_URL }}
 
@@ -43,50 +56,38 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.2
-          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
-          tools: composer:v2
-          coverage: none
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT }}
-
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 8
           run_install: true
 
       - name: Setup node.js
         uses: actions/setup-node@v4
         with:
           cache: pnpm
-          node-version: 18.x
+          node-version: lts/*
 
-      - name: Setup environment
-        id: environments
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ inputs.php-version }}
+          extensions: curl, intl, libxml, mbstring, pcntl, ssh2, zip
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-        run: |
-          git config user.name "Creasi.HQ" && git config user.email "developers@creasi.co"
-          echo "target-branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-          echo "composer-cache=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-          echo "should-reports=$([[ -n \"$CC_TEST_REPORTER_ID\" ]] && echo '1')" >> $GITHUB_OUTPUT
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
       - name: Prepare Composer Cache
         uses: actions/cache@v4
         with:
-          path: ${{ steps.environments.outputs.composer-cache }}
-          key: php-8.2-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: php-8.2-composer-
+          path: ${{ inputs.composer-cache }}
+          key: ${{ inputs.composer-cache-key }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ inputs.composer-cache-key }}-composer-
 
       - name: Install dependencies
         env:
-          BRANCH: ${{ steps.environments.outputs.target-branch }}
+          BRANCH: ${{ inputs.branch }}
         run: |
-          composer install --prefer-dist --no-interaction --no-progress --ansi
+          composer update --prefer-dist --no-interaction --no-progress --ansi
+          cp .github/.env.example .env
           [[ $APP_ENV != 'testing' ]] && composer dep deploy:info env=${{ env.APP_ENV }} -- --branch $BRANCH
           composer ziggy:generate
           php artisan vendor:publish --tag creasi-assets --ansi
@@ -94,7 +95,6 @@ jobs:
       - name: Build frontend
         env:
           APP_NAME: ${{ vars.APP_NAME }}
-          APP_LOCALE: id
           FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
@@ -104,7 +104,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_ORG: ${{ github.repository_owner }}
-          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          SENTRY_PROJECT: ${{ inputs.sentry-project }}
           VITE_API_URL: ${{ env.APP_URL }}/api
           VITE_GTM_ID: 'G-1KQP24LR0L'
         run: |
