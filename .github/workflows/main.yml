@@ -22,7 +22,6 @@ env:
   DB_USERNAME: ${{ github.repository_owner }}
   DB_PASSWORD: secret
   MAIL_FROM_ADDRESS: ${{ vars.MAIL_FROM_ADDRESS }}
-  SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
 jobs:
   prepare:
@@ -42,13 +41,12 @@ jobs:
     with:
       branch: ${{ needs.prepare.outputs.target-branch }}
       composer-cache: ${{ needs.prepare.outputs.composer-cache }}
-      composer-cache-key: ${{ needs.prepare.outputs.composer-cache-key }}
       sentry-project: ${{ vars.SENTRY_PROJECT }}
 
   units:
     name: Unit Test with PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
-    needs: [prepare, build]
+    needs: prepare
 
     services:
       postgresql:

@@ -11,13 +11,13 @@ on:
         required: true
         type: string
       composer-cache-key:
-        required: true
+        default: php-${{ inputs.php-version }}
         type: string
       php-version:
         default:  '8.2'
         type: string
       sentry-project:
-        required: true
+        default: ${{ vars.SENTRY_PROJECT }}
         type: string
       target:
         description: 'Build target'
@@ -87,6 +87,7 @@ jobs:
           BRANCH: ${{ inputs.branch }}
         run: |
           composer update --prefer-dist --no-interaction --no-progress --ansi
+          cp .github/.env.example .env
           [[ $APP_ENV != 'testing' ]] && composer dep deploy:info env=${{ env.APP_ENV }} -- --branch $BRANCH
           composer ziggy:generate
           php artisan vendor:publish --tag creasi-assets --ansi
@@ -94,7 +95,6 @@ jobs:
       - name: Build frontend
         env:
           APP_NAME: ${{ vars.APP_NAME }}
-          APP_LOCALE: id
           FIREBASE_PROJECT_ID: ${{ vars.FIREBASE_PROJECT_ID }}
           FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
           FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
@@ -104,7 +104,7 @@ jobs:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SENTRY_ORG: ${{ github.repository_owner }}
-          SENTRY_PROJECT: ${{ vars.SENTRY_PROJECT }}
+          SENTRY_PROJECT: ${{ inputs.sentry-project }}
           VITE_API_URL: ${{ env.APP_URL }}/api
           VITE_GTM_ID: 'G-1KQP24LR0L'
         run: |
