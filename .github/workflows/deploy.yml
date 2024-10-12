@@ -28,6 +28,7 @@ jobs:
   prepare:
     name: Prepare
     uses: projek-xyz/actions/.github/workflows/configure.yml@main
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     with:
       php-version: 8.2
     secrets:
@@ -35,10 +36,10 @@ jobs:
 
   build:
     name: Build
-    needs: prepare
-    if: ${{ github.event_name != 'workflow_dispatch' || inputs.target != 'testing' }}
     # uses: creasico/laravel-project/.github/workflows/build.yml@main
     uses: ./.github/workflows/build.yml
+    if: ${{ success() && (github.event_name != 'workflow_dispatch' || inputs.target != 'testing') }}
+    needs: prepare
     secrets: inherit
     with:
       branch: ${{ needs.prepare.outputs.target-branch }}
@@ -54,6 +55,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     name: Deploy to ${{ needs.build.outputs.target-env }}
+    if: ${{ success() }}
     needs: build
 
     environment:
