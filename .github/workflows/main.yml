@@ -18,8 +18,6 @@ env:
   # AWS_ENDPOINT: 'https://is3.cloudhost.id'
   # AWS_DEFAULT_REGION: 'ap-southeast-3'
   # AWS_BUCKET: creasi-staging
-  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-  CC_TEST_REPORTER_URL: ${{ vars.CC_TEST_REPORTER_URL }}
   DB_DATABASE: ${{ github.repository_owner }}
   DB_USERNAME: ${{ github.repository_owner }}
   DB_PASSWORD: secret
@@ -27,29 +25,25 @@ env:
   SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
 
 jobs:
-  labels:
-    name: Labels
-    runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-
-    permissions:
-      contents: read
-      pull-requests: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Labeler
-        uses: actions/labeler@v5
-        with:
-          dot: true
-
   prepare:
     name: Prepare
-    # uses: creasico/laravel-project/.github/workflows/prepare.yml@main
-    uses: ./.github/workflows/prepare.yml
+    uses: projek-xyz/actions/.github/workflows/configure.yml@main
+    with:
+      php-version: 8.2
+    secrets:
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+  build:
+    name: Build
+    needs: prepare
+    # uses: creasico/laravel-project/.github/workflows/build.yml@main
+    uses: ./.github/workflows/build.yml
     secrets: inherit
+    with:
+      branch: ${{ needs.prepare.outputs.target-branch }}
+      composer-cache: ${{ needs.prepare.outputs.composer-cache }}
+      composer-cache-key: ${{ needs.prepare.outputs.composer-cache-key }}
+      sentry-project: ${{ vars.SENTRY_PROJECT }}
 
   units:
     name: Unit Test with PHP ${{ matrix.php }}
@@ -86,7 +80,6 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: curl, dom, gd, imagick, intl, libxml, mbstring, pcntl, pdo, pdo_pgsql, zip
           ini-values: error_reporting=E_ALL
-          tools: composer:v2
           coverage: xdebug
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
@@ -105,22 +98,22 @@ jobs:
         run: php artisan test --ansi --coverage
 
       - name: Generate reports for CodeClimate
-        if: github.actor != 'dependabot[bot]'
+        id: reports
+        if: needs.prepare.outputs.has-codeclimate == '1'
         env:
-          COVERAGE_FILE: tests/reports/clover.xml
           CODECLIMATE_REPORT: tests/reports/codeclimate.${{ matrix.php }}.json
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          CC_TEST_REPORTER_URL: ${{ vars.CC_TEST_REPORTER_URL }}
         run: |
           curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
-          ./cc-test-reporter format-coverage -t clover -o $CODECLIMATE_REPORT $COVERAGE_FILE
+          ./cc-test-reporter format-coverage -t clover -o $CODECLIMATE_REPORT tests/reports/clover.xml
 
       - name: Upload tests reports
-        if: github.actor != 'dependabot[bot]'
+        if: needs.prepare.outputs.has-codeclimate == '1'
         uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.php }}
-          path: |
-            tests/coverage
-            tests/reports
+          path: tests/reports/codeclimate.${{ matrix.php }}.json
 
   e2e:
     name: Integration Test on BrowserStack
@@ -201,18 +194,10 @@ jobs:
 
   reports:
     name: Report Test Coverages
-    if: github.actor != 'dependabot[bot]'
-    runs-on: ubuntu-latest
-    needs: units
-
-    steps:
-      - name: Download test reports
-        uses: actions/download-artifact@v4
-        with:
-          pattern: test-reports-*
-          merge-multiple: true
-
-      - name: Submit to CodeClimate
-        run: |
-          curl -LSs $CC_TEST_REPORTER_URL > ./cc-test-reporter && chmod +x ./cc-test-reporter
-          ./cc-test-reporter sum-coverage -o - reports/codeclimate.*.json | ./cc-test-reporter upload-coverage --input -
+    if: needs.prepare.outputs.should-reports == '1'
+    uses: projek-xyz/actions/.github/workflows/report.yml@main
+    needs: [prepare, units]
+    with:
+      has-codeclimate: ${{ needs.prepare.outputs.has-codeclimate == '1' }}
+    secrets:
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}

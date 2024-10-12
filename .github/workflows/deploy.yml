@@ -27,11 +27,24 @@ concurrency:
 jobs:
   prepare:
     name: Prepare
+    uses: projek-xyz/actions/.github/workflows/configure.yml@main
+    with:
+      php-version: 8.2
+    secrets:
+      CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+
+  build:
+    name: Build
+    needs: prepare
     if: ${{ github.event_name != 'workflow_dispatch' || inputs.target != 'testing' }}
-    # uses: creasico/laravel-project/.github/workflows/prepare.yml@main
-    uses: ./.github/workflows/prepare.yml
+    # uses: creasico/laravel-project/.github/workflows/build.yml@main
+    uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
+      branch: ${{ needs.prepare.outputs.target-branch }}
+      composer-cache: ${{ needs.prepare.outputs.composer-cache }}
+      composer-cache-key: ${{ needs.prepare.outputs.composer-cache-key }}
+      sentry-project: ${{ vars.SENTRY_PROJECT }}
       target: ${{ github.event_name == 'workflow_dispatch' && inputs.target || matrix.target }}
 
     strategy:
@@ -40,16 +53,16 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    name: Deploy to ${{ needs.prepare.outputs.target-env }}
-    needs: prepare
+    name: Deploy to ${{ needs.build.outputs.target-env }}
+    needs: build
 
     environment:
-      name: ${{ needs.prepare.outputs.target-env }}
-      url: ${{ env.APP_URL }}
+      name: ${{ needs.build.outputs.target-env }}
+      url: ${{ needs.build.outputs.target-url }}
 
     env:
-      APP_ENV: ${{ needs.prepare.outputs.target-env }}
-      APP_URL: ${{ needs.prepare.outputs.target-url }}
+      APP_ENV: ${{ needs.build.outputs.target-env }}
+      APP_URL: ${{ needs.build.outputs.target-url }}
 
     steps:
       - name: Checkout
