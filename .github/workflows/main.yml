@@ -48,7 +48,7 @@ jobs:
   units:
     name: Unit Test with PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
-    needs: prepare
+    needs: [prepare, build]
 
     services:
       postgresql:
@@ -119,7 +119,7 @@ jobs:
     name: Integration Test on BrowserStack
     if: github.actor != 'dependabot[bot]'
     runs-on: ubuntu-latest
-    needs: prepare
+    needs: [prepare, build]
 
     env:
       DEBUGBAR_ENABLED: false
