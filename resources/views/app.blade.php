@@ -11,7 +11,7 @@
 
         <script>
             window.__navigations = @json($navigations);
-            window.__translations = @json($translations);
+            window.__translations = @json($translations ?? []);
         </script>
 
         <!-- Scripts -->
