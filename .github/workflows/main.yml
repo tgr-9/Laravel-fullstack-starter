@@ -166,8 +166,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ needs.prepare.outputs.composer-cache }}
-          key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: php-8.1-composer-
+          key: ${{ needs.prepare.outputs.composer-cache-key }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ needs.prepare.outputs.composer-cache-key }}-composer-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress --ansi
