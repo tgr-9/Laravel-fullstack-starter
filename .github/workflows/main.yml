@@ -10,43 +10,38 @@ on:
     branches: [main]
     # paths: ['.github/**.yml', '**.php', '**.js', '**.ts', '**.vue']
 
-env:
-  APP_NAME: ${{ vars.APP_NAME }}
-  APP_ENV: ${{ vars.APP_ENV }}
-  APP_URL: ${{ vars.APP_URL }}
-  APP_KEY: base64:wd/Cak9eudgF0z4HcmvkjAzw1zmKorlVLGjNabomfQs=
-  # AWS_ENDPOINT: 'https://is3.cloudhost.id'
-  # AWS_DEFAULT_REGION: 'ap-southeast-3'
-  # AWS_BUCKET: creasi-staging
-  DB_DATABASE: ${{ github.repository_owner }}
-  DB_USERNAME: ${{ github.repository_owner }}
-  DB_PASSWORD: secret
-  MAIL_FROM_ADDRESS: ${{ vars.MAIL_FROM_ADDRESS }}
-
 jobs:
   prepare:
     name: Prepare
     uses: projek-xyz/actions/.github/workflows/configure.yml@main
-    with:
-      php-version: 8.2
     secrets:
       CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
   build:
     name: Build
     needs: prepare
-    # uses: creasico/laravel-project/.github/workflows/build.yml@main
-    uses: ./.github/workflows/build.yml
-    secrets: inherit
+    uses: projek-xyz/actions/.github/workflows/build.yml@main
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.PAT }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     with:
       branch: ${{ needs.prepare.outputs.target-branch }}
       composer-cache: ${{ needs.prepare.outputs.composer-cache }}
+      composer-cache-key: ${{ needs.prepare.outputs.composer-cache-key }}
       sentry-project: ${{ vars.SENTRY_PROJECT }}
 
   units:
     name: Unit Test with PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
     needs: prepare
+
+    env:
+      APP_ENV: ${{ vars.APP_ENV }}
+      APP_URL: ${{ vars.APP_URL }}
+      DB_DATABASE: ${{ github.repository_owner }}
+      DB_USERNAME: ${{ github.repository_owner }}
+      DB_PASSWORD: secret
 
     services:
       postgresql:
@@ -86,11 +81,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ needs.prepare.outputs.composer-cache }}
-          key: php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: php-${{ matrix.php }}-composer-
+          key: ${{ needs.prepare.outputs.composer-cache-key }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ needs.prepare.outputs.composer-cache-key }}-composer-
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --ansi
+        run: |
+          cp .github/.env.example .env
+          composer update --prefer-dist --no-interaction --no-progress --ansi
+          php artisan key:generate
 
       - name: Run unit tests
         run: php artisan test --ansi --coverage
@@ -120,6 +118,11 @@ jobs:
     needs: [prepare, build]
 
     env:
+      APP_ENV: ${{ vars.APP_ENV }}
+      APP_URL: ${{ vars.APP_URL }}
+      DB_DATABASE: ${{ github.repository_owner }}
+      DB_USERNAME: ${{ github.repository_owner }}
+      DB_PASSWORD: secret
       DEBUGBAR_ENABLED: false
       DUSK_HEADLESS_DISABLED: true
 
@@ -157,7 +160,7 @@ jobs:
         id: download
         uses: actions/download-artifact@v4
         with:
-          name: build-${{ env.APP_ENV }}
+          name: build-${{ needs.build.outputs.target-env }}
           path: public
 
       - name: Prepare Composer Cache
@@ -168,7 +171,10 @@ jobs:
           restore-keys: ${{ needs.prepare.outputs.composer-cache-key }}-composer-
 
       - name: Install dependencies
-        run: composer update --prefer-dist --no-interaction --no-progress --ansi
+        run: |
+          cp .github/.env.example .env
+          composer update --prefer-dist --no-interaction --no-progress --ansi
+          php artisan key:generate
 
       - name: Start dev server
         run: php artisan serve > /dev/null 2>&1 &
