@@ -36,17 +36,19 @@ jobs:
 
   build:
     name: Build
-    # uses: creasico/laravel-project/.github/workflows/build.yml@main
-    uses: ./.github/workflows/build.yml
-    if: ${{ success() && (github.event_name != 'workflow_dispatch' || inputs.target != 'testing') }}
     needs: prepare
-    secrets: inherit
+    uses: projek-xyz/actions/.github/workflows/build.yml@main
+    secrets:
+      ACCESS_TOKEN: ${{ secrets.PAT }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
     with:
       branch: ${{ needs.prepare.outputs.target-branch }}
       composer-cache: ${{ needs.prepare.outputs.composer-cache }}
       composer-cache-key: ${{ needs.prepare.outputs.composer-cache-key }}
       sentry-project: ${{ vars.SENTRY_PROJECT }}
-      target: ${{ github.event_name == 'workflow_dispatch' && inputs.target || matrix.target }}
+      target-env: ${{ github.event_name == 'workflow_dispatch' && inputs.target || matrix.target }}
+      target-url: ${{ vars.APP_URL }}
 
     strategy:
       matrix:
@@ -73,7 +75,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.1
+          php-version: 8.2
           extensions: curl, pcntl, ssh2, zip
           tools: composer:v2
           coverage: none
@@ -107,8 +109,8 @@ jobs:
       #   uses: actions/cache@v4
       #   with:
       #     path: ${{ needs.prepare.outputs.composer-cache }}
-      #     key: php-8.1-composer-${{ hashFiles('**/composer.lock') }}
-      #     restore-keys: php-8.1-composer-
+      #     key: php-8.2-composer-${{ hashFiles('**/composer.lock') }}
+      #     restore-keys: php-8.2-composer-
 
       # - name: Install dependencies
       #   run: composer install --prefer-dist --no-interaction --no-progress --ansi
