@@ -34,7 +34,7 @@ jobs:
   units:
     name: Unit Test on PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
-    needs: prepare
+    needs: [prepare, build]
 
     env:
       APP_ENV: ${{ vars.APP_ENV }}
@@ -89,6 +89,13 @@ jobs:
           cp .github/.env.example .env
           composer update --prefer-dist --no-interaction --no-progress --ansi
           php artisan key:generate
+
+      - name: Download assets
+        id: download
+        uses: actions/download-artifact@v4
+        with:
+          name: build-${{ needs.build.outputs.target-env }}
+          path: public
 
       - name: Run unit tests
         run: php artisan test --ansi --coverage
@@ -156,13 +163,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PAT }}
 
-      - name: Download assets
-        id: download
-        uses: actions/download-artifact@v4
-        with:
-          name: build-${{ needs.build.outputs.target-env }}
-          path: public
-
       - name: Prepare Composer Cache
         uses: actions/cache@v4
         with:
@@ -175,6 +175,13 @@ jobs:
           cp .github/.env.example .env
           composer update --prefer-dist --no-interaction --no-progress --ansi
           php artisan key:generate
+
+      - name: Download assets
+        id: download
+        uses: actions/download-artifact@v4
+        with:
+          name: build-${{ needs.build.outputs.target-env }}
+          path: public
 
       - name: Start dev server
         run: php artisan serve > /dev/null 2>&1 &
