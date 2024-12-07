@@ -1,7 +1,3 @@
-[![Version](https://img.shields.io/packagist/v/creasi/skeleton)](https://packagist.org/packages/creasi/skeleton)
-[![License](https://img.shields.io/packagist/l/creasi/skeleton)](https://github.com/tgr-9/Laravel-fullstack-starter/blob/master/LICENSE)
-[![Actions Status](https://github.com/tgr-9/Laravel-fullstack-starter/actions/workflows/main.yml/badge.svg)](https://github.com/tgr-9/Laravel-fullstack-starter/actions)
-
 # Laravel Full Stack Starter
 
 ## Requirements
