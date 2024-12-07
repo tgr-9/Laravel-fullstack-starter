@@ -1,6 +1,6 @@
-[![Actions Status](https://github.com/creasico/laravel-project/actions/workflows/main.yml/badge.svg)](https://github.com/creasico/laravel-project/actions)
+[![Actions Status](https://github.com/tgr-9/Laravel-fullstack-starter/actions/workflows/main.yml/badge.svg)](https://github.com/tgr-9/Laravel-fullstack-starter/actions)
 
-# Application Skeleton
+# Laravel Full Stack Starter
 
 ## Requirements
 

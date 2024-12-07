@@ -1,8 +1,8 @@
 [![Version](https://img.shields.io/packagist/v/creasi/skeleton)](https://packagist.org/packages/creasi/skeleton)
-[![License](https://img.shields.io/packagist/l/creasi/skeleton)](https://github.com/creasico/laravel-project/blob/master/LICENSE)
-[![Actions Status](https://github.com/creasico/laravel-project/actions/workflows/main.yml/badge.svg)](https://github.com/creasico/laravel-project/actions)
+[![License](https://img.shields.io/packagist/l/creasi/skeleton)](https://github.com/tgr-9/Laravel-fullstack-starter/blob/master/LICENSE)
+[![Actions Status](https://github.com/tgr-9/Laravel-fullstack-starter/actions/workflows/main.yml/badge.svg)](https://github.com/tgr-9/Laravel-fullstack-starter/actions)
 
-# Application Skeleton
+# Laravel Full Stack Starter
 
 ## Requirements
 
@@ -21,7 +21,7 @@
 1. Clone the repository and `cd` into it
 
    ```shell
-   git clone git@github.com:creasico/laravel-project.git my-project && cd $_
+   git clone git@github.com:tgr-9/Laravel-fullstack-starter.git my-project && cd $_
    ```
 2. Install `composer` and `pnpm` dependencies
 3. Copy `.env.example` file to `.env` file & generate new app key
@@ -88,11 +88,3 @@ By default laravel dusk will runs headlessly, if you willing to disable headless
 ## Contributing
 - **Commit Convention**: This project follows [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) using [@commitlint/config-conventional](https://github.com/conventional-changelog/commitlint/tree/master/@commitlint/config-conventional) as standart, so make sure you follow the rules.
 - **Code Style**: This project uses [`Laravel Pint`](https://laravel.com/docs/pint) with `laravel` preset and [`@antfu/eslint-config`](https://github.com/antfu/eslint-config) as coding standard, so make sure you follow the rules. But don't worry, your VSCode should handle it for you. Please consult to [this config](.vscode/settings.json) for more info.
-
-## Sponsors
-
-[![BrowserStack Logo](https://d98b8t1nnulk5.cloudfront.net/production/images/layout/logo-header.png?1469004780)](https://browserstack.com)
-
-## License
-
-The project is an open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
