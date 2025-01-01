@@ -7,7 +7,7 @@ settings:
 dependencies:
   axios:
     specifier: ^1.7.7
-    version: 1.7.8
+    version: 1.7.9
   date-fns:
     specifier: ^3.6.0
     version: 3.6.0
@@ -16,10 +16,10 @@ dependencies:
     version: 10.14.1
   pinia:
     specifier: ^2.2.4
-    version: 2.2.8(typescript@5.6.3)(vue@3.5.13)
+    version: 2.3.0(typescript@5.6.3)(vue@3.5.13)
   pinia-plugin-persistedstate:
     specifier: ^3.2.3
-    version: 3.2.3(pinia@2.2.8)
+    version: 3.2.3(pinia@2.3.0)
   qs:
     specifier: ^6.13.0
     version: 6.13.1
@@ -2268,7 +2268,7 @@ packages:
   /@inertiajs/core@1.2.0:
     resolution: {integrity: sha512-6U0gqCPbGGGMcLoDm+ckKipc5gptZMmfVFfPGdO7vlO7yipWf1RD+TKkcZGJklFvfgFMKwK2VPw8GAv1OctuQA==}
     dependencies:
-      axios: 1.7.8
+      axios: 1.7.9
       deepmerge: 4.3.1
       nprogress: 0.2.0
       qs: 6.13.1
@@ -3471,8 +3471,8 @@ packages:
       possible-typed-array-names: 1.0.0
     dev: true
 
-  /axios@1.7.8:
-    resolution: {integrity: sha512-Uu0wb7KNqK2t5K+YQyVCLM76prD5sRFjKHbJYCP1J7JFGEQ6nN7HWn9+04LAeiJ3ji54lgS/gZCH1oxyrf1SPw==}
+  /axios@1.7.9:
+    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.1
@@ -6541,23 +6541,20 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /pinia-plugin-persistedstate@3.2.3(pinia@2.2.8):
+  /pinia-plugin-persistedstate@3.2.3(pinia@2.3.0):
     resolution: {integrity: sha512-Cm819WBj/s5K5DGw55EwbXDtx+EZzM0YR5AZbq9XE3u0xvXwvX2JnWoFpWIcdzISBHqy9H1UiSIUmXyXqWsQRQ==}
     peerDependencies:
       pinia: ^2.0.0
     dependencies:
-      pinia: 2.2.8(typescript@5.6.3)(vue@3.5.13)
+      pinia: 2.3.0(typescript@5.6.3)(vue@3.5.13)
     dev: false
 
-  /pinia@2.2.8(typescript@5.6.3)(vue@3.5.13):
-    resolution: {integrity: sha512-NRTYy2g+kju5tBRe0oNlriZIbMNvma8ZJrpHsp3qudyiMEA8jMmPPKQ2QMHg0Oc4BkUyQYWagACabrwriCK9HQ==}
+  /pinia@2.3.0(typescript@5.6.3)(vue@3.5.13):
+    resolution: {integrity: sha512-ohZj3jla0LL0OH5PlLTDMzqKiVw2XARmC1XYLdLWIPBMdhDW/123ZWr4zVAhtJm+aoSkFa13pYXskAvAscIkhQ==}
     peerDependencies:
-      '@vue/composition-api': ^1.4.0
       typescript: '>=4.4.4'
-      vue: ^2.6.14 || ^3.5.11
+      vue: ^2.7.0 || ^3.5.11
     peerDependenciesMeta:
-      '@vue/composition-api':
-        optional: true
       typescript:
         optional: true
     dependencies:
@@ -6565,6 +6562,8 @@ packages:
       typescript: 5.6.3
       vue: 3.5.13(typescript@5.6.3)
       vue-demi: 0.14.10(vue@3.5.13)
+    transitivePeerDependencies:
+      - '@vue/composition-api'
     dev: false
 
   /pkg-types@1.2.1:
